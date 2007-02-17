@@ -1,0 +1,27 @@
+<html>
+<head><title>org.soulwing.cas.client Package</title></head>
+<body>
+<p>
+The CAS client API.
+</p>
+<p>
+This package provides the classes needed to use all of the authentication 
+services of a CAS server.  Clients of this package should generally utilize
+the Validator interface for interaction with the CAS server.  Clients
+should obtain a instance of Validator using the ValidatorFactory object.
+
+The ValidatorFactory requires an instance of RequestGenerator that will
+be injected into Validator instances created by it.  The default
+implementation of RequestGenerator is RequestGeneratorImpl.  This
+implementation must be configured with the base URL for the CAS service
+on the target CAS server.  The default implementation provides a few 
+optional properties to support other facets of the CAS service.
+</p>
+<p>
+@see org.soulwing.cas.client.Validator
+@see org.soulwing.cas.client.ValidatorFactory
+@see org.soulwing.cas.client.RequestGenerator
+@see org.soulwing.cas.client RequestGeneratorImpl
+</p>
+</body>
+</html>

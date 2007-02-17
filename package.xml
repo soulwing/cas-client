@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="cas-filter" default="lib.jar" basedir=".">
+  <property name="name" value="cas-filter"/>
+  <property name="version" value="0.2-rc2"/>
+  <property name="name.version" value="${name}-${version}"/>
+  <property name="build.dir" location="build"/>
+  <property name="build.prod.dir" location="${build.dir}/classes"/>
+  <property name="build.test.dir" location="${build.dir}/test-classes"/>
+  <property name="dist.dir" location="dist"/>
+  <property name="jar.name" location="${dist.dir}/${name.version}.jar"/>
+  
+  <target name="prepare">
+    <mkdir dir="${dist.dir}"/>
+  </target>
+  
+  <target name="lib.jar" depends="prepare">
+    <jar destfile="${jar.name}" basedir="${build.prod.dir}"/>
+  </target>
+  
+</project>  
