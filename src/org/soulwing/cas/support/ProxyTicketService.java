@@ -17,6 +17,8 @@
  */
 package org.soulwing.cas.support;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.soulwing.cas.client.ProtocolConfiguration;
 import org.soulwing.cas.client.Proxy;
 import org.soulwing.cas.client.ProxyFactory;
@@ -33,6 +35,8 @@ import org.soulwing.cas.client.SimpleUrlGenerator;
  * @author Carl Harris
  */
 public class ProxyTicketService {
+  
+  private static final Log log = LogFactory.getLog(ProxyTicketService.class);
 
   private ProtocolConfiguration configuration;
   private Proxy proxy;
@@ -53,11 +57,14 @@ public class ProxyTicketService {
   }
   
   public String getTicket(String targetService) {
+    log.debug("Requesting ticket for target " + targetService);
     ProxyResponse response = proxy.proxy(
         new SimpleProxyRequest(getProxyGrantingTicket(), targetService));
     if (!response.isSuccessful()) {
       throw new ProxyTicketException(response);
     }
+    log.debug("Obtained ticket " + response.getProxyTicket() 
+        + " for target " + targetService);
     return response.getProxyTicket();
   }
   

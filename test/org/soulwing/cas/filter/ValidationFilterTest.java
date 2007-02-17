@@ -62,7 +62,6 @@ public class ValidationFilterTest extends TestCase {
     MockHttpServletResponse response = newServletResponse();
     filter.doFilter(request, response, filterChain);
     assertTrue(!filterChain.isChainInvoked());
-    assertTrue(filter.isRequestSaved(request));
     assertEquals(UrlGeneratorFactory.getUrlGenerator(request).getLoginUrl(), 
           response.getRedirect());
   }

@@ -21,7 +21,6 @@ import junit.framework.TestCase;
 import org.soulwing.cas.client.StringProtocolSource;
 import org.soulwing.servlet.MockFilterChain;
 import org.soulwing.servlet.MockFilterConfig;
-import org.soulwing.servlet.MockRequestDispatcher;
 import org.soulwing.servlet.http.MockHttpServletRequest;
 import org.soulwing.servlet.http.MockHttpServletResponse;
 
@@ -31,7 +30,6 @@ public class ServiceValidateFilterPathTest extends TestCase {
   private static final String SERVER_URL = "https://localhost/cas";
   private static final String SERVICE_URL = "https://localhost/myapp";
   private static final String FILTER_PATH = "/testFilterPath";
-  private static final String DEFAULT_PATH = "/testDefaultPath";
   private static final String TICKET = "TEST TICKET";
   private static final String USER = "TEST USER";
   private static final String RESULT_CODE = "TEST CODE";
@@ -81,8 +79,6 @@ public class ServiceValidateFilterPathTest extends TestCase {
         filter.getConfiguration().getProtocolSource();
     request.setRequestURL(URL);
     request.setParameter("ticket", TICKET);
-    request.getSession().setAttribute(FilterConstants.SAVED_REQUEST_ATTRIBUTE,
-        request);
     source.setText(getFailureText());
     filter.doFilter(request, response, filterChain);
     assertEquals(false, filterChain.isChainInvoked());
@@ -114,22 +110,6 @@ public class ServiceValidateFilterPathTest extends TestCase {
     assertEquals(request.getRequestURL().toString(), 
         chainedRequest.getRequestURL().toString());
     assertEquals(request.getQueryString(), chainedRequest.getQueryString());
-  }
-
-  public void testValidationSuccessForwardToDefault() throws Exception {
-    config.setInitParameter(FilterConstants.DEFAULT_PATH, DEFAULT_PATH);
-    filter.init(config);
-    source = (StringProtocolSource)
-        filter.getConfiguration().getProtocolSource();
-    MockRequestDispatcher requestDispatcher = new MockRequestDispatcher();
-    request.setRequestDispatcher(requestDispatcher);
-    request.setRequestURL(URL);
-    request.setParameter("ticket", TICKET);
-    source.setText(getSuccessText());
-    filter.doFilter(request, response, filterChain);
-    assertTrue(!filterChain.isChainInvoked());
-    assertTrue(requestDispatcher.isForwardInvoked());
-    assertEquals(DEFAULT_PATH, request.getServletPath());
   }
 
   private String getSuccessText() {

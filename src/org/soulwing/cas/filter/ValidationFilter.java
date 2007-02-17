@@ -32,6 +32,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.soulwing.cas.client.NoTicketException;
+import org.soulwing.cas.client.ProtocolConstants;
 import org.soulwing.cas.client.ServiceValidationResponse;
 import org.soulwing.cas.client.ValidatorFactory;
 import org.soulwing.servlet.http.HttpServletRequestWrapper;
@@ -142,7 +143,6 @@ public abstract class ValidationFilter implements Filter {
       }
     }
     else {
-      saveRequest(request);
       redirectToLogin(request, response);
     }
   }
@@ -162,14 +162,7 @@ public abstract class ValidationFilter implements Filter {
   }
   
   private boolean isAuthenticationInProgress(HttpServletRequest request) {
-    HttpSession session = request.getSession(false);
-    if (session == null) {
-      return false;
-    }
-    else {
-      return session.getAttribute(FilterConstants.SAVED_REQUEST_ATTRIBUTE) 
-          != null;
-    }
+    return request.getParameter(ProtocolConstants.TICKET_PARAM) != null;
   }
   
   private void validate(HttpServletRequest request, 
@@ -178,20 +171,9 @@ public abstract class ValidationFilter implements Filter {
     ValidationResponse validationResponse = new ValidationResponse(
         getAuthenticator().authenticate(request)); 
     if (validationResponse.success()) {
-      if (isRequestSaved(request)) {
-        wrapAndPassToFilterChain(getSavedRequest(request), response, 
-            filterChain, validationResponse);
-      }
-      else if (config.getDefaultPath() != null) {
-        setSessionValidation(request, validationResponse.getResponse());
-        forwardToDefault(request, response);
-      }
-      else {
-        setSessionValidation(request, validationResponse.getResponse());
-        passToFilterChain(wrapRequest(request, 
-            validationResponse.getUserName()), 
-            response, filterChain);
-      }
+      setSessionValidation(request, validationResponse.getResponse());
+      wrapAndPassToFilterChain(request, response, filterChain, 
+          validationResponse);
     }
     else {
       redirectToAuthFailed(response);
@@ -205,7 +187,6 @@ public abstract class ValidationFilter implements Filter {
     HttpServletRequest wrappedRequest = 
         wrapRequest(request, validationResponse.getUserName()); 
     passToFilterChain(wrappedRequest, response, filterChain);
-    setSessionValidation(wrappedRequest, validationResponse.getResponse());
   }
 
   private void passToFilterChain(HttpServletRequest request, 
@@ -255,18 +236,6 @@ public abstract class ValidationFilter implements Filter {
     }
   }
   
-  private void forwardToDefault(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    log.debug("Forwarding to default " + config.getDefaultPath());
-    request.getRequestDispatcher(config.getDefaultPath())
-        .forward(request, response);
-  }
-
-  private void saveRequest(HttpServletRequest request) {
-    log.debug("Saved request in session");
-    request.getSession()
-        .setAttribute(FilterConstants.SAVED_REQUEST_ATTRIBUTE, request);
-  }
-  
   private HttpServletRequest wrapRequest(HttpServletRequest request,
       String userName) {
     return new HttpServletRequestWrapper(request, new Principal(userName));
@@ -292,21 +261,6 @@ public abstract class ValidationFilter implements Filter {
     }
   }
 
-  private HttpServletRequest getSavedRequest(HttpServletRequest request) {
-    HttpServletRequest savedRequest = (HttpServletRequest)
-        request.getSession().getAttribute(
-            FilterConstants.SAVED_REQUEST_ATTRIBUTE);
-    request.getSession().removeAttribute(
-        FilterConstants.SAVED_REQUEST_ATTRIBUTE);
-    return savedRequest;
-  }
-
-  boolean isRequestSaved(HttpServletRequest request) {
-    return request.getSession().getAttribute(
-        FilterConstants.SAVED_REQUEST_ATTRIBUTE) != null;
-  }
-  
-  
   /**
    * @return if the session attached to <code>request</code> contains
    *    a validation request, returns the cached validation request

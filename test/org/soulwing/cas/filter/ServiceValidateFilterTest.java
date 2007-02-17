@@ -76,8 +76,6 @@ public class ServiceValidateFilterTest extends TestCase {
   public void testValidationFailureError() throws Exception {
     request.setRequestURL(URL);
     request.setParameter("ticket", TICKET);
-    request.getSession().setAttribute(FilterConstants.SAVED_REQUEST_ATTRIBUTE,
-        request);
     source.setText(getFailureText());
     filter.doFilter(request, response, filterChain);
     assertEquals(false, filterChain.isChainInvoked());
@@ -91,8 +89,6 @@ public class ServiceValidateFilterTest extends TestCase {
         filter.getConfiguration().getProtocolSource();
     request.setRequestURL(URL);
     request.setParameter("ticket", TICKET);
-    request.getSession().setAttribute(FilterConstants.SAVED_REQUEST_ATTRIBUTE,
-        request);
     source.setText(getFailureText());
     filter.doFilter(request, response, filterChain);
     assertEquals(false, filterChain.isChainInvoked());
@@ -114,8 +110,6 @@ public class ServiceValidateFilterTest extends TestCase {
   public void testValidationSuccess() throws Exception {
     request.setRequestURL(URL);
     request.setParameter("ticket", TICKET);
-    request.getSession().setAttribute(FilterConstants.SAVED_REQUEST_ATTRIBUTE,
-        request);
     source.setText(getSuccessText());
     filter.doFilter(request, response, filterChain);
     assertEquals(true, filterChain.isChainInvoked());

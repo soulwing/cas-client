@@ -26,7 +26,6 @@ public class ValidationConfigurationTest extends TestCase {
   private final static String SERVER_URL = "testServerUrl";
   private final static String FILTER_PATH = "testFilterPath";
   private final static String SERVICE_URL = "testServiceUrl";
-  private final static String DEFAULT_URL = "testDefaultUrl";
   private final static String PROXY_CALLBACK_URL = "testProxyCallbackUrl";
   private static final String AUTH_FAILED_URL = "testAuthFailedUrl";
 
@@ -56,7 +55,6 @@ public class ValidationConfigurationTest extends TestCase {
     ValidationConfiguration config = getConfiguration(getRequiredConfig());
     assertEquals(SERVER_URL, config.getServerUrl());
     assertEquals(FILTER_PATH, config.getFilterPath());
-    assertNull(config.getDefaultPath());
     assertEquals(SERVICE_URL, config.getServiceUrl());
     assertNull(config.getProxyCallbackUrl());
     assertNull(config.getAuthFailedUrl());
@@ -74,13 +72,6 @@ public class ValidationConfigurationTest extends TestCase {
     ValidationConfiguration config = getConfiguration(filterConfig); 
     assertEquals(SERVICE_URL, 
         config.getServiceUrl());
-  }
-
-  public void testDefaultUrlSet() throws Exception {
-    MockFilterConfig filterConfig = getRequiredConfig();
-    filterConfig.setInitParameter(FilterConstants.DEFAULT_PATH, DEFAULT_URL);
-    ValidationConfiguration config = getConfiguration(filterConfig); 
-    assertEquals(DEFAULT_URL, config.getDefaultPath());
   }
 
   public void testProxyCallbackUrlSet() throws Exception {

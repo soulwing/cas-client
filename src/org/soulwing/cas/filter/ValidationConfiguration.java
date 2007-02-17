@@ -57,15 +57,6 @@ import org.soulwing.cas.client.UrlProtocolSource;
  *      (but not including) the servlet path.
  *   </tr>
  *   <tr>
- *     <td>defaultPath</td><td>optional</td>
- *     <td>The servlet path for a request that needs authentication is
- *       saved in the session before the filter redirects the user to the
- *       CAS login URL.  When a request is made for <code>filterPath</code>
- *       (i.e. a validation request), if orginal target request is not
- *       found in the session, this default is used if specified, otherwise 
- *       no forwarding occurs after validation.</td>
- *   </tr>
- *   <tr>
  *     <td>proxyCallbackUrl</td><td>optional</td>
  *     <td>Specifies the URL that will be passed to the CAS server as
  *      the argument to the CAS protocol's <code>pgtUrl</code>
@@ -115,7 +106,6 @@ class ValidationConfiguration extends FilterConfigurator {
   public static final Class SOURCE_CLASS_DEFAULT = UrlProtocolSource.class; 
   
   private final String filterPath;
-  private final String defaultPath;
   private final String authFailedUrl;
   private final String trustedProxies;
   private final ProtocolSource protocolSource;
@@ -129,7 +119,6 @@ class ValidationConfiguration extends FilterConfigurator {
     super(filterConfig);
     configureProtocol();
     filterPath = getParameter(FilterConstants.FILTER_PATH);
-    defaultPath = getParameter(FilterConstants.DEFAULT_PATH);
     authFailedUrl = getParameter(FilterConstants.AUTH_FAILED_URL);
     trustedProxies = getParameter(FilterConstants.TRUSTED_PROXIES);
     protocolSource = newProtocolSource(
@@ -148,10 +137,6 @@ class ValidationConfiguration extends FilterConfigurator {
     return authFailedUrl;
   }
 
-  public String getDefaultPath() {
-    return defaultPath;
-  }
-  
   public String getFilterPath() {
     return filterPath;
   }  

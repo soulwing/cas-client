@@ -74,8 +74,6 @@ public class ProxyValidateFilterTest extends TestCase {
   public void testValidationFailure() throws Exception {
     request.setRequestURL(URL);
     request.setParameter("ticket", TICKET);
-    request.getSession().setAttribute(FilterConstants.SAVED_REQUEST_ATTRIBUTE,
-        request);
     source.setText(getFailureText());
     filter.doFilter(request, response, filterChain);
     assertEquals(false, filterChain.isChainInvoked());
@@ -97,8 +95,6 @@ public class ProxyValidateFilterTest extends TestCase {
   public void testValidationSuccessNoProxies() throws Exception {
     request.setRequestURL(URL);
     request.setParameter("ticket", TICKET);
-    request.getSession().setAttribute(FilterConstants.SAVED_REQUEST_ATTRIBUTE,
-        request);
     source.setText(getSuccessText(null));
     filter.doFilter(request, response, filterChain);
     assertEquals(true, filterChain.isChainInvoked());
@@ -114,8 +110,6 @@ public class ProxyValidateFilterTest extends TestCase {
   public void testValidationSuccessTrustedProxies() throws Exception {
     request.setRequestURL(URL);
     request.setParameter("ticket", TICKET);
-    request.getSession().setAttribute(FilterConstants.SAVED_REQUEST_ATTRIBUTE,
-        request);
     List proxies = Arrays.asList(new String[]{ PROXY1, PROXY2 });
     source.setText(getSuccessText(proxies));
     filter.doFilter(request, response, filterChain);
@@ -125,8 +119,6 @@ public class ProxyValidateFilterTest extends TestCase {
   public void testValidationSuccessUntrustedProxy() throws Exception {
     request.setRequestURL(URL);
     request.setParameter("ticket", TICKET);
-    request.getSession().setAttribute(FilterConstants.SAVED_REQUEST_ATTRIBUTE,
-        request);
     List proxies = Arrays.asList(new String[]{ OTHER_PROXY });
     source.setText(getSuccessText(proxies));
     filter.doFilter(request, response, filterChain);
