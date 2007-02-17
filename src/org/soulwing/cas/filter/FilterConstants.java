@@ -42,4 +42,6 @@ public interface FilterConstants {
   String PROXY_GRANTING_TICKET_ATTRIBUTE = ATTRIBUTE_PREFIX 
       + "proxyGrantingTicket";
 
+  String BYPASS_ATTRIBUTE = ATTRIBUTE_PREFIX + "bypass";
+
 }

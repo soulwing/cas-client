@@ -141,5 +141,13 @@ public class ServiceValidateFilterTest extends TestCase {
     assertNull(request.getSession(false));
   }
   
+  public void testBypassOnBypassAttribute() throws Exception {
+    request.setRequestURL(URL);
+    request.getSession().setAttribute(FilterConstants.BYPASS_ATTRIBUTE, 
+        new Boolean(true));
+    filter.doFilter(request, response, filterChain);
+    assertTrue(filterChain.isChainInvoked());
+  }
+  
 }
 

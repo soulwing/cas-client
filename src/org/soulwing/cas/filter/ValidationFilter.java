@@ -119,7 +119,7 @@ public abstract class ValidationFilter implements Filter {
       HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
 
-    if (isRequestForProxyCallbackUrl(request)) {
+    if (isRequestForProxyCallbackUrl(request) || isRequestForBypass(request)) {
       bypassValidation(request, response, filterChain);
     }
     else if (getSessionValidation(request) != null) {
@@ -157,6 +157,12 @@ public abstract class ValidationFilter implements Filter {
         getConfiguration().getProxyCallbackUrl());
   }
 
+  private boolean isRequestForBypass(HttpServletRequest request) {
+    HttpSession session = request.getSession(false);
+    return session != null 
+        && session.getAttribute(FilterConstants.BYPASS_ATTRIBUTE) != null;
+  }
+  
   private boolean isRequestForFilterPath(HttpServletRequest request) {
     return request.getServletPath().equals(getConfiguration().getFilterPath());
   }

@@ -92,7 +92,7 @@ public class LogoutFilter implements Filter {
     }
   }
   
-  private void removeSessionState(HttpServletRequest request) {
+  protected void removeSessionState(HttpServletRequest request) {
     HttpSession session = request.getSession(false);
     if (session == null) {
       return;
