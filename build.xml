@@ -19,17 +19,19 @@
   <property name="src.dir" location="src"/>
   <property name="test.dir" location="test"/>
   <property name="resources.dir" location="resources"/>
-  <property name="build.lib.dir" location="vendor/lib"/>
-  <property name="build.testlib.dir" location="vendor/test-lib"/>
+  <property name="vendor.classes.dir" location="vendor/classes"/>
+  <property name="vendor.lib.dir" location="vendor/lib"/>
+  <property name="vendor.testlib.dir" location="vendor/test-lib"/>
 
   <path id="project.classpath">
-    <pathelement location="${build.resources.dir}"/>
+    <pathelement location="${resources.dir}"/>
     <pathelement location="${build.prod.dir}"/>
     <pathelement location="${build.test.dir}"/>
-    <fileset dir="${build.lib.dir}">
+    <pathelement location="${vendor.classes.dir}"/>
+    <fileset dir="${vendor.lib.dir}">
       <include name="*.jar"/>
     </fileset>
-    <fileset dir="${build.testlib.dir}">
+    <fileset dir="${vendor.testlib.dir}">
       <include name="*.jar"/>
     </fileset>
   </path>

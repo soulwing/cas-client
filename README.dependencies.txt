@@ -7,10 +7,6 @@ JAR files for all of the dependent libraries are in the "vendor" folder.
 commons-logging.jar (run-time, required)
     Apache Commons logging.
  
-confluence-2.3.1.jar (build-time)
-		Supporting classes needed to compile the application adapter for 
-		Atlassian Confluence.
-
 jakarta-oro-2.0.8.jar (run-time, optional)
 		Provides glob pattern matching support for the CAS bypass filter.
 		If you're not using CAS bypass, you can omit this library.
