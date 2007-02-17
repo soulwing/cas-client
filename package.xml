@@ -12,22 +12,43 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  -->
-<project name="cas-filter" default="lib.jar" basedir=".">
-  <property name="name" value="cas-filter"/>
-  <property name="version" value="0.2-rc2"/>
+<project name="soulwing-casclient" default="dist.zip" basedir=".">
+  <property name="name" value="${ant.project.name}"/>
+  <property name="version" value="0.2rc2"/>
   <property name="name.version" value="${name}-${version}"/>
   <property name="build.dir" location="build"/>
   <property name="build.prod.dir" location="${build.dir}/classes"/>
   <property name="build.test.dir" location="${build.dir}/test-classes"/>
+  <property name="vendor.dir" location="vendor/"/>
+  <property name="vendor.lib.dir" location="${vendor.dir}/lib"/>
   <property name="dist.dir" location="dist"/>
-  <property name="jar.name" location="${dist.dir}/${name.version}.jar"/>
+  <property name="zip.dir" location="${dist.dir}/${name.version}"/>
+  <property name="jar.name" location="${zip.dir}/${name.version}.jar"/>
+  <property name="zip.name" location="${dist.dir}/${name.version}.zip"/>
   
-  <target name="prepare">
+  <target name="clean">
+    <delete dir="${dist.dir}"/>
+  </target>
+
+  <target name="prepare" depends="clean">
     <mkdir dir="${dist.dir}"/>
+    <mkdir dir="${zip.dir}"/>
   </target>
   
   <target name="lib.jar" depends="prepare">
     <jar destfile="${jar.name}" basedir="${build.prod.dir}"/>
   </target>
   
+  <target name="dist.zip" depends="lib.jar">
+    <copy todir="${zip.dir}">
+      <fileset includes="LICENSE.txt" dir="."/>
+    </copy>
+    <copy todir="${zip.dir}/lib">
+      <fileset includes="**.jar" dir="${vendor.lib.dir}"/>
+    </copy>
+    <zip destfile="${zip.name}" basedir="${dist.dir}">
+      <fileset includes="${zip.dir}" dir="${dist.dir}"/>
+    </zip>
+  </target>
+
 </project>  
