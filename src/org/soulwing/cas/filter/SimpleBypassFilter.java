@@ -30,7 +30,7 @@ import org.apache.oro.text.regex.Perl5Matcher;
  * more servlet paths that should be marked for CAS bypass.  When a request
  * for a path that matches one of the configured glob expressions is
  * received by the filter, it adds an attribute to the session that the
- * ValidationFilter will observe as a request to bypass validation of
+ * AbstractValidationFilter will observe as a request to bypass validation of
  * CAS credentials.
  *
  * @author Carl Harris

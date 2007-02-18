@@ -21,7 +21,7 @@ import org.soulwing.servlet.http.MockHttpServletRequest;
 import org.soulwing.servlet.http.MockHttpServletResponse;
 
 
-public class ValidationFilterTest extends TestCase {
+public class AbstractValidationFilterTest extends TestCase {
   
   private static final String SERVER_URL = "https://localhost/cas";
   private static final String FILTER_PATH = "/testFilterPath";

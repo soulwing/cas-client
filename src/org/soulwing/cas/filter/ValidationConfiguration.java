@@ -27,7 +27,7 @@ import org.soulwing.cas.client.UrlProtocolSource;
 
 
 /**
- * A configuration bean for ValidationFilter.  Property values for this
+ * A configuration bean for AbstractValidationFilter.  Property values for this
  * bean can be configured using the provided public setters or via a
  * FilterConfig passed to a constructor for this class. 
  *

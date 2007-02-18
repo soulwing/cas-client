@@ -25,22 +25,21 @@ import org.soulwing.servlet.http.MockHttpServletRequest;
 import org.soulwing.servlet.http.MockHttpServletResponse;
 
 
-public class ServiceValidateFilterTest extends TestCase {
+public class ServiceValidationFilterPathTest extends TestCase {
 
   private static final String SERVER_URL = "https://localhost/cas";
-  private static final String SERVICE_URL = "https://localhost/apps";
-  private static final String URL = "https://localhost/apps/myapp.htm";
+  private static final String SERVICE_URL = "https://localhost/myapp";
+  private static final String FILTER_PATH = "/testFilterPath";
   private static final String TICKET = "TEST TICKET";
   private static final String USER = "TEST USER";
   private static final String RESULT_CODE = "TEST CODE";
   private static final String RESULT_MESSAGE = "TEST MESSAGE";
-  private static final String AUTH_FAILED_URL = "https:/authFailed.htm";
-  private static final String PROXY_CALLBACK_URL = 
-      "https://localhost/apps/pgtCallback";
+  private static final String URL = 
+      "https://localhost" + FILTER_PATH;
   private static final String SOURCE_CLASS_NAME = 
       "org.soulwing.cas.client.StringProtocolSource";
   
-  private ServiceValidateFilter filter;
+  private ServiceValidationFilter filter;
   private MockFilterConfig config;
   private MockFilterChain filterChain;
   private MockHttpServletRequest request;
@@ -49,15 +48,12 @@ public class ServiceValidateFilterTest extends TestCase {
   
   protected void setUp() throws Exception {
     config = new MockFilterConfig();
-    config.setInitParameter(FilterConstants.SERVER_URL, 
-        SERVER_URL);
-    config.setInitParameter(FilterConstants.SERVICE_URL,
-        SERVICE_URL);
+    config.setInitParameter(FilterConstants.SERVER_URL, SERVER_URL);
+    config.setInitParameter(FilterConstants.SERVICE_URL, SERVICE_URL);
+    config.setInitParameter(FilterConstants.FILTER_PATH, FILTER_PATH);
     config.setInitParameter(FilterConstants.SOURCE_CLASS_NAME,
         SOURCE_CLASS_NAME);
-    config.setInitParameter(FilterConstants.PROXY_CALLBACK_URL,
-        PROXY_CALLBACK_URL);
-    filter = new ServiceValidateFilter();
+    filter = new ServiceValidationFilter();
     filter.init(config);
     source = (StringProtocolSource)
         filter.getConfiguration().getProtocolSource();
@@ -66,13 +62,6 @@ public class ServiceValidateFilterTest extends TestCase {
     response = new MockHttpServletResponse();
   }
   
-  public void testLoginRedirect() throws Exception {
-    request.setRequestURL(URL);
-    filter.doFilter(request, response, filterChain);
-    assertEquals(false, filterChain.isChainInvoked());
-    assertNotNull(response.getRedirect());
-  }
-
   public void testValidationFailureError() throws Exception {
     request.setRequestURL(URL);
     request.setParameter("ticket", TICKET);
@@ -83,7 +72,8 @@ public class ServiceValidateFilterTest extends TestCase {
   }
 
   public void testValidationFailureRedirect() throws Exception {
-    config.setInitParameter(FilterConstants.AUTH_FAILED_URL, AUTH_FAILED_URL);
+    final String authFailedUrl = "mock_redirect_url";
+    config.setInitParameter(FilterConstants.AUTH_FAILED_URL, authFailedUrl);
     filter.init(config);
     source = (StringProtocolSource)
         filter.getConfiguration().getProtocolSource();
@@ -92,7 +82,7 @@ public class ServiceValidateFilterTest extends TestCase {
     source.setText(getFailureText());
     filter.doFilter(request, response, filterChain);
     assertEquals(false, filterChain.isChainInvoked());
-    assertEquals(AUTH_FAILED_URL, response.getRedirect());
+    assertEquals(authFailedUrl, response.getRedirect());
   }
 
   private String getFailureText() {
@@ -133,21 +123,5 @@ public class ServiceValidateFilterTest extends TestCase {
     sb.append("</cas:serviceResponse>");
     return sb.toString();
   }
-
-  public void testBypassOnProxyCallback() throws Exception {
-    request.setRequestURL(PROXY_CALLBACK_URL);
-    filter.doFilter(request, response, filterChain);
-    assertTrue(filterChain.isChainInvoked());
-    assertNull(request.getSession(false));
-  }
-  
-  public void testBypassOnBypassAttribute() throws Exception {
-    request.setRequestURL(URL);
-    request.getSession().setAttribute(FilterConstants.BYPASS_ATTRIBUTE, 
-        new Boolean(true));
-    filter.doFilter(request, response, filterChain);
-    assertTrue(filterChain.isChainInvoked());
-  }
-  
 }
 

@@ -18,15 +18,13 @@
 package org.soulwing.cas.filter;
 
 
-
-
 /**
- * A mock ValidationFilter implementation for unit testing the 
- * abstract ValidationFilter. 
+ * A mock validation filter implementation for unit testing the 
+ * abstract AbstractValidationFilter. 
  *
  * @author Carl Harris
  */
-public class MockValidationFilter extends ValidationFilter {
+public class MockValidationFilter extends AbstractValidationFilter {
 
   private final FilterAuthenticator authenticator;
 
@@ -35,7 +33,7 @@ public class MockValidationFilter extends ValidationFilter {
   }
 
   /* 
-   * @see org.soulwing.cas.filter.ValidationFilter#getAuthenticator()
+   * @see org.soulwing.cas.filter.AbstractValidationFilter#getAuthenticator()
    */
   public FilterAuthenticator getAuthenticator() {
     return authenticator;

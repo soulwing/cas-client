@@ -1,5 +1,5 @@
 /*
- * ProxyValidateAuthenticator.java
+ * ProxyValidationAuthenticator.java
  *
  * Created on Sep 12, 2006
  *
@@ -38,16 +38,16 @@ import org.soulwing.cas.client.ValidatorFactory;
  *
  * @author Carl Harris
  */
-class ProxyValidateAuthenticator implements FilterAuthenticator {
+class ProxyValidationAuthenticator implements FilterAuthenticator {
 
   private List trustedProxies = new ArrayList(0);
 
-  ProxyValidateAuthenticator(String trustedProxies) {
+  ProxyValidationAuthenticator(String trustedProxies) {
     setTrustedProxies(trustedProxies);
   }
   
   /**
-   * Sets the list of proxies this ProxyValidateAuthenticator should
+   * Sets the list of proxies this ProxyValidationAuthenticator should
    * trust.
    * @param trustedProxies list of String proxy names
    */

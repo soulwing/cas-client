@@ -13,10 +13,6 @@
  */
 package org.soulwing.cas.filter;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -29,33 +25,39 @@ import org.soulwing.servlet.http.MockHttpServletRequest;
 import org.soulwing.servlet.http.MockHttpServletResponse;
 
 
-public class ProxyValidateFilterTest extends TestCase {
+public class ServiceValidationFilterTest extends TestCase {
 
-  private static final String URL = "https://localhost/myapp/myapp.htm";
+  private static final String SERVER_URL = "https://localhost/cas";
+  private static final String SERVICE_URL = "https://localhost/apps";
+  private static final String URL = "https://localhost/apps/myapp.htm";
   private static final String TICKET = "TEST TICKET";
   private static final String USER = "TEST USER";
   private static final String RESULT_CODE = "TEST CODE";
   private static final String RESULT_MESSAGE = "TEST MESSAGE";
-  private static final String PROXY1 = "proxy1";
-  private static final String PROXY2 = "proxy2";
-  private static final String OTHER_PROXY = "otherProxy";
-  private static final String TRUSTED_PROXIES = PROXY1 + ", " + PROXY2;
+  private static final String AUTH_FAILED_URL = "https:/authFailed.htm";
+  private static final String PROXY_CALLBACK_URL = 
+      "https://localhost/apps/pgtCallback";
+  private static final String SOURCE_CLASS_NAME = 
+      "org.soulwing.cas.client.StringProtocolSource";
   
-  private ProxyValidateFilter filter;
+  private ServiceValidationFilter filter;
+  private MockFilterConfig config;
+  private MockFilterChain filterChain;
+  private MockHttpServletRequest request;
+  private MockHttpServletResponse response;
   private StringProtocolSource source;
-  private MockFilterChain filterChain = new MockFilterChain();
-  private MockHttpServletRequest request = new MockHttpServletRequest();
-  private MockHttpServletResponse response = new MockHttpServletResponse();
-  
   
   protected void setUp() throws Exception {
-    MockFilterConfig config = new MockFilterConfig();
-    config.setInitParameter("serverUrl", "https://localhost/cas");
-    config.setInitParameter("serviceUrl", "https://localhost/myapp");
-    config.setInitParameter("trustedProxies", TRUSTED_PROXIES);
-    config.setInitParameter("sourceClassName",
-        "org.soulwing.cas.client.StringProtocolSource");
-    this.filter = new ProxyValidateFilter();
+    config = new MockFilterConfig();
+    config.setInitParameter(FilterConstants.SERVER_URL, 
+        SERVER_URL);
+    config.setInitParameter(FilterConstants.SERVICE_URL,
+        SERVICE_URL);
+    config.setInitParameter(FilterConstants.SOURCE_CLASS_NAME,
+        SOURCE_CLASS_NAME);
+    config.setInitParameter(FilterConstants.PROXY_CALLBACK_URL,
+        PROXY_CALLBACK_URL);
+    filter = new ServiceValidationFilter();
     filter.init(config);
     source = (StringProtocolSource)
         filter.getConfiguration().getProtocolSource();
@@ -71,13 +73,26 @@ public class ProxyValidateFilterTest extends TestCase {
     assertNotNull(response.getRedirect());
   }
 
-  public void testValidationFailure() throws Exception {
+  public void testValidationFailureError() throws Exception {
     request.setRequestURL(URL);
     request.setParameter("ticket", TICKET);
     source.setText(getFailureText());
     filter.doFilter(request, response, filterChain);
     assertEquals(false, filterChain.isChainInvoked());
     assertEquals(HttpServletResponse.SC_FORBIDDEN, response.getStatus());
+  }
+
+  public void testValidationFailureRedirect() throws Exception {
+    config.setInitParameter(FilterConstants.AUTH_FAILED_URL, AUTH_FAILED_URL);
+    filter.init(config);
+    source = (StringProtocolSource)
+        filter.getConfiguration().getProtocolSource();
+    request.setRequestURL(URL);
+    request.setParameter("ticket", TICKET);
+    source.setText(getFailureText());
+    filter.doFilter(request, response, filterChain);
+    assertEquals(false, filterChain.isChainInvoked());
+    assertEquals(AUTH_FAILED_URL, response.getRedirect());
   }
 
   private String getFailureText() {
@@ -92,10 +107,10 @@ public class ProxyValidateFilterTest extends TestCase {
     return sb.toString();
   }
   
-  public void testValidationSuccessNoProxies() throws Exception {
+  public void testValidationSuccess() throws Exception {
     request.setRequestURL(URL);
     request.setParameter("ticket", TICKET);
-    source.setText(getSuccessText(null));
+    source.setText(getSuccessText());
     filter.doFilter(request, response, filterChain);
     assertEquals(true, filterChain.isChainInvoked());
     HttpServletRequest chainedRequest = (HttpServletRequest) 
@@ -107,44 +122,32 @@ public class ProxyValidateFilterTest extends TestCase {
     assertEquals(request.getQueryString(), chainedRequest.getQueryString());
   }
 
-  public void testValidationSuccessTrustedProxies() throws Exception {
-    request.setRequestURL(URL);
-    request.setParameter("ticket", TICKET);
-    List proxies = Arrays.asList(new String[]{ PROXY1, PROXY2 });
-    source.setText(getSuccessText(proxies));
-    filter.doFilter(request, response, filterChain);
-    assertEquals(true, filterChain.isChainInvoked());
-  }
-
-  public void testValidationSuccessUntrustedProxy() throws Exception {
-    request.setRequestURL(URL);
-    request.setParameter("ticket", TICKET);
-    List proxies = Arrays.asList(new String[]{ OTHER_PROXY });
-    source.setText(getSuccessText(proxies));
-    filter.doFilter(request, response, filterChain);
-    assertEquals(false, filterChain.isChainInvoked());
-    assertEquals(HttpServletResponse.SC_FORBIDDEN, response.getStatus());
-  }
-
-  private String getSuccessText(List proxies) {
-    StringBuilder sb = new StringBuilder(1000);
+  private String getSuccessText() {
+    StringBuilder sb = new StringBuilder();
     sb.append("<cas:serviceResponse xmlns:cas='http://www.yale.edu/tp/cas'>");
     sb.append("<cas:authenticationSuccess>");
     sb.append("<cas:user>");
     sb.append(USER);
     sb.append("</cas:user>");
-    if (proxies != null) {
-      sb.append("<cas:proxies>");
-      for (Iterator i = proxies.iterator(); i.hasNext(); ) {
-        sb.append("<cas:proxy>");
-        sb.append((String) i.next());
-        sb.append("</cas:proxy>");
-      }
-      sb.append("</cas:proxies>");
-    }
     sb.append("</cas:authenticationSuccess>");
     sb.append("</cas:serviceResponse>");
     return sb.toString();
   }
+
+  public void testBypassOnProxyCallback() throws Exception {
+    request.setRequestURL(PROXY_CALLBACK_URL);
+    filter.doFilter(request, response, filterChain);
+    assertTrue(filterChain.isChainInvoked());
+    assertNull(request.getSession(false));
+  }
+  
+  public void testBypassOnBypassAttribute() throws Exception {
+    request.setRequestURL(URL);
+    request.getSession().setAttribute(FilterConstants.BYPASS_ATTRIBUTE, 
+        new Boolean(true));
+    filter.doFilter(request, response, filterChain);
+    assertTrue(filterChain.isChainInvoked());
+  }
+  
 }
 

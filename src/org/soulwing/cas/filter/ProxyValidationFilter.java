@@ -1,5 +1,5 @@
 /*
- * ServiceValidateFilter.java
+ * ProxyValidationFilter.java
  *
  * Created on Sep 8, 2006
  *
@@ -17,28 +17,24 @@
  */
 package org.soulwing.cas.filter;
 
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-
 
 /**
- * A ValidationFilter that uses CAS's <code>/serviceValidate</code>
- * operation to perform the authentication.
- *
- * @author Carl Harris
+ * An subclass of AbstractValidationFilter that uses CAS's 
+ * <code>/proxyValidate</code> operation to perform the authentication.
  * 
+ * @author Carl Harris
  */
-public class ServiceValidateFilter extends ValidationFilter {
-
-  private FilterAuthenticator authenticator;
+public class ProxyValidationFilter extends AbstractValidationFilter { 
+  
+  private ProxyValidationAuthenticator authenticator;
   
   protected FilterAuthenticator getAuthenticator() {
     return authenticator;
   }
-
-  public void init(FilterConfig filterConfig) throws ServletException {
-    super.init(filterConfig);
-    authenticator = new ServiceValidateAuthenticator();
+  
+  protected void doInit() {
+    authenticator = new ProxyValidationAuthenticator( 
+        getConfiguration().getTrustedProxies());
   }
-
+  
 }

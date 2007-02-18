@@ -1,5 +1,5 @@
 /*
- * ServiceValidateAuthenticator.java
+ * ServiceValidationAuthenticator.java
  *
  * Created on Feb 18, 2007 
  *
@@ -31,7 +31,7 @@ import org.soulwing.cas.client.ValidatorFactory;
  *
  * @author Carl Harris
  */
-class ServiceValidateAuthenticator implements FilterAuthenticator {
+class ServiceValidationAuthenticator implements FilterAuthenticator {
   
   public ServiceValidationResponse authenticate(
       final HttpServletRequest request) 

@@ -1,5 +1,5 @@
 /*
- * ValidationFilter.java
+ * AbstractValidationFilter.java
  *
  * Created on Sep 8, 2006
  *
@@ -35,60 +35,124 @@ import org.soulwing.cas.client.NoTicketException;
 import org.soulwing.cas.client.ProtocolConstants;
 import org.soulwing.cas.client.ServiceValidationResponse;
 import org.soulwing.cas.client.ValidatorFactory;
+import org.soulwing.cas.support.ValidationUtils;
 import org.soulwing.servlet.http.HttpServletRequestWrapper;
 
 
 /**
- * A CAS validation filter. 
+ * An abstract base validation filter.  This class must be extended by
+ * a subclass that provides an implementation of the <code>getAuthenticator
+ * </code> method which returns an instance of FilterAuthenticator that
+ * understands how to perform the desired validation of CAS authentication
+ * credentials. 
+ *
+ * Classes that extend this class should be designed to be used as
+ * either a Filter that can be configured in <code>web.xml</code> or as
+ * a bean that can be used with a filter-to-bean proxy in a dependency 
+ * injection framework such as Spring.  
+ * 
  * 
  * @author Carl Harris
  */
-public abstract class ValidationFilter implements Filter {
+abstract class AbstractValidationFilter implements Filter {
 
-  private static final Log log = LogFactory.getLog(ValidationFilter.class);
+  private static final Log log = LogFactory.getLog(AbstractValidationFilter.class);
   private ValidationConfiguration config;
 
   /**
-   * Gets the ValidationConfiguration for this ValidationFilter. 
+   * Gets the ValidationConfiguration for this AbstractValidationFilter. 
    */
   public ValidationConfiguration getConfiguration() {
     return config;
   }
 
   /**
-   * Sets the ValidationConfiguration for this ValidationFilter.
+   * Sets the ValidationConfiguration for this AbstractValidationFilter.
    */
   public void setConfiguration(ValidationConfiguration config) {
     this.config = config;
   }
   
   /**
-   * Gets the FilterAuthenticator instance for this ValidationFilter.
+   * Gets the FilterAuthenticator instance for this AbstractValidationFilter.
    */
   protected abstract FilterAuthenticator getAuthenticator();
 
   /**
-   * Invoked by filter's container to initialize the filter.  May be 
-   * overriden by subclasses to perform subclass-specific configuration.
-   * If so, the subclass <em>must</em> first invoke <code>super.init</code>
-   * to start the initialization.
-   * 
+   * Invoked by filter's container to initialize the filter, when the 
+   * filter is configured in the application's deployment descriptor
+   * (<code>web.xml</code>).
    * @param filterConfig configuration passed in by the container
    * @throws ServletException if a configuration error is detected
    */
-  public void init(FilterConfig filterConfig) throws ServletException {
+  public final void init(FilterConfig filterConfig) throws ServletException {
     setConfiguration(new ValidationConfiguration(filterConfig));
-    ValidatorFactory.setProtocolSource(
-        getConfiguration().getProtocolSource());
+    try {
+      doInit(filterConfig);
+      init();
+    }
+    catch (Exception ex) {
+      throw new ServletException(ex);
+    }
   }
 
   /**
-   * Invoked by the container when the application context is
-   * begin destroyed.  Subclasses may override this method, but must
-   * invoke <code>super.destroy</code> to complete the shutdown process.
+   * Subclasses may override this method in order to participate in
+   * the filter initialization process when the filter is configured
+   * in the application's deployment descriptor (<code>web.xml</code>).
+   * The default implementation simply returns.
+   * @param filterConfig <code>FilterConfig</code> passed to this
+   *    filter's <code>init(FilterConfig)</code> method.
+   * @throws Exception
    */
-  public void destroy() {
-    // Nothing to destroy
+  protected void doInit(FilterConfig filterConfig) throws Exception {
+    // default implementation does nothing
+  }
+  
+  /**
+   * Initializes this filter. This method should be invoked by framework
+   * initialization code after all dependencies have been set when the filter is
+   * being used as a bean in a dependency injection framework.
+   * @throws Exception
+   */
+  public final void init() throws Exception {
+    if (getConfiguration() == null) {
+      throw new IllegalStateException("Must set configuration property");
+    }
+    doInit();
+    if (getAuthenticator() == null) {
+      throw new IllegalStateException("Subclass must provide an authenticator");
+    }
+    ValidatorFactory.setProtocolSource(
+        getConfiguration().getProtocolSource());
+  }
+  
+  /**
+   * Subclasses may override this method in order to participate in
+   * initialization processing.  If this filter is configured in 
+   * <code>web.xml</code>, this method is invoked <em>after</em> 
+   * <code>doInit(FilterConfig).  The default implementation
+   * simply returns.
+   * @throws Exception
+   */
+  protected void doInit() throws Exception {
+    // default implementation does nothing
+  }
+  
+  /**
+   * Invoked by the servlet container when the application's context is
+   * being destroyed.
+   */
+  public final void destroy() {
+    doDestroy();
+  }
+  
+  /**
+   * Subclasses may override this method in order to participate in the
+   * shutdown processing.  The default implementation simply returns.
+   */
+  protected void doDestroy() {
+    // default implementation does nothing.
   }
   
   /**
@@ -267,31 +331,17 @@ public abstract class ValidationFilter implements Filter {
     }
   }
 
-  /**
-   * @return if the session attached to <code>request</code> contains
-   *    a validation request, returns the cached validation request
-   *    else returns <code>null</code>.
-   * TODO: should we check a signature on the stored attribute to make
-   * certain we created it.
-   */
+  // This method has package-level access to facilitate unit testing.
   ServiceValidationResponse getSessionValidation(
       HttpServletRequest request) {
-    HttpSession session = request.getSession(false);
     ServiceValidationResponse response = null;
-    if (session != null) {
-      response = (ServiceValidationResponse)
-        session.getAttribute(FilterConstants.VALIDATION_ATTRIBUTE);
-    }
+      ValidationUtils.getServiceValidationResponse(request);
     log.debug("Validation object " 
         + (response != null ? "exists" : "does not exist") + " in session");
     return response;
   }
 
-  /**
-   * Stores the validation response in the session attached to 
-   * <code>request</code>.
-   * TODO: should we sign the request?
-   */
+  // This method has package-level access to facilitate unit testing.
   void setSessionValidation(HttpServletRequest request,
       ServiceValidationResponse response) {
     request.getSession(true).setAttribute(
