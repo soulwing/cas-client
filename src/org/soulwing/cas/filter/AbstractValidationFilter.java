@@ -46,12 +46,6 @@ import org.soulwing.servlet.http.HttpServletRequestWrapper;
  * understands how to perform the desired validation of CAS authentication
  * credentials. 
  *
- * Classes that extend this class should be designed to be used as
- * either a Filter that can be configured in <code>web.xml</code> or as
- * a bean that can be used with a filter-to-bean proxy in a dependency 
- * injection framework such as Spring.  
- * 
- * 
  * @author Carl Harris
  */
 abstract class AbstractValidationFilter implements Filter {
@@ -308,31 +302,10 @@ abstract class AbstractValidationFilter implements Filter {
   
   private HttpServletRequest wrapRequest(HttpServletRequest request,
       String userName) {
-    return new HttpServletRequestWrapper(request, new Principal(userName));
+    return new HttpServletRequestWrapper(request, new CasPrincipal(userName));
   }
   
-  private class Principal implements java.security.Principal {
-    private String name;
-   
-    public Principal(String userName) {
-      setName(userName);
-    }
-    
-    public Principal(ServiceValidationResponse response) {
-      this(response.getUserName());
-    }
-    
-    public String getName() {
-      return this.name;
-    }
-
-    private void setName(String name) {
-      this.name = name;
-    }
-  }
-
-  // This method has package-level access to facilitate unit testing.
-  ServiceValidationResponse getSessionValidation(
+  private ServiceValidationResponse getSessionValidation(
       HttpServletRequest request) {
     ServiceValidationResponse response = null;
       ValidationUtils.getServiceValidationResponse(request);
@@ -341,8 +314,7 @@ abstract class AbstractValidationFilter implements Filter {
     return response;
   }
 
-  // This method has package-level access to facilitate unit testing.
-  void setSessionValidation(HttpServletRequest request,
+  private void setSessionValidation(HttpServletRequest request,
       ServiceValidationResponse response) {
     request.getSession(true).setAttribute(
         FilterConstants.VALIDATION_ATTRIBUTE, response);

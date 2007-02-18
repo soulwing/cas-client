@@ -12,7 +12,7 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  -->
-<project name="soulwing-casclient" default="compile" basedir=".">
+<project name="soulwing-casclient" default="all" basedir=".">
   <property name="build.dir" location="build"/>
   <property name="build.prod.dir" location="${build.dir}/classes"/>
   <property name="build.test.dir" location="${build.dir}/test-classes"/>
@@ -22,7 +22,9 @@
   <property name="vendor.classes.dir" location="vendor/classes"/>
   <property name="vendor.lib.dir" location="vendor/lib"/>
   <property name="vendor.testlib.dir" location="vendor/test-lib"/>
-
+  <property name="doc.dir" location="doc"/>
+  <property name="api.doc.dir" location="${doc.dir}/api"/>
+  
   <path id="project.classpath">
     <pathelement location="${resources.dir}"/>
     <pathelement location="${build.prod.dir}"/>
@@ -36,14 +38,18 @@
     </fileset>
   </path>
   
+  <target name="all" depends="prepare, compile, test, javadoc"/>
+  
   <target name="prepare">
     <mkdir dir="${build.prod.dir}"/>
     <mkdir dir="${build.test.dir}"/>
+    <mkdir dir="${api.doc.dir}"/>
   </target>
   
   <target name="clean">
     <delete dir="${build.prod.dir}"/>
     <delete dir="${build.test.dir}"/>
+    <delete dir="${api.doc.dir}"/>
   </target>
   
   <target name="compile" depends="compile.src, compile.test"/>
@@ -74,6 +80,15 @@
       <compilerarg value="-Xlint:-deprecation"/>
       <classpath refid="project.classpath"/>
     </javac>
+  </target>
+  
+  <target name="javadoc" depends="prepare">
+    <javadoc sourcepath="${src.dir}" destdir="${api.doc.dir}" 
+        author="true" version="true" use="true">
+      <doctitle><![CDATA[<h1>Soulwing CAS Client</h1>]]></doctitle>
+      <bottom><![CDATA[<i>Copyright &#169; 2006, 2007 Carl E. Harris, Jr.  All Rights Reserved.</i>]]></bottom>
+      <tag name="todo" scope="all" description="To do:"/>
+    </javadoc>
   </target>
 
 </project>

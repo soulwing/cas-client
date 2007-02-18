@@ -14,17 +14,18 @@
  -->
 <project name="soulwing-casclient" default="dist.zip" basedir=".">
   <property name="name" value="${ant.project.name}"/>
-  <property name="version" value="0.2rc4"/>
+  <property name="version" value="0.2rc5"/>
   <property name="name.version" value="${name}-${version}"/>
+  <property name="doc.dir" location="doc"/>
   <property name="build.dir" location="build"/>
   <property name="build.prod.dir" location="${build.dir}/classes"/>
   <property name="build.test.dir" location="${build.dir}/test-classes"/>
   <property name="vendor.dir" location="vendor/"/>
   <property name="vendor.lib.dir" location="${vendor.dir}/lib"/>
   <property name="dist.dir" location="dist"/>
-  <property name="zip.dir" location="${dist.dir}/${name.version}"/>
-  <property name="jar.name" location="${zip.dir}/${name.version}.jar"/>
-  <property name="zip.name" location="${dist.dir}/${name.version}.zip"/>
+  <property name="jar.name" value="${name.version}.jar"/>
+  <property name="jar.path" location="${dist.dir}/${jar.name}"/>
+  <property name="zip.path" location="${dist.dir}/${name.version}.zip"/>
   
   <target name="clean">
     <delete dir="${dist.dir}"/>
@@ -36,19 +37,22 @@
   </target>
   
   <target name="lib.jar" depends="prepare">
-    <jar destfile="${jar.name}" basedir="${build.prod.dir}"/>
+    <jar destfile="${jar.path}" basedir="${build.prod.dir}"/>
   </target>
   
   <target name="dist.zip" depends="lib.jar">
-    <copy todir="${zip.dir}">
-      <fileset includes="LICENSE.txt" dir="."/>
-    </copy>
-    <copy todir="${zip.dir}/lib">
-      <fileset includes="**.jar" dir="${vendor.lib.dir}"/>
-    </copy>
-    <zip destfile="${zip.name}" basedir="${dist.dir}">
-      <fileset includes="${zip.dir}" dir="${dist.dir}"/>
+    <zip destfile="${zip.path}">
+      <zipfileset dir="${basedir}" prefix="${name.version}">
+        <include name="README.dependencies.txt" />
+        <include name="LICENSE.txt" />
+      </zipfileset>
+      <zipfileset dir="${dist.dir}" includes="${jar.name}"
+        prefix="${name.version}" />
+      <zipfileset dir="${doc.dir}" prefix="${name.version}/doc" />
+      <zipfileset dir="${vendor.lib.dir}" prefix="${name.version}/lib">
+        <include name="**/*.jar" />
+      </zipfileset>
     </zip>
   </target>
-
+  
 </project>  

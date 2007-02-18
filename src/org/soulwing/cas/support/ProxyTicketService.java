@@ -29,7 +29,7 @@ import org.soulwing.cas.client.SimpleUrlGenerator;
 
 /**
  * A service-layer bean that collaborates with ProxyGrantingTicketFilter 
- * (via ProxyGrantingTicketHolder) providing a simple means of obtaining
+ * (via ProxyGrantingTicketHolder) to provide a simple means of obtaining
  * tickets to access CAS-protected services via proxy.
  *
  * @author Carl Harris
@@ -41,14 +41,28 @@ public class ProxyTicketService {
   private ProtocolConfiguration configuration;
   private Proxy proxy;
 
+  /**
+   * Gets the CAS protocol configuration for this ProxyTicketService.
+   * @return <code>ProtocolConfiguration</code> instance configured for
+   *    this ProxyTicketService.
+   */
   public ProtocolConfiguration getConfiguration() {
     return configuration;
   }
   
+  /**
+   * Sets the CAS protocol configuration to use with this ProxyTicketService.
+   * @param configuration <code>ProtocolConfiguration</code> instance
+   *    configured for this ProxyTicketService.
+   */
   public void setConfiguration(ProtocolConfiguration configuration) {
     this.configuration = configuration;
   }
   
+  /**
+   * Initializes this ProxyTicketService instance.  Must be called before
+   * the service can be used to obtain proxy tickets.
+   */
   public void init() {
     if (configuration == null) {
       throw new IllegalStateException("Must provide configuration");
@@ -56,6 +70,14 @@ public class ProxyTicketService {
     proxy = ProxyFactory.getProxy(new SimpleUrlGenerator(configuration));
   }
   
+  /**
+   * Gets a proxy authentication ticket for a target service.
+   * @param targetService URL of the service to which the authentication
+   *    ticket will be presented 
+   * @return <code>String</code> CAS proxy authentication ticket
+   * @throws ProxyTicketException if any exception occurs in obtaining
+   *    the ticket.
+   */
   public String getTicket(String targetService) {
     log.debug("Requesting ticket for target " + targetService);
     ProxyResponse response = proxy.proxy(

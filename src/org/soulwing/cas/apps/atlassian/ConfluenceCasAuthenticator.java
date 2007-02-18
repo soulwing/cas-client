@@ -54,9 +54,9 @@ public class ConfluenceCasAuthenticator extends ConfluenceAuthenticator {
       LogFactory.getLog(ConfluenceCasAuthenticator.class);
 
   /**
-   * Gets the logged in user as a <code>Principal</code>.
+   * Gets the logged in user as a <code>CasPrincipal</code>.
    * @return If CAS authentication has been performed for the session 
-   * associated with <code>request</code>, returns a <code>Principal</code>
+   * associated with <code>request</code>, returns a <code>CasPrincipal</code>
    * for the CAS-authenticated username.  Otherwise the return value is
    * delegated to the superclass.
    */

@@ -21,7 +21,7 @@ import java.security.Principal;
 
 
 /**
- * A HttpServletRequest decorator that includes a CAS Principal. 
+ * A HttpServletRequest decorator that includes a CAS CasPrincipal. 
  *
  * @author Carl Harris
  * 
@@ -32,9 +32,9 @@ public class HttpServletRequestWrapper
   private Principal principal;
   
   /**
-   * Decorates <code>request</code> to include the CAS Principal.
+   * Decorates <code>request</code> to include the CAS CasPrincipal.
    * @param request HTTP request to decorate
-   * @param principal CAS Principal that will be included in the wrapped
+   * @param principal CAS CasPrincipal that will be included in the wrapped
    *  request.
    */
   public HttpServletRequestWrapper(javax.servlet.http.HttpServletRequest request, 
