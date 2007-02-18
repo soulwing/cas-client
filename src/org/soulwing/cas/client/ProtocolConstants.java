@@ -18,8 +18,7 @@
 package org.soulwing.cas.client;
 
 /**
- * Constants used in the CAS protocol.  Most of these are string element
- * names that appear in the CAS response document.
+ * Constants used in the CAS protocol.
  *
  * @author Carl Harris
  *
@@ -48,11 +47,11 @@ public interface ProtocolConstants {
       "cas:proxyTicket";
   String CODE = "code";
   
-  String LOGIN_URI = "login";
-  String SERVICE_VALIDATE_URI = "serviceValidate";
-  String PROXY_VALIDATE_URI = "proxyValidate";
-  String PROXY_URI = "proxy";
-  String LOGOUT_URI = "logout";
+  String LOGIN_PATH = "/login";
+  String SERVICE_VALIDATE_PATH = "/serviceValidate";
+  String PROXY_VALIDATE_PATH = "/proxyValidate";
+  String PROXY_PATH = "/proxy";
+  String LOGOUT_PATH = "/logout";
   String SERVICE_PARAM = "service";
   String TICKET_PARAM = "ticket";
   String PROXY_TICKET_PARAM = "pgtId";

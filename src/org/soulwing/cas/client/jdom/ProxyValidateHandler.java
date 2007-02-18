@@ -31,7 +31,8 @@ import org.xml.sax.InputSource;
 
 
 /**
- * A ProtocolHandler for the CAS <code>/proxyValidate</code> function.
+ * A ProtocolHandler for the CAS <code>/proxyValidate</code> operation
+ * that extends the JDOM-based ServiceValidateHandler.
  *
  * @author Carl Harris
  * 

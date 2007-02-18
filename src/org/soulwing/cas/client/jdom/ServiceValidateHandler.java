@@ -29,12 +29,13 @@ import org.xml.sax.InputSource;
 
 
 /**
- * A ProtocolHandler for the CAS <code>/serviceValidate</code> function.
+ * A ProtocolHandler for the CAS <code>/serviceValidate</code> operation
+ * that extends the JDOM-based AbstractProtocolHandler.
  *
  * @author Carl Harris
  * 
  */
-public class ServiceValidateHandler extends DefaultProtocolHandler {
+public class ServiceValidateHandler extends AbstractProtocolHandler {
 
   /**
    * @see ProtocolHandler#processResult(InputSource)

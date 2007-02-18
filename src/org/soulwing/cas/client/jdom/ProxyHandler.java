@@ -29,12 +29,12 @@ import org.xml.sax.InputSource;
 
 
 /**
- * A ProtocolHandler for the CAS <code>/proxy</code> function.
+ * A ProtocolHandler for the CAS <code>/proxy</code> operation that
+ * extends the JDOM-based AbstractProtocolHandler.
  *
  * @author Carl Harris
- * 
  */
-public final class ProxyHandler extends DefaultProtocolHandler {
+public final class ProxyHandler extends AbstractProtocolHandler {
 
   /**
    * @see ProtocolHandler#processResult(InputSource)

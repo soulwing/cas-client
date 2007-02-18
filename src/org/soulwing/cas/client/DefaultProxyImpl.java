@@ -1,5 +1,5 @@
 /*
- * ProxyImpl.java
+ * DefaultProxyImpl.java
  *
  * Created on Feb 9, 2007
  *
@@ -21,17 +21,17 @@ import org.soulwing.cas.client.jdom.ProxyHandler;
 
 
 /**
- * A proxy issues requests for proxy tickets for a target service.
+ * The default implementation of the Proxy interface.
  *
  * @author Carl Harris
  */
-public class ProxyImpl implements Proxy {
+public class DefaultProxyImpl implements Proxy {
 
   private final ProtocolHandler proxyHandler;
   private UrlGenerator generator;
   private ProtocolSource source = new UrlProtocolSource();
 
-  public ProxyImpl() {
+  public DefaultProxyImpl() {
     this.proxyHandler = new ProxyHandler();
   }
 

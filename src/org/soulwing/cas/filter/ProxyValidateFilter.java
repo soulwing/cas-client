@@ -22,7 +22,7 @@ import javax.servlet.ServletException;
 
 /**
  * A ValidationFilter that uses CAS's <code>/proxyValidate</code>
- * function to perform the authentication.
+ * operation to perform the authentication.
  * 
  * @author Carl Harris
  */

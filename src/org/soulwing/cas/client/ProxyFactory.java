@@ -22,8 +22,8 @@ import org.soulwing.cas.client.jdom.ProxyHandler;
 
 /**
  * A factory for generating Proxy instances.  The default configuration
- * of this factory uses org.soulwing.cas.jdom.ProxyHandler as the
- * proxy handler.
+ * of this factory uses org.soulwing.cas.jdom.ProxyHandler for the
+ * proxyHandler property.
  *
  * @author Carl Harris
  */
@@ -33,8 +33,16 @@ public class ProxyFactory {
 
   private static ProtocolSource protocolSource = new UrlProtocolSource();
 
+  /**
+   * Obtains an instance of Proxy from the factory.  The Proxy is configured
+   * with a ProxyHandler and ProtocolSource as configured for the factory.
+   * @param urlGenerator <code>UrlGenerator</code> to use in the returned
+   *    Proxy.
+   * @return a <code>Proxy</code> configured with the specified UrlGenerator,
+   *    and a ProxyHandler and ProtocolSource as configured for the factory.
+   */
   public static final Proxy getProxy(UrlGenerator urlGenerator) {
-    ProxyImpl proxy = new ProxyImpl();
+    DefaultProxyImpl proxy = new DefaultProxyImpl();
     proxy.setUrlGenerator(urlGenerator);
     proxy.setProtocolSource(protocolSource);
     return proxy;

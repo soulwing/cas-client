@@ -24,7 +24,14 @@ import org.apache.oro.text.regex.Perl5Matcher;
 
 
 /**
- * A simple bypass filter that accepts a single servlet path to bypass.
+ * A filter that detects requests for servlet paths that should bypass
+ * CAS authentication.  The <code>bypassPath</code> property is set to 
+ * a comma-separated string of glob expressions that describe one or
+ * more servlet paths that should be marked for CAS bypass.  When a request
+ * for a path that matches one of the configured glob expressions is
+ * received by the filter, it adds an attribute to the session that the
+ * ValidationFilter will observe as a request to bypass validation of
+ * CAS credentials.
  *
  * @author Carl Harris
  */
@@ -34,14 +41,21 @@ public class SimpleBypassFilter extends LogoutFilter {
   
   private static final Log log = LogFactory.getLog(LogoutFilter.class);
   private Pattern[] bypassPaths;
-  
+
   /*
    * @see javax.servlet.Filter#init(javax.servlet.FilterConfig)
    */
   public void init(FilterConfig filterConfig) throws ServletException {
     super.init(filterConfig);
-    String[] paths = new FilterConfigurator(filterConfig)
-        .getRequiredParameter(BYPASS_PATHS).split("\\s*,\\s*");
+    setBypassPaths(new FilterConfigurator(filterConfig)
+        .getRequiredParameter(BYPASS_PATHS));
+  }
+
+  public void setBypassPaths(String bypassPaths) {
+    setBypassPaths(bypassPaths.split("\\s*,\\s*"));
+  }
+
+  private void setBypassPaths(String[] paths) {
     if (paths.length > 0) {
       GlobCompiler compiler = new GlobCompiler();
       bypassPaths = new Pattern[paths.length];
@@ -50,7 +64,7 @@ public class SimpleBypassFilter extends LogoutFilter {
           bypassPaths[i] = compiler.compile(paths[i]);
         }
         catch (MalformedPatternException ex) {
-          throw new ServletException("compile error for pattern "
+          throw new IllegalArgumentException("compile error for pattern "
               + paths[i] + ": ", ex);
         }
       }

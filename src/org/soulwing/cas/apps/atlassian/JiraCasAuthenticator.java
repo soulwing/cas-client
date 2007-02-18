@@ -20,7 +20,6 @@ package org.soulwing.cas.apps.atlassian;
 
 
 import java.security.Principal;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,31 +31,20 @@ import org.soulwing.cas.support.ValidationUtils;
 
 import com.atlassian.seraph.auth.AuthenticatorException;
 import com.atlassian.seraph.auth.DefaultAuthenticator;
-import com.atlassian.seraph.config.SecurityConfig;
 
 
 /**
- * Subclass of ConfluenceAuthenticator that provides CAS authentication for
- * Confluence.
+ * Subclass of DefaultAuthenticator that provides CAS authentication for
+ * JIRA.  This authenticator can be plugged into <code>seraph-config.xml</code> 
+ * to enable CAS authentication for JIRA.
  *
- * @author ingomar.otter
- * @author jayshao
  * @author Carl Harris
- * 
  */
 public class JiraCasAuthenticator extends DefaultAuthenticator {
 
   private static final long serialVersionUID = 1L;
   private static final Log log = 
       LogFactory.getLog(JiraCasAuthenticator.class);
-
-  public void init(Map params, SecurityConfig config) {
-    super.init(params, config);
-    
-    log.debug("initialized with loginURL=" + config.getLoginURL()
-        + " and logoutURL=" + config.getLogoutURL());
-    log.debug("param keys=" + params.keySet());
-  }
 
   public Principal getUser(HttpServletRequest request, 
       HttpServletResponse response) {
@@ -72,20 +60,6 @@ public class JiraCasAuthenticator extends DefaultAuthenticator {
     request.getSession().setAttribute(LOGGED_IN_KEY, user);
     request.getSession().setAttribute(LOGGED_OUT_KEY, null);
     return user;
-  }
-
-  public boolean login(HttpServletRequest request,
-      HttpServletResponse response, String username, String password) 
-      throws AuthenticatorException {
-    return login(request, response, username, password, false);
-  }
-
-  public boolean login(HttpServletRequest request,
-      HttpServletResponse response, String username, 
-      String password, boolean cookie) 
-      throws AuthenticatorException {
-    log.debug("login invoked");
-    return super.login(request, response, username, password, cookie);
   }
 
   public boolean logout(HttpServletRequest request,

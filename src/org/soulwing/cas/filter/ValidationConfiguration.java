@@ -27,76 +27,13 @@ import org.soulwing.cas.client.UrlProtocolSource;
 
 
 /**
- * A conffiguration bean for ValidationFilter.  Property values for this
- * bean are obtained from a FilterConfig instance, populated with
- * initialization parameters from the application's deployment descriptor
- * (typically, web.xml).
+ * A configuration bean for ValidationFilter.  Property values for this
+ * bean can be configured using the provided public setters or via a
+ * FilterConfig passed to a constructor for this class. 
  *
- * The following initialization parameters are accepted as properties:
- * <table>
- *   <tr><th>Parameter</th><th>Use</th><th>Description</th></tr>
- *   <tr>
- *     <td>serverUrl</td><td>mandatory</td>
- *     <td>Specifies the base URL for the CAS server that will be used 
- *       by this filter.</td>
- *   </tr>
- *   <tr>
- *     <td>filterPath</td><td>mandatory</td>
- *     <td>Specifies the servlet path that the filter will consider to be
- *       a request for validation.  This will be appended onto
- *       the serviceUrl, with the resulting being the value of the
- *       "service" parameter in a CAS serviceValidate or proxyValidate
- *       request.</td>
- *   </tr>
- *   <tr>
- *     <td>serviceUrl</td><td>optional</td>
- *     <td>Specifies the base URL that will be passed to the CAS server as
- *      the argument to the CAS protocol's <code>server</code>
- *      parameter.  Normal this parameter isn't specified, because 
- *      the default is to use the portion of the request URL up to 
- *      (but not including) the servlet path.
- *   </tr>
- *   <tr>
- *     <td>proxyCallbackUrl</td><td>optional</td>
- *     <td>Specifies the URL that will be passed to the CAS server as
- *      the argument to the CAS protocol's <code>pgtUrl</code>
- *      parameter.</td>
- *   </tr>
- *   <tr>
- *     <td>authFailedUrl</td><td>optional</td>
- *     <td>Specifies the URL to which the user will be redirected if
- *       CAS authentication fails.  This URL MUST NOT refer to a resource
- *       that is protected by the ValidationFilter, as a redirection loop
- *       will occur.  If this parameter is not specified, the HTTP result
- *       code FORBIDDEN is returned to the browser.</td>
- *   </tr>
- *   <tr>
- *     <td>gateway</td><td>optional</td>
- *     <td>Set this parameter to "true" in order to utilize the
- *       CAS protocol's gateway functionality.</td>
- *   </tr>
- *   <tr>
- *     <td>renew</td><td>optional</td>
- *     <td>Set this parameter to "true" in order to utilize the
- *       CAS protocol's renew functionality.  This option is intended
- *       primarily for testing.</td>
- *   </tr>
- *   <tr>
- *     <td>sourceClassName</td><td>optional</td>
- *     <td>Set this parameter to the fully-qualified name of an
- *       implementation of ProtocolSource.  By default, UrlValidationSource
- *       is used.</td>  
- *   </td>
- *   <tr>
- *     <td>trustedProxies</td><td>optional</td>
- *     <td>A comma-delimited list of trusted proxy names.  If this parameter
- *       is not specified, all proxies are trusted.</td>
- *   </tr>
- * </table>
-
  * @author Carl Harris
  */
-class ValidationConfiguration extends FilterConfigurator {
+public class ValidationConfiguration {
 
   private static final Log log = 
       LogFactory.getLog(ValidationConfiguration.class);
@@ -105,24 +42,36 @@ class ValidationConfiguration extends FilterConfigurator {
   public static final boolean RENEW_DEFAULT = false;
   public static final Class SOURCE_CLASS_DEFAULT = UrlProtocolSource.class; 
   
-  private final String filterPath;
-  private final String authFailedUrl;
-  private final String trustedProxies;
-  private final ProtocolSource protocolSource;
+  private String filterPath;
+  private String authFailedUrl;
+  private String trustedProxies;
+  private ProtocolSource protocolSource;
+  private ProtocolConfiguration protocolConfiguration;
   
-  private final ProtocolConfiguration protocolConfig = 
-      new ProtocolConfiguration();
+  public ValidationConfiguration() {
+  }
 
-  ValidationConfiguration(FilterConfig filterConfig) 
+  public ValidationConfiguration(FilterConfig filterConfig) 
       throws FilterParameterException {
-
-    super(filterConfig);
-    configureProtocol();
-    filterPath = getParameter(FilterConstants.FILTER_PATH);
-    authFailedUrl = getParameter(FilterConstants.AUTH_FAILED_URL);
-    trustedProxies = getParameter(FilterConstants.TRUSTED_PROXIES);
-    protocolSource = newProtocolSource(
-        getClassFromParameter(FilterConstants.SOURCE_CLASS_NAME,
+    FilterConfigurator fc = new FilterConfigurator(filterConfig);
+    setFilterPath(fc.getParameter(FilterConstants.FILTER_PATH));
+    setAuthFailedUrl(fc.getParameter(FilterConstants.AUTH_FAILED_URL));
+    setTrustedProxies(fc.getParameter(FilterConstants.TRUSTED_PROXIES));
+    ProtocolConfiguration config = new ProtocolConfiguration();
+    config.setServerUrl(
+        fc.getRequiredParameter(FilterConstants.SERVER_URL));
+    config.setServiceUrl(
+        fc.getParameter(FilterConstants.SERVICE_URL));
+    config.setGatewayFlag(
+        Boolean.valueOf(fc.getParameter(FilterConstants.GATEWAY, 
+            Boolean.toString(GATEWAY_DEFAULT))).booleanValue());
+    config.setRenewFlag(
+        Boolean.valueOf(fc.getParameter(FilterConstants.RENEW, 
+            Boolean.toString(RENEW_DEFAULT))).booleanValue()); 
+    config.setProxyCallbackUrl(
+        fc.getParameter(FilterConstants.PROXY_CALLBACK_URL));
+    setProtocolConfiguration(config);
+    setProtocolSource(fc.getClassFromParameter(FilterConstants.SOURCE_CLASS_NAME,
         SOURCE_CLASS_DEFAULT));
   }
   
@@ -137,59 +86,40 @@ class ValidationConfiguration extends FilterConfigurator {
     return authFailedUrl;
   }
 
+  public void setAuthFailedUrl(String authFailedUrl) {
+    this.authFailedUrl = authFailedUrl;
+  }
+  
   public String getFilterPath() {
     return filterPath;
   }  
   
-  public String getProxyCallbackUrl() {
-    return protocolConfig.getProxyCallbackUrl();
-  }
-  
-  public boolean getGatewayFlag() {
-    return protocolConfig.getGatewayFlag();
-  }
-  
-  public boolean getRenewFlag() {
-    return protocolConfig.getRenewFlag();
+  public void setFilterPath(String filterPath) {
+    this.filterPath = filterPath;
   }
 
-  public String getServerUrl() {
-    return protocolConfig.getServerUrl();
+  public ProtocolConfiguration getProtocolConfiguration() {
+    return protocolConfiguration;
   }
 
-  public String getServiceUrl() {
-    return protocolConfig.getServiceUrl();
-  }
-
-  public String getTrustedProxies() {
-    return trustedProxies;
+  public void setProtocolConfiguration(
+      ProtocolConfiguration protocolConfiguration) {
+    this.protocolConfiguration = protocolConfiguration;
+    UrlGeneratorFactory.setProtocolConfiguration(protocolConfiguration);
   }
 
   public ProtocolSource getProtocolSource() {
     return protocolSource;
   }
 
-  private void configureProtocol() throws FilterParameterException {
-    protocolConfig.setServerUrl(
-        getRequiredParameter(FilterConstants.SERVER_URL));
-    protocolConfig.setServiceUrl(
-        getParameter(FilterConstants.SERVICE_URL));
-    protocolConfig.setGatewayFlag(
-        Boolean.valueOf(getParameter(FilterConstants.GATEWAY, 
-            Boolean.toString(GATEWAY_DEFAULT))).booleanValue());
-    protocolConfig.setRenewFlag(
-        Boolean.valueOf(getParameter(FilterConstants.RENEW, 
-            Boolean.toString(RENEW_DEFAULT))).booleanValue()); 
-    protocolConfig.setProxyCallbackUrl(
-        getParameter(FilterConstants.PROXY_CALLBACK_URL));
-    UrlGeneratorFactory.setProtocolConfiguration(protocolConfig);
+  public void setProtocolSource(ProtocolSource protocolSource) {
+    this.protocolSource = protocolSource;
   }
 
-  private ProtocolSource newProtocolSource(Class sourceClass) 
+  public void setProtocolSource(Class sourceClass) 
       throws FilterParameterException {
-    
     try {
-      return (ProtocolSource) sourceClass.newInstance();
+      setProtocolSource((ProtocolSource) sourceClass.newInstance());
     }
     catch (ClassCastException ex) {
       throw new FilterParameterException(ex);
@@ -201,6 +131,33 @@ class ValidationConfiguration extends FilterConfigurator {
       throw new FilterParameterException(ex);
     }
   }
+
+  public String getTrustedProxies() {
+    return trustedProxies;
+  }
+
+  public void setTrustedProxies(String trustedProxies) {
+    this.trustedProxies = trustedProxies;
+  }
+
+  public String getProxyCallbackUrl() {
+    return protocolConfiguration.getProxyCallbackUrl();
+  }
   
+  public boolean getGatewayFlag() {
+    return protocolConfiguration.getGatewayFlag();
+  }
   
+  public boolean getRenewFlag() {
+    return protocolConfiguration.getRenewFlag();
+  }
+
+  public String getServerUrl() {
+    return protocolConfiguration.getServerUrl();
+  }
+
+  public String getServiceUrl() {
+    return protocolConfiguration.getServiceUrl();
+  }
+
 }

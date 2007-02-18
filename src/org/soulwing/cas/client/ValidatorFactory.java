@@ -47,7 +47,7 @@ public class ValidatorFactory {
    */
   public static final Validator getValidator(UrlGenerator generator) {
 
-    ValidatorImpl validator = new ValidatorImpl(
+    DefaultValidatorImpl validator = new DefaultValidatorImpl(
         getServiceValidateHandler(),
         getProxyValidateHandler());
     

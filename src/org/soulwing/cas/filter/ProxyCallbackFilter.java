@@ -37,9 +37,18 @@ import org.soulwing.cas.client.ServiceValidationResponse;
 import org.soulwing.cas.support.ValidationUtils;
 
 /**
- * A filter for processing CAS proxy callback requests.
- *
+ * A filter for processing CAS proxy callback requests.  Monitors incoming
+ * HTTP requests and intercepts requests for the servlet path defined
+ * by the <code>filterPath</code> property, which it interprets as a
+ * CAS proxy callback request.
+ * 
+ * For all other requests, the filter adds the proxy granting ticket as
+ * a session attribute if the request contains an IOU for which the associated
+ * proxy granting ticket is known.  The value of this attribute can be
+ * obtained using <code>ValidationUtils.getProxyGrantingTicket</code>
+ * 
  * @author Carl Harris
+ * @see ValidationUtils
  */
 public class ProxyCallbackFilter implements Filter {
 
@@ -54,17 +63,31 @@ public class ProxyCallbackFilter implements Filter {
   Map getTicketMap() {
     return ticketMap;
   }
-  
+
+  /**
+   * Gets this ProxyCallbackFilter's <code>filterPath</code> property.
+   * @return <code>String</code> servlet path that this filter should
+   *    consider to be a CAS proxy callback request.
+   */
+  public String getFilterPath() {
+    return filterPath;
+  }
+
+  /**
+   * Sets this ProxyCallbackFilter's <code>filterPath</code> property.
+   * @param filterPath <code>String</code> servlet path that this filter
+   *    should consider to be a CAS proxy callback request.
+   */
+  public void setFilterPath(String filterPath) {
+    this.filterPath = filterPath;
+  }
+
   /*
    * @see javax.servlet.Filter#init(javax.servlet.FilterConfig)
    */
   public void init(FilterConfig config) throws ServletException {
-    filterPath = config.getInitParameter(
-        FilterConstants.FILTER_PATH);
-    if (filterPath == null) {
-      throw new ServletException(FilterConstants.FILTER_PATH
-          + " parameter is required");
-    }
+    setFilterPath(new FilterConfigurator(config)
+        .getRequiredParameter(FilterConstants.FILTER_PATH));
   }
   
   /*
@@ -85,7 +108,7 @@ public class ProxyCallbackFilter implements Filter {
           filterChain);
     }
     catch (ClassCastException ex) {
-      log.info("Filter supports HTTP only");
+      log.debug("Filter supports HTTP only");
       filterChain.doFilter(request, response);
     }
   }
@@ -98,8 +121,9 @@ public class ProxyCallbackFilter implements Filter {
       processCallback(request);
     }
     else {
-      if (hasValidation(request)) {
-        addTicketToSession(request);
+      String iou = getProxyGrantingTicketIou(request);
+      if (iou != null) {
+        addTicketToSession(request, iou);
       }
       filterChain.doFilter(request, response);
     }
@@ -125,22 +149,25 @@ public class ProxyCallbackFilter implements Filter {
     ticketMap.put(pgtIou, pgtId);
   }
 
-  private boolean hasValidation(HttpServletRequest request) {
-    return ValidationUtils.getServiceValidationResponse(request) != null;
-  }
-  
-  private void addTicketToSession(HttpServletRequest request) {
+  private String getProxyGrantingTicketIou(HttpServletRequest request) {
+    String iou = null;
     ServiceValidationResponse validation = 
         ValidationUtils.getServiceValidationResponse(request);
-    String proxyGrantingTicket = (String) 
-        ticketMap.get(validation.getProxyGrantingTicketIou());
+    if (validation != null) {
+      iou = validation.getProxyGrantingTicketIou();
+    }
+    return iou;
+  }
+  
+  private void addTicketToSession(HttpServletRequest request, String iou) {
+    String proxyGrantingTicket = (String) ticketMap.get(iou);
     if (proxyGrantingTicket != null) {
-      ticketMap.remove(validation.getProxyGrantingTicketIou());
+      ticketMap.remove(iou);
       log.debug("PGT " + proxyGrantingTicket + " added to session");
       request.getSession().setAttribute(
           FilterConstants.PROXY_GRANTING_TICKET_ATTRIBUTE, 
           proxyGrantingTicket);
-    } 
+    }
   }
   
 }

@@ -19,14 +19,24 @@ package org.soulwing.cas.client;
 
 
 /**
- * A request for a proxy ticket.
+ * A request to obtain a proxy ticket from a CAS server.
  *
  * @author Carl Harris
  */
 public interface ProxyRequest {
 
+  /**
+   * Gets the proxy granting ticket for this request.
+   * @return <code>String</code> proxy granting ticket obtained through
+   *    the CAS proxy callback interaction.
+   */
   String getProxyGrantingTicket();
   
+  /**
+   * Gets the URL for the target service for this request.
+   * @return <code>String</code> target service URL to which the requested
+   *    proxy ticket will be presented.
+   */
   String getTargetService();
   
 }

@@ -25,7 +25,6 @@ package org.soulwing.cas.apps.atlassian;
 
 
 import java.security.Principal;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,15 +36,14 @@ import org.soulwing.cas.support.ValidationUtils;
 
 import com.atlassian.confluence.user.ConfluenceAuthenticator;
 import com.atlassian.seraph.auth.AuthenticatorException;
-import com.atlassian.seraph.config.SecurityConfig;
 
 
 /**
  * Subclass of ConfluenceAuthenticator that provides CAS authentication for
+ * Confluence.  This authenticator can be plugged into 
+ * <code>seraph-config.xml</code> to enable CAS authentication for
  * Confluence.
  *
- * @author ingomar.otter
- * @author jayshao
  * @author Carl Harris
  * 
  */
@@ -55,14 +53,13 @@ public class ConfluenceCasAuthenticator extends ConfluenceAuthenticator {
   private static final Log log = 
       LogFactory.getLog(ConfluenceCasAuthenticator.class);
 
-  public void init(Map params, SecurityConfig config) {
-    super.init(params, config);
-    
-    log.debug("initialized with loginURL=" + config.getLoginURL()
-        + " and logoutURL=" + config.getLogoutURL());
-    log.debug("param keys=" + params.keySet());
-  }
-
+  /**
+   * Gets the logged in user as a <code>Principal</code>.
+   * @return If CAS authentication has been performed for the session 
+   * associated with <code>request</code>, returns a <code>Principal</code>
+   * for the CAS-authenticated username.  Otherwise the return value is
+   * delegated to the superclass.
+   */
   public Principal getUser(HttpServletRequest request, 
       HttpServletResponse response) {
 
@@ -79,23 +76,15 @@ public class ConfluenceCasAuthenticator extends ConfluenceAuthenticator {
     return user;
   }
 
-  public boolean login(HttpServletRequest request,
-      HttpServletResponse response, String username, String password) 
-      throws AuthenticatorException {
-    return login(request, response, username, password, false);
-  }
-
-  public boolean login(HttpServletRequest request,
-      HttpServletResponse response, String username, 
-      String password, boolean cookie) 
-      throws AuthenticatorException {
-    log.debug("login invoked");
-    return super.login(request, response, username, password, cookie);
-  }
-
+  /**
+   * Performs the logout function, setting Seraph session state such
+   * that it appears that no user is logged in.
+   * @return <code>true</code>
+   */
   public boolean logout(HttpServletRequest request,
       HttpServletResponse response) throws AuthenticatorException {
-    log.debug("logout invoked");
+    super.logout(request, response);
+    // TODO: the superclass probably does the same thing we're doing here
     request.getSession().setAttribute(LOGGED_IN_KEY, null);
     request.getSession().setAttribute(LOGGED_OUT_KEY, new Boolean(true));
     return true;

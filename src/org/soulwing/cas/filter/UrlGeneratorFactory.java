@@ -1,5 +1,5 @@
 /*
- * ContextUrlGeneratorFactory.java
+ * UrlGeneratorFactory.java
  *
  * Created on Feb 11, 2007
  *
@@ -26,28 +26,49 @@ import org.soulwing.cas.client.UrlGenerator;
 
 
 /**
- * A factory for constructing ContextUrlGenerator instances.
+ * A factory for constructing UrlGenerator instances.
  *
  * @author Carl Harris
  */
-public class UrlGeneratorFactory {
+class UrlGeneratorFactory {
 
   private static ProtocolConfiguration config;
 
+  /**
+   * Gets the ProtocolConfiguration configured for this factory.
+   * @return configuration for this factory.
+   */
   public static synchronized ProtocolConfiguration getProtocolConfiguration() {
     return config;
   }
   
+  /**
+   * Sets the ProtocolConfiguration to use in this factory.
+   * @param config configuration to use for this factory.
+   */
   public static synchronized void setProtocolConfiguration(
       ProtocolConfiguration config) {
     UrlGeneratorFactory.config = config;
   }
   
+  /**
+   * Gets a UrlGenerator from this factory, configured as this factory
+   * is configured. 
+   * @param request request for which a UrlGenerator is needed
+   * @return <code>UrlGenerator</code> instance
+   */
   public static UrlGenerator getUrlGenerator(HttpServletRequest request) {
     return new SimpleUrlGenerator(
         new ContextProtocolConfiguration(request, config));
   }
-  
+
+  /**
+   * An extension of ProtocolConfiguration that allows the 
+   * value of the <code>serviceUrl</code> property to be derived from
+   * an HttpServletRequest.
+   *
+   * @author Carl Harris
+   */
   static class ContextProtocolConfiguration 
       extends ProtocolConfiguration {
     private final HttpServletRequest request;

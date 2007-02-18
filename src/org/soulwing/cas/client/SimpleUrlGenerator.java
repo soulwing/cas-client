@@ -18,34 +18,78 @@
 package org.soulwing.cas.client;
 
 /**
- * A simple generator for the URL strings used in the CAS protocol.
+ * A simple generator for the URL strings used in the CAS protocol.  This
+ * URL generator can be provided with a <code>ProtocolConfiguration</code> 
+ * that will be used in generating URLs for CAS operations.  Alternatively,
+ * the configuration parameters can be passed in as constructor arguments. 
  *
  * @author Carl Harris
+ * @see ProtocolConfiguration
  */
 public class SimpleUrlGenerator implements UrlGenerator {
 
   private final ProtocolConfiguration config;
   
-  
+  /**
+   * @param config <code>ProtocolConfiguration</code> that will provide
+   *    the configuration for this generator
+   */
   public SimpleUrlGenerator(ProtocolConfiguration config) {
     this.config = config;
   }
   
+  /**
+   * @param serverUrl base URL for the CAS server, to which servlet paths
+   *    corresponding to the CAS operations (e.g. <code>/serviceValidate
+   *    </code>) will be appended
+   * @param serviceUrl full URL for the application, which will be used as
+   *    the value of the <code>service</code> query parameter in CAS
+   *    request URLs.
+   */
   public SimpleUrlGenerator(String serverUrl, String serviceUrl) {
     this(serverUrl, serviceUrl, null, false, false);
   }
   
+  /**
+   * @param serverUrl base URL for the CAS server, to which servlet paths
+   *    corresponding to the CAS operations (e.g. <code>/serviceValidate
+   *    </code>) will be appended
+   * @param serviceUrl full URL for the application, which will be used as
+   *    the value of the <code>service</code> query parameter in CAS
+   *    request URLs.
+   * @param proxyCallbackUrl URL that will be used as the value of the
+   *    <code>pgtUrl</code> query parameter in CAS request URLs.
+   */
   public SimpleUrlGenerator(String serverUrl, String serviceUrl,
       String proxyCallbackUrl) {
     this(serverUrl, serviceUrl, proxyCallbackUrl, false, false);
   }
   
+  /**
+   * @param serverUrl base URL for the CAS server, to which servlet paths
+   *    corresponding to the CAS operations (e.g. <code>/serviceValidate
+   *    </code>) will be appended
+   * @param serviceUrl full URL for the application, which will be used as
+   *    the value of the <code>service</code> query parameter in CAS
+   *    request URLs.
+   * @param proxyCallbackUrl URL that will be used as the value of the
+   *    <code>pgtUrl</code> query parameter in CAS request URLs.
+   * @param gatewayFlag if <code>true</code>, <code>gateway=true</code>
+   *    will be included as a query parameter in CAS request URLs.
+   * @param renewFlag if <code>true</code>, <code>renew=true</code>
+   *    will be included as a query parameter in CAS request URLs.
+   */
   public SimpleUrlGenerator(String serverUrl, String serviceUrl,
       String proxyCallbackUrl, boolean gatewayFlag, boolean renewFlag) {
     config = new ProtocolConfiguration(serverUrl, serviceUrl,
         proxyCallbackUrl, gatewayFlag, renewFlag);
   }
 
+  /**
+   * Gets the configuration of this SimpleUrlGenerator.
+   * @return <code>ProtocolConfiguration</code> containing configuration
+   *    properties for this instance.
+   */
   public ProtocolConfiguration getConfiguration() {
     return config;
   }
@@ -57,7 +101,7 @@ public class SimpleUrlGenerator implements UrlGenerator {
    */
   public String getLoginUrl() {
     StringBuilder sb = new StringBuilder(100);
-    appendLoginUri(sb);
+    appendLoginUrl(sb);
     appendService(sb);
     appendGateway(sb);
     appendRenew(sb);
@@ -81,7 +125,7 @@ public class SimpleUrlGenerator implements UrlGenerator {
    */
   public String getLogoutUrl(String url) {
     StringBuilder sb = new StringBuilder(100);
-    appendLogoutUri(sb);
+    appendLogoutUrl(sb);
     appendUrl(sb, url);
     return sb.toString();
   }
@@ -99,7 +143,7 @@ public class SimpleUrlGenerator implements UrlGenerator {
     requiredParameter("proxyGrantingTicket", proxyGrantingTicket);
     requiredParameter("targetService", targetService);    
     StringBuilder sb = new StringBuilder(100);
-    appendProxyUri(sb);
+    appendProxyUrl(sb);
     appendProxyGrantingTicket(sb, proxyGrantingTicket);
     appendTargetService(sb,targetService);
     return sb.toString();
@@ -114,7 +158,7 @@ public class SimpleUrlGenerator implements UrlGenerator {
    */
   public String getProxyValidateUrl(String ticket) {
     requiredParameter("ticket", ticket);
-    return getValidateUrl(ProtocolConstants.PROXY_VALIDATE_URI, ticket); 
+    return getValidateUrl(ProtocolConstants.PROXY_VALIDATE_PATH, ticket); 
   }
   
   /**
@@ -126,7 +170,7 @@ public class SimpleUrlGenerator implements UrlGenerator {
    */
   public String getServiceValidateUrl(String ticket) {
     requiredParameter("ticket", ticket);
-    return getValidateUrl(ProtocolConstants.SERVICE_VALIDATE_URI, ticket); 
+    return getValidateUrl(ProtocolConstants.SERVICE_VALIDATE_PATH, ticket); 
   }
   
   private void requiredParameter(String name, String value) {  
@@ -135,9 +179,9 @@ public class SimpleUrlGenerator implements UrlGenerator {
     }
   }
   
-  private String getValidateUrl(String validate, String ticket) {
+  private String getValidateUrl(String validatePath, String ticket) {
     StringBuilder sb = new StringBuilder(100);
-    appendValidateUri(sb, validate);
+    appendValidateUrl(sb, validatePath);
     appendService(sb);
     appendTicket(sb, ticket);
     appendProxyCallbackUrl(sb, config.getProxyCallbackUrl());
@@ -146,28 +190,24 @@ public class SimpleUrlGenerator implements UrlGenerator {
     return sb.toString();
   }
 
-  private void appendLoginUri(StringBuilder sb) {
-    sb.append(config.getServerUrl());
-    sb.append('/');
-    sb.append(ProtocolConstants.LOGIN_URI);
+  private void appendLoginUrl(StringBuilder url) {
+    url.append(config.getServerUrl());
+    url.append(ProtocolConstants.LOGIN_PATH);
   }
 
-  private void appendLogoutUri(StringBuilder sb) {
-    sb.append(config.getServerUrl());
-    sb.append('/');
-    sb.append(ProtocolConstants.LOGOUT_URI);
+  private void appendLogoutUrl(StringBuilder url) {
+    url.append(config.getServerUrl());
+    url.append(ProtocolConstants.LOGOUT_PATH);
   }
 
-  private void appendProxyUri(StringBuilder sb) {
-    sb.append(config.getServerUrl());
-    sb.append('/');
-    sb.append(ProtocolConstants.PROXY_URI);
+  private void appendProxyUrl(StringBuilder url) {
+    url.append(config.getServerUrl());
+    url.append(ProtocolConstants.PROXY_PATH);
   }
   
-  private void appendValidateUri(StringBuilder sb, String validate) {
+  private void appendValidateUrl(StringBuilder sb, String validatePath) {
     sb.append(config.getServerUrl());
-    sb.append('/');
-    sb.append(validate);
+    sb.append(validatePath);
   }
 
   private void appendUrl(StringBuilder sb, String url) {

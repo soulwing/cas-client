@@ -17,6 +17,11 @@
  */
 package org.soulwing.cas.client;
 
+/**
+ * A generator for CAS service request URLs.  
+ *
+ * @author Carl Harris
+ */
 public interface UrlGenerator {
   
   /**

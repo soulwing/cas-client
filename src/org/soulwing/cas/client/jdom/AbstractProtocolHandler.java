@@ -1,5 +1,5 @@
 /*
- * DefaultProtocolHandler.java
+ * AbstractProtocolHandler.java
  *
  * Created on Sep 14, 2006
  *
@@ -33,13 +33,12 @@ import org.xml.sax.InputSource;
 
 
 /**
- * A base implementation of ProtocolHandler that uses JDOM.
+ * An abstract base implementation of ProtocolHandler that uses JDOM.
  *
  * @author Carl Harris
  * 
  */
-public abstract class DefaultProtocolHandler 
-    implements ProtocolHandler {
+public abstract class AbstractProtocolHandler implements ProtocolHandler {
 
   /** 
    * @see org.soulwing.cas.client.ProtocolHandler#processResult(

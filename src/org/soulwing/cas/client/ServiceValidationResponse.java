@@ -19,11 +19,10 @@ package org.soulwing.cas.client;
 
 
 /**
- * A value class that represents the response to the CAS
- * <code>/serviceValidate</code> function.
+ * A response received for an invocation of the CAS <code>/serviceValidate
+ * </code> operation.
  *
  * @author Carl Harris
- * 
  */
 public class ServiceValidationResponse extends Response {
 

@@ -22,11 +22,11 @@ import java.util.List;
 
 
 /**
- * A value class that represents the response to the CAS 
- * <code>/proxyValidate</code> function.
+ * A response received for an invocation of the CAS <code>/proxyValidate</code>
+ * operation.
  *
  * @author Carl Harris
- * 
+ * @see ServiceValidationResponse
  */
 public class ProxyValidationResponse extends ServiceValidationResponse {
 

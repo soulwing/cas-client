@@ -26,7 +26,10 @@ package org.soulwing.cas.client;
 public class SimpleValidationRequest implements ValidationRequest {
 
   private final String ticket;
-  
+
+  /**
+   * @param ticket <code>String</code> ticket to be validated.
+   */
   public SimpleValidationRequest(String ticket) {
     this.ticket = ticket;
   }

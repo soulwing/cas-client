@@ -22,20 +22,17 @@ import org.soulwing.cas.client.jdom.ServiceValidateHandler;
 
 
 /**
- * An implementation of the Validator interface.  This implementation is
- * essentially a facade over the RequestGenerator and ProtocolHandler types.
- *
+ * Default implementation of the Validator interface.
  * @author Carl Harris
- * 
  */
-public class ValidatorImpl implements Validator {
+public class DefaultValidatorImpl implements Validator {
 
   private final ProtocolHandler serviceValidateHandler;
   private final ProtocolHandler proxyValidateHandler;
   private UrlGenerator generator;
   private ProtocolSource source = new UrlProtocolSource();
   
-  public ValidatorImpl(
+  public DefaultValidatorImpl(
       ProtocolHandler serviceValidateHandler,
       ProtocolHandler proxyValidateHandler) {
     this.serviceValidateHandler = new ServiceValidateHandler();

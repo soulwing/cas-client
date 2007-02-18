@@ -19,12 +19,16 @@ package org.soulwing.cas.client;
 
 
 /**
- * A request for validation.
+ * A request for CAS ticket validation.
  *
  * @author Carl Harris
  */
 public interface ValidationRequest {
 
+  /**
+   * Gets the ticket to be validated.
+   * @return <code>String</code> ticket to be validated by this request.
+   */
   String getTicket();
   
 }

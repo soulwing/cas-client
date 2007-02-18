@@ -51,14 +51,14 @@ public abstract class ValidationFilter implements Filter {
   /**
    * Gets the ValidationConfiguration for this ValidationFilter. 
    */
-  protected ValidationConfiguration getConfiguration() {
+  public ValidationConfiguration getConfiguration() {
     return config;
   }
 
   /**
    * Sets the ValidationConfiguration for this ValidationFilter.
    */
-  private void setConfiguration(ValidationConfiguration config) {
+  public void setConfiguration(ValidationConfiguration config) {
     this.config = config;
   }
   

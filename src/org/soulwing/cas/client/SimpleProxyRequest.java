@@ -28,6 +28,12 @@ public class SimpleProxyRequest implements ProxyRequest {
   private final String proxyGrantingTicket;
   private final String targetService;
   
+  /**
+   * @param proxyGrantingTicket proxy granting ticket issued by the CAS
+   *    server in the the proxy callback interaction. 
+   * @param targetService URL for the service to which the proxy ticket
+   *    will be presented for authentication.
+   */
   public SimpleProxyRequest(String proxyGrantingTicket, String targetService) {
     this.proxyGrantingTicket = proxyGrantingTicket;
     this.targetService = targetService;

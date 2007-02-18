@@ -34,7 +34,7 @@ import org.soulwing.cas.client.ValidatorFactory;
 
 /**
  * FilterAuthenticator implementation for the CAS <code>/proxyValidate</code>
- * function.
+ * operation.
  *
  * @author Carl Harris
  */
@@ -42,7 +42,7 @@ class ProxyValidateAuthenticator implements FilterAuthenticator {
 
   private List trustedProxies = new ArrayList(0);
 
-  ProxyValidateAuthenticator( String trustedProxies) {
+  ProxyValidateAuthenticator(String trustedProxies) {
     setTrustedProxies(trustedProxies);
   }
   
@@ -102,7 +102,7 @@ class ProxyValidateAuthenticator implements FilterAuthenticator {
    * CAS pseudo-response for an untrusted proxy.
    */
   private class UntrustedProxyResponse extends ProxyValidationResponse {
-    public UntrustedProxyResponse() {
+    UntrustedProxyResponse() {
       super();
       setResultCode("UNTRUSTED_PROXY");
       setResultMessage("Response contained an untrusted proxy");

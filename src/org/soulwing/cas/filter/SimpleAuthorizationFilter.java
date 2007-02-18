@@ -35,17 +35,19 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * An authorization filter for which a list of authorized usernames is 
  * configured as an initialization parameter.
+ * 
+ * This filter expect
  *
  * @author Carl Harris
  * 
  */
 public class SimpleAuthorizationFilter implements Filter {
 
-  private static final String AUTHORIZED_UESRS_PARAM = "authorizedUsers";
   private List authorizedUsers = new ArrayList(0);
   
   public void init(FilterConfig config) throws ServletException {
-    String authorizedUsers = config.getInitParameter(AUTHORIZED_UESRS_PARAM);
+    String authorizedUsers = config.getInitParameter(
+        FilterConstants.AUTHORIZED_UESRS_PARAM);
     if (authorizedUsers != null) {
       this.authorizedUsers = Arrays.asList(
           authorizedUsers.split("\\p{Space}+"));

@@ -19,7 +19,8 @@ package org.soulwing.cas.client;
 
 
 /**
- * Requests proxy tickets using a proxy granting ticket.
+ * A service interface that requests proxy tickets using a CAS proxy granting 
+ * ticket.
  *
  * @author Carl Harris
  */

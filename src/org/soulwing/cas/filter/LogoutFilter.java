@@ -36,12 +36,11 @@ import org.soulwing.cas.client.ServiceValidationResponse;
 import org.soulwing.cas.support.ValidationUtils;
 
 /**
- * A filter for removing CAS-related session state.  This filter expects
- * a single configuration parameter <code>logoutPath</code> that should
- * be configured as a servlet path that indicates a logout request.  If, 
- * after passing control down the filter chain, 
- * <code>request.getServletPath</code> equals <code>logoutPath</code>, 
- * then this filter will remove all CAS-related state from the session.
+ * A filter for removing CAS-related session state.  This filter monitors
+ * incoming requests for requests with a servlet path that matches its
+ * <code>logoutPath</code> property.  When such a request is detected, after
+ * passing control down the filter chain, this fitler removes all 
+ * CAS-related attributes from the session. 
  * 
  * @author Carl Harris
  */
@@ -49,13 +48,33 @@ public class LogoutFilter implements Filter {
 
   private static final Log log = LogFactory.getLog(LogoutFilter.class);
   private String logoutPath;
-  
+
+  /**
+   * Gets the servlet path that should be interpreted by this filter
+   * as a logout request.
+   * @return <code>String</code> servlet path this filter should interpret
+   *    as a logout request.
+   */
+  public String getLogoutPath() {
+    return logoutPath;
+  }
+
+  /**
+   * Sets the servlet path that should be interpreted by this filter as
+   * a logout request.
+   * @param logoutPath <code>String</code> servlet path that this filter
+   *    should interpret as a logout request.
+   */
+  public void setLogoutPath(String logoutPath) {
+    this.logoutPath = logoutPath;
+  }
+
   /*
    * @see javax.servlet.Filter#init(javax.servlet.FilterConfig)
    */
   public void init(FilterConfig filterConfig) throws ServletException {
-    this.logoutPath = new FilterConfigurator(filterConfig)
-        .getRequiredParameter(FilterConstants.LOGOUT_PATH);
+    setLogoutPath(new FilterConfigurator(filterConfig)
+        .getRequiredParameter(FilterConstants.LOGOUT_PATH));
   }
   
   /* 

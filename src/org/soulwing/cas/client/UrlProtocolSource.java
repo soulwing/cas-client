@@ -37,20 +37,10 @@ public class UrlProtocolSource implements ProtocolSource {
 
   private static final Log log = LogFactory.getLog(UrlProtocolSource.class);
   
-  private URL getURL(String url) {
-    try {
-      return new URL(url);
-    }
-    catch (MalformedURLException ex) {
-      throw new ServiceAccessException(ex);
-    }
-  }
-
-  /**
-   * @see ProtocolSource#getSource
+  /*
+   * @see org.soulwing.cas.client.ProtocolSource#getSource(java.lang.String)
    */
-  public InputSource getSource(String url) {
-    
+  public InputSource getSource(String url) {    
     try {
       log.debug("requesting " + url);
       URLConnection connection = getURL(url).openConnection();
@@ -58,6 +48,15 @@ public class UrlProtocolSource implements ProtocolSource {
       return new InputSource(connection.getInputStream());
     }
     catch (IOException ex) {
+      throw new ServiceAccessException(ex);
+    }
+  }
+
+  private URL getURL(String url) {
+    try {
+      return new URL(url);
+    }
+    catch (MalformedURLException ex) {
       throw new ServiceAccessException(ex);
     }
   }

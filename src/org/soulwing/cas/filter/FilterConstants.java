@@ -43,5 +43,6 @@ public interface FilterConstants {
       + "proxyGrantingTicket";
 
   String BYPASS_ATTRIBUTE = ATTRIBUTE_PREFIX + "bypass";
+  public static final String AUTHORIZED_UESRS_PARAM = "authorizedUsers";
 
 }
