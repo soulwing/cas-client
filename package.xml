@@ -33,7 +33,6 @@
 
   <target name="prepare" depends="clean">
     <mkdir dir="${dist.dir}"/>
-    <mkdir dir="${zip.dir}"/>
   </target>
   
   <target name="lib.jar" depends="prepare">
