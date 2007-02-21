@@ -24,7 +24,14 @@ seraph-0.7.23.jar (build-time)
 servlet-api.jar (build-time)
 		Supporting classes for Servlet API version 2.4
 
-xercesImpl.jar (run-time, option)
+spring-beans.jar, spring-core.jar, 
+spring-context.jar, spring-web.jar (run-time, optional)
+		Needed only if you are using FilterToBeanProxy to configure your
+		filters as beans in a Spring application context. 
+    If your application includes the entire spring.jar,  it includes the 
+    classes in these jar files.
+
+xercesImpl.jar (run-time, optional)
 		Xerces JAXP parser implementation.  You can use a different JAXP
 		parser, if you prefer -- JDOM uses the standard JAXP API to obtain
 		an XML parser.

@@ -48,7 +48,7 @@ import org.soulwing.servlet.http.HttpServletRequestWrapper;
  *
  * @author Carl Harris
  */
-abstract class AbstractValidationFilter implements Filter {
+public abstract class AbstractValidationFilter implements Filter {
 
   private static final Log log = LogFactory.getLog(AbstractValidationFilter.class);
   private ValidationConfiguration config;
@@ -307,8 +307,8 @@ abstract class AbstractValidationFilter implements Filter {
   
   private ServiceValidationResponse getSessionValidation(
       HttpServletRequest request) {
-    ServiceValidationResponse response = null;
-      ValidationUtils.getServiceValidationResponse(request);
+    ServiceValidationResponse response = 
+        ValidationUtils.getServiceValidationResponse(request);
     log.debug("Validation object " 
         + (response != null ? "exists" : "does not exist") + " in session");
     return response;

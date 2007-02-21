@@ -46,12 +46,29 @@ public class SimpleAuthorizationFilter implements Filter {
   private List authorizedUsers = new ArrayList(0);
   
   public void init(FilterConfig config) throws ServletException {
-    String authorizedUsers = config.getInitParameter(
-        FilterConstants.AUTHORIZED_UESRS_PARAM);
-    if (authorizedUsers != null) {
-      this.authorizedUsers = Arrays.asList(
-          authorizedUsers.split("\\p{Space}+"));
+    String users = new FilterConfigurator(config).getRequiredParameter(
+        FilterConstants.AUTHORIZED_USERS_PARAM);
+    setAuthorizedUsers(Arrays.asList(users.split("\\p{Space}+")));
+    try {
+      init();
     }
+    catch (Exception ex) {
+      throw new ServletException(ex);
+    }
+  }
+
+  public void init() throws Exception {
+    if (getAuthorizedUsers() == null) {
+      throw new IllegalStateException("Must set authorizedUsers property");
+    }
+  }
+  
+  public List getAuthorizedUsers() {
+    return authorizedUsers;
+  }
+  
+  public void setAuthorizedUsers(List authorizedUsers) {
+    this.authorizedUsers = authorizedUsers;
   }
 
   public void doFilter(ServletRequest request, ServletResponse response,

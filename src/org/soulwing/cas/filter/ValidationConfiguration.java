@@ -46,7 +46,8 @@ public class ValidationConfiguration {
   private String authFailedUrl;
   private String trustedProxies;
   private ProtocolSource protocolSource;
-  private ProtocolConfiguration protocolConfiguration;
+  private ProtocolConfiguration protocolConfiguration =
+      new ProtocolConfiguration();
   
   public ValidationConfiguration() {
   }
@@ -74,6 +75,18 @@ public class ValidationConfiguration {
     setProtocolSource(fc.getClassFromParameter(FilterConstants.SOURCE_CLASS_NAME,
         SOURCE_CLASS_DEFAULT));
   }
+  
+  public void init() throws Exception {
+    if (getProtocolConfiguration() == null) {
+      throw new IllegalStateException(
+          "protocolConfiguration property is required");
+    }
+    if (getProtocolSource() == null) {
+      setProtocolSource(SOURCE_CLASS_DEFAULT);
+    }
+    UrlGeneratorFactory.setProtocolConfiguration(protocolConfiguration);
+  }
+  
   
   /* 
    * @see org.soulwing.cas.filter.FilterConfigurator#log()
@@ -104,8 +117,11 @@ public class ValidationConfiguration {
 
   public void setProtocolConfiguration(
       ProtocolConfiguration protocolConfiguration) {
+    if (protocolConfiguration.getServerUrl() == null) {
+      throw new IllegalArgumentException(FilterConstants.SERVER_URL
+          + " property is required");
+    }
     this.protocolConfiguration = protocolConfiguration;
-    UrlGeneratorFactory.setProtocolConfiguration(protocolConfiguration);
   }
 
   public ProtocolSource getProtocolSource() {
@@ -141,23 +157,43 @@ public class ValidationConfiguration {
   }
 
   public String getProxyCallbackUrl() {
-    return protocolConfiguration.getProxyCallbackUrl();
+    return getProtocolConfiguration().getProxyCallbackUrl();
+  }
+  
+  public void setProxyCallbackUrl(String proxyCallbackUrl) {
+    getProtocolConfiguration().setProxyCallbackUrl(proxyCallbackUrl);    
   }
   
   public boolean getGatewayFlag() {
-    return protocolConfiguration.getGatewayFlag();
+    return getProtocolConfiguration().getGatewayFlag();
+  }
+  
+  public void setGatewayFlag(boolean gatewayFlag) {
+    getProtocolConfiguration().setGatewayFlag(gatewayFlag);
   }
   
   public boolean getRenewFlag() {
-    return protocolConfiguration.getRenewFlag();
+    return getProtocolConfiguration().getRenewFlag();
   }
 
+  public void setRenewFlag(boolean renewFlag) {
+    getProtocolConfiguration().setRenewFlag(renewFlag);
+  }
+  
   public String getServerUrl() {
-    return protocolConfiguration.getServerUrl();
+    return getProtocolConfiguration().getServerUrl();
   }
 
+  public void setServerUrl(String serverUrl) {
+    getProtocolConfiguration().setServerUrl(serverUrl);
+  }
+  
   public String getServiceUrl() {
-    return protocolConfiguration.getServiceUrl();
+    return getProtocolConfiguration().getServiceUrl();
+  }
+
+  public void setServiceUrl(String serviceUrl) {
+    getProtocolConfiguration().setServiceUrl(serviceUrl);
   }
 
 }
