@@ -28,18 +28,22 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 
 /**
  * An authorization filter for which a list of authorized usernames is 
  * configured as an initialization parameter.
- * 
- * This filter expect
  *
  * @author Carl Harris
  * 
  */
 public class SimpleAuthorizationFilter implements Filter {
 
+  private static final Log log = 
+      LogFactory.getLog(SimpleAuthorizationFilter.class);
+  
   private String authorizedUsers[] = new String[0];
   
   public void init(FilterConfig config) throws ServletException {
@@ -66,8 +70,20 @@ public class SimpleAuthorizationFilter implements Filter {
   
   public void setAuthorizedUsers(String[] authorizedUsers) {
     this.authorizedUsers = authorizedUsers;
+    log.debug("authorized users: " + authorizedUsersToString());
   }
 
+  private String authorizedUsersToString() {
+    StringBuilder sb = new StringBuilder();
+    for (int i = 0; i < authorizedUsers.length; i++) {
+      sb.append(authorizedUsers[i]);
+      if (i < authorizedUsers.length - 1) {
+        sb.append(", ");
+      }
+    }
+    return sb.toString();
+  }
+  
   public void doFilter(ServletRequest request, ServletResponse response,
       FilterChain filterChain) throws IOException, ServletException {
 
@@ -90,6 +106,7 @@ public class SimpleAuthorizationFilter implements Filter {
       filterChain.doFilter(request, response);
     }
     else {
+      log.info(userName + " is not authorized");
       response.sendError(HttpServletResponse.SC_FORBIDDEN);
       return;
     }
