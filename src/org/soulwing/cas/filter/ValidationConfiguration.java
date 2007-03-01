@@ -17,8 +17,6 @@
  */
 package org.soulwing.cas.filter;
 
-import javax.servlet.FilterConfig;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.soulwing.cas.client.ProtocolConfiguration;
@@ -38,43 +36,14 @@ public class ValidationConfiguration {
   private static final Log log = 
       LogFactory.getLog(ValidationConfiguration.class);
 
-  public static final boolean GATEWAY_DEFAULT = false;
-  public static final boolean RENEW_DEFAULT = false;
   public static final Class SOURCE_CLASS_DEFAULT = UrlProtocolSource.class; 
-  
+ 
   private String filterPath;
   private String authFailedUrl;
   private String trustedProxies;
   private ProtocolSource protocolSource;
   private ProtocolConfiguration protocolConfiguration =
       new ProtocolConfiguration();
-  
-  public ValidationConfiguration() {
-  }
-
-  public ValidationConfiguration(FilterConfig filterConfig) 
-      throws FilterParameterException {
-    FilterConfigurator fc = new FilterConfigurator(filterConfig);
-    setFilterPath(fc.getParameter(FilterConstants.FILTER_PATH));
-    setAuthFailedUrl(fc.getParameter(FilterConstants.AUTH_FAILED_URL));
-    setTrustedProxies(fc.getParameter(FilterConstants.TRUSTED_PROXIES));
-    ProtocolConfiguration config = new ProtocolConfiguration();
-    config.setServerUrl(
-        fc.getRequiredParameter(FilterConstants.SERVER_URL));
-    config.setServiceUrl(
-        fc.getParameter(FilterConstants.SERVICE_URL));
-    config.setGatewayFlag(
-        Boolean.valueOf(fc.getParameter(FilterConstants.GATEWAY, 
-            Boolean.toString(GATEWAY_DEFAULT))).booleanValue());
-    config.setRenewFlag(
-        Boolean.valueOf(fc.getParameter(FilterConstants.RENEW, 
-            Boolean.toString(RENEW_DEFAULT))).booleanValue()); 
-    config.setProxyCallbackUrl(
-        fc.getParameter(FilterConstants.PROXY_CALLBACK_URL));
-    setProtocolConfiguration(config);
-    setProtocolSourceClass(fc.getClassFromParameter(FilterConstants.SOURCE_CLASS_NAME,
-        SOURCE_CLASS_DEFAULT));
-  }
   
   /**
    * Initializes this ValidationConfiguration instance.  
@@ -92,7 +61,6 @@ public class ValidationConfiguration {
     if (getProtocolSource() == null) {
       setProtocolSourceClass(SOURCE_CLASS_DEFAULT);
     }
-    UrlGeneratorFactory.setProtocolConfiguration(protocolConfiguration);
   }
   
   
@@ -164,6 +132,7 @@ public class ValidationConfiguration {
           + " property is required");
     }
     this.protocolConfiguration = protocolConfiguration;
+    UrlGeneratorFactory.setProtocolConfiguration(protocolConfiguration);
   }
 
   /**
@@ -211,107 +180,6 @@ public class ValidationConfiguration {
 
   public void setTrustedProxies(String trustedProxies) {
     this.trustedProxies = trustedProxies;
-  }
-
-  /**
-   * Gets the URL that the validation filter will pass to the CAS
-   * server as the value for the <code>pgtUrl</code> query parameter. 
-   * @return <code>String</code> URL
-   */
-  public String getProxyCallbackUrl() {
-    return getProtocolConfiguration().getProxyCallbackUrl();
-  }
-  
-  /**
-   * Sets the URL that the validation filter will pass to the CAS
-   * server as the value for the <code>pgtUrl</code> query parameter.
-   * If no proxy callback URL is configured, this parameter will not 
-   * be included in CAS validation requests.  If this parameter is
-   * configured and the ProxyCallbackFilter is being used to process
-   * CAS callbacks, the servlet path portion of this URL should correspond
-   * to the value configured for ProxyCallbackFilter.  
-   * @param proxyCallbackUrl <code>String</code> URL
-   */
-  public void setProxyCallbackUrl(String proxyCallbackUrl) {
-    getProtocolConfiguration().setProxyCallbackUrl(proxyCallbackUrl);    
-  }
-  
-  /**
-   * Gets the value of the CAS gateway flag.
-   * @return flag value
-   */
-  public boolean getGatewayFlag() {
-    return getProtocolConfiguration().getGatewayFlag();
-  }
-  
-  /**
-   * Sets the CAS gateway flag.  If this property is set to <code>true</code>,
-   * CAS validation requests will include <code>gateway=true</code> as a
-   * query parameter.
-   * @param gatewayFlag value to set
-   */
-  public void setGatewayFlag(boolean gatewayFlag) {
-    getProtocolConfiguration().setGatewayFlag(gatewayFlag);
-  }
-  
-  /**
-   * Gets the CAS renew flag.
-   * @return flag value
-   */
-  public boolean getRenewFlag() {
-    return getProtocolConfiguration().getRenewFlag();
-  }
-
-  /**
-   * Sets the CAS renew flag.  If this property is set to <code>true</code>,
-   * CAS validation requests will include <code>renew=true</code> as a
-   * query parameter.
-   * @param renewFlag value to set
-   */
-  public void setRenewFlag(boolean renewFlag) {
-    getProtocolConfiguration().setRenewFlag(renewFlag);
-  }
-  
-  /**
-   * Gets the configured CAS server URL.
-   * @return <code>String</code> URL
-   */
-  public String getServerUrl() {
-    return getProtocolConfiguration().getServerUrl();
-  }
-
-  /**
-   * Sets the CAS server URL.  This URL should be set to the base URL
-   * for the CAS server that provides authentication services that will
-   * be used by the validation filter.  Servlet paths for CAS protocol
-   * operations (e.g. <code>/serviceValidate</code>) will be appended 
-   * to this URL.
-   * @param serverUrl <code>String</code> URL
-   */
-  public void setServerUrl(String serverUrl) {
-    getProtocolConfiguration().setServerUrl(serverUrl);
-  }
-  
-  /**
-   * Gets the configured CAS service URL.
-   * @return <code>String</code> URL
-   */
-  public String getServiceUrl() {
-    return getProtocolConfiguration().getServiceUrl();
-  }
-
-  /**
-   * Sets the CAS service URL.  Generally, this parameter does not need to be
-   * configured, as the validation filter can infer the appropriate service
-   * URL for most applications.  If this property is configured, it will
-   * be used as the base of the URL that will be passed to the CAS
-   * server as the value for the <code>service</code> query parameter.  
-   * @param serviceUrl <code>String</code> service URL up to and including
-   *    the context path for the application.  It MUST NOT include any 
-   *    portion of a servlet path.
-   */
-  public void setServiceUrl(String serviceUrl) {
-    getProtocolConfiguration().setServiceUrl(serviceUrl);
   }
 
 }

@@ -34,8 +34,12 @@ public interface FilterConstants {
   String AUTH_FAILED_URL = "authFailedUrl";
   String TRUSTED_PROXIES = "trustedProxies";
   String SOURCE_CLASS_NAME = "sourceClassName";
-
+  String AUTHORIZED_USERS = "authorizedUsers";
+  
   String ATTRIBUTE_PREFIX = "org.soulwing.cas.";
+  
+  String PROTOCOL_CONFIGURATION_ATTRIBUTE = ATTRIBUTE_PREFIX
+      + "protocolConfiguration";
   
   String VALIDATION_ATTRIBUTE = ATTRIBUTE_PREFIX + "serviceValidation";
   
@@ -43,6 +47,7 @@ public interface FilterConstants {
       + "proxyGrantingTicket";
 
   String BYPASS_ATTRIBUTE = ATTRIBUTE_PREFIX + "bypass";
-  public static final String AUTHORIZED_USERS_PARAM = "authorizedUsers";
+  
+  
 
 }

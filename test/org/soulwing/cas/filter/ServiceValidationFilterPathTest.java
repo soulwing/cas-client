@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import junit.framework.TestCase;
 
+import org.soulwing.cas.client.ProtocolConfiguration;
 import org.soulwing.cas.client.StringProtocolSource;
 import org.soulwing.servlet.MockFilterChain;
 import org.soulwing.servlet.MockFilterConfig;
@@ -47,9 +48,11 @@ public class ServiceValidationFilterPathTest extends TestCase {
   private StringProtocolSource source;
   
   protected void setUp() throws Exception {
+    ProtocolConfiguration protocolConfig = new ProtocolConfiguration();
+    protocolConfig.setServerUrl(SERVER_URL);
+    protocolConfig.setServiceUrl(SERVICE_URL);
+    ProtocolConfigurationFilter.setConfiguration(protocolConfig);
     config = new MockFilterConfig();
-    config.setInitParameter(FilterConstants.SERVER_URL, SERVER_URL);
-    config.setInitParameter(FilterConstants.SERVICE_URL, SERVICE_URL);
     config.setInitParameter(FilterConstants.FILTER_PATH, FILTER_PATH);
     config.setInitParameter(FilterConstants.SOURCE_CLASS_NAME,
         SOURCE_CLASS_NAME);

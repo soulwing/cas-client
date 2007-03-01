@@ -50,7 +50,9 @@ import org.soulwing.servlet.http.HttpServletRequestWrapper;
  */
 public abstract class AbstractValidationFilter implements Filter {
 
-  private static final Log log = LogFactory.getLog(AbstractValidationFilter.class);
+  private static final Log log = 
+      LogFactory.getLog(AbstractValidationFilter.class);
+
   private ValidationConfiguration config;
 
   /**
@@ -80,9 +82,22 @@ public abstract class AbstractValidationFilter implements Filter {
    * @throws ServletException if a configuration error is detected
    */
   public final void init(FilterConfig filterConfig) throws ServletException {
-    setConfiguration(new ValidationConfiguration(filterConfig));
+    ValidationConfiguration config = new ValidationConfiguration();
+    FilterConfigurator fc = new FilterConfigurator(filterConfig);
+    config.setFilterPath(fc.getParameter(FilterConstants.FILTER_PATH));
+    config.setAuthFailedUrl(fc.getParameter(FilterConstants.AUTH_FAILED_URL));
+    config.setTrustedProxies(fc.getParameter(FilterConstants.TRUSTED_PROXIES));
+    config.setProtocolSourceClass(
+        fc.getClassFromParameter(FilterConstants.SOURCE_CLASS_NAME,
+        ValidationConfiguration.SOURCE_CLASS_DEFAULT));
+    if (ProtocolConfigurationFilter.getConfiguration() == null) {
+      throw new ServletException("Must configure ProtocolConfigurationFilter");
+    }
+    config.setProtocolConfiguration(
+        ProtocolConfigurationFilter.getConfiguration());
     try {
-      getConfiguration().init();
+      config.init();
+      setConfiguration(config);
       doInit(filterConfig);
       init();
     }
@@ -206,14 +221,16 @@ public abstract class AbstractValidationFilter implements Filter {
     }
   }
 
-  private void bypassValidation(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
+  private void bypassValidation(HttpServletRequest request, 
+      HttpServletResponse response, FilterChain filterChain) 
+      throws IOException, ServletException {
     log.info("Bypassing CAS validation for " + request.getServletPath());
     filterChain.doFilter(request, response);
   }
 
   private boolean isRequestForProxyCallbackUrl(HttpServletRequest request) {
     return request.getRequestURL().toString().equals(
-        getConfiguration().getProxyCallbackUrl());
+        getConfiguration().getProtocolConfiguration().getProxyCallbackUrl());
   }
 
   private boolean isRequestForBypass(HttpServletRequest request) {
