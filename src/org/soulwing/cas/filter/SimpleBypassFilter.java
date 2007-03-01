@@ -42,40 +42,44 @@ public class SimpleBypassFilter extends LogoutFilter {
   private static final Log log = LogFactory.getLog(LogoutFilter.class);
   private Pattern[] bypassPaths;
 
-  /*
-   * @see javax.servlet.Filter#init(javax.servlet.FilterConfig)
+  /**
+   * Sets the list of path expressions for which CAS authentication
+   * should be bypassed.
+   * @param bypassPaths <code>String</code> containing a comma-delimited list 
+   *    of servlet path expressions.  Each expression can be a simple string
+   *    or a string containing glob wildcards.
    */
-  public void init(FilterConfig filterConfig) throws ServletException {
-    super.init(filterConfig);
-    setBypassPaths(new FilterConfigurator(filterConfig)
-        .getRequiredParameter(BYPASS_PATHS));
-  }
-
   public void setBypassPaths(String bypassPaths) {
     setBypassPaths(bypassPaths.split("\\s*,\\s*"));
   }
 
-  private void setBypassPaths(String[] paths) {
-    if (paths.length > 0) {
-      GlobCompiler compiler = new GlobCompiler();
-      bypassPaths = new Pattern[paths.length];
-      for (int i = 0; i < paths.length; i++) {
-        try {
-          bypassPaths[i] = compiler.compile(paths[i]);
-        }
-        catch (MalformedPatternException ex) {
-          throw new IllegalArgumentException("compile error for pattern "
-              + paths[i] + ": ", ex);
-        }
-      }
+  /**
+   * Initializes this filter.  When this filter is being used as a bean in
+   * a dependency injection framework (e.g. Spring), this method should be 
+   * invoked after all dependencies have been set.
+   * @throws Exception
+   */
+  public void init() throws Exception {
+    if (bypassPaths == null) {
+      throw new IllegalStateException("must set bypassPaths property");
     }
+    super.init();
   }
-  
+
+  /*
+   * @see javax.servlet.Filter#init(javax.servlet.FilterConfig)
+   */
+  public void init(FilterConfig filterConfig) throws ServletException {
+    setBypassPaths(new FilterConfigurator(filterConfig)
+        .getRequiredParameter(BYPASS_PATHS));
+    super.init(filterConfig);
+  }
+
   /* 
    * @see javax.servlet.Filter#destroy()
    */
   public void destroy() {
-    // not needed
+    super.destroy();
   }
 
   /* 
@@ -95,7 +99,7 @@ public class SimpleBypassFilter extends LogoutFilter {
     }
   }
 
-  public void doHttpFilter(HttpServletRequest request, 
+  protected void doHttpFilter(HttpServletRequest request, 
       HttpServletResponse response, FilterChain filterChain) 
       throws IOException, ServletException { 
 
@@ -109,6 +113,22 @@ public class SimpleBypassFilter extends LogoutFilter {
     super.doHttpFilter(request, response, filterChain);
   }
 
+  private void setBypassPaths(String[] paths) {
+    if (paths.length > 0) {
+      GlobCompiler compiler = new GlobCompiler();
+      bypassPaths = new Pattern[paths.length];
+      for (int i = 0; i < paths.length; i++) {
+        try {
+          bypassPaths[i] = compiler.compile(paths[i]);
+        }
+        catch (MalformedPatternException ex) {
+          throw new IllegalArgumentException("compile error for pattern "
+              + paths[i] + ": ", ex);
+        }
+      }
+    }
+  }
+  
   private boolean isBypassPath(String servletPath) {
     boolean match = false;
     Perl5Matcher matcher = new Perl5Matcher();

@@ -69,12 +69,30 @@ public class LogoutFilter implements Filter {
     this.logoutPath = logoutPath;
   }
 
+  /**
+   * Initializes this filter.  When this filter is being used as a bean in
+   * a dependency injection framework (e.g. Spring), this method should be 
+   * invoked after all dependencies have been set.
+   * @throws Exception
+   */
+  public void init() throws Exception {
+    if (getLogoutPath() == null) {
+      throw new IllegalStateException("must set logoutPath property");
+    }
+  }
+  
   /*
    * @see javax.servlet.Filter#init(javax.servlet.FilterConfig)
    */
   public void init(FilterConfig filterConfig) throws ServletException {
     setLogoutPath(new FilterConfigurator(filterConfig)
         .getRequiredParameter(FilterConstants.LOGOUT_PATH));
+    try {
+      init();
+    }
+    catch (Exception ex) {
+      throw new ServletException(ex);
+    }
   }
   
   /* 
@@ -101,7 +119,7 @@ public class LogoutFilter implements Filter {
     }
   }
 
-  public void doHttpFilter(HttpServletRequest request, 
+  protected void doHttpFilter(HttpServletRequest request, 
       HttpServletResponse response, FilterChain filterChain) 
       throws IOException, ServletException { 
 

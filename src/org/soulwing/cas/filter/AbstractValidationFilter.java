@@ -82,6 +82,7 @@ public abstract class AbstractValidationFilter implements Filter {
   public final void init(FilterConfig filterConfig) throws ServletException {
     setConfiguration(new ValidationConfiguration(filterConfig));
     try {
+      getConfiguration().init();
       doInit(filterConfig);
       init();
     }
@@ -104,9 +105,9 @@ public abstract class AbstractValidationFilter implements Filter {
   }
   
   /**
-   * Initializes this filter. This method should be invoked by framework
-   * initialization code after all dependencies have been set when the filter is
-   * being used as a bean in a dependency injection framework.
+   * Initializes this filter.  When thise filter is being used as a bean in
+   * a dependency injection framework (e.g. Spring), this method should be 
+   * invoked after all dependencies have been set.
    * @throws Exception
    */
   public final void init() throws Exception {

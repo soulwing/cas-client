@@ -82,12 +82,30 @@ public class ProxyCallbackFilter implements Filter {
     this.filterPath = filterPath;
   }
 
+  /**
+   * Initializes this filter.  When this filter is being used as a bean in
+   * a dependency injection framework (e.g. Spring), this method should be 
+   * invoked after all dependencies have been set.
+   * @throws Exception
+   */
+  public void init() throws Exception {
+    if (getFilterPath() == null) {
+      throw new IllegalStateException("must set filterPath property");
+    }
+  }
+  
   /*
    * @see javax.servlet.Filter#init(javax.servlet.FilterConfig)
    */
   public void init(FilterConfig config) throws ServletException {
     setFilterPath(new FilterConfigurator(config)
         .getRequiredParameter(FilterConstants.FILTER_PATH));
+    try {
+      init();
+    }
+    catch (Exception ex) {
+      throw new ServletException(ex);
+    }
   }
   
   /*
