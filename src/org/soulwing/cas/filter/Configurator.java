@@ -34,11 +34,19 @@ public class Configurator {
   private static final Log log = LogFactory.getLog(Configurator.class);
   private final ParameterProvider parameterProvider;
   
+  /**
+   * Constructs a Configurator for a Filter.
+   * @param filterConfig
+   */
   public Configurator(FilterConfig filterConfig) {
     this.parameterProvider = 
         new FilterConfigParameterProvider(filterConfig);
   }
 
+  /**
+   * Constructs a Configurator for a ServletContextListener.
+   * @param servletContext
+   */
   public Configurator(ServletContext servletContext) {
     this.parameterProvider = 
         new ServletContextParameterProvider(servletContext);
@@ -176,10 +184,16 @@ public class Configurator {
     }
   }
 
+  /**
+   * A provider of configuration parameters.
+   */
   interface ParameterProvider {
     String getInitParameter(String parameterName);
   }
-  
+
+  /**
+   * A ParameterProvider that delegates to a FilterConfig.
+   */
   class FilterConfigParameterProvider implements ParameterProvider {
   
     private final FilterConfig config;
@@ -193,7 +207,10 @@ public class Configurator {
     }
     
   }
-  
+
+  /**
+   * A ParameterProvider that delegates to a ServletContext.
+   */
   class ServletContextParameterProvider implements ParameterProvider {
     
     private final ServletContext context;
@@ -207,4 +224,5 @@ public class Configurator {
     }
     
   }
+
 }

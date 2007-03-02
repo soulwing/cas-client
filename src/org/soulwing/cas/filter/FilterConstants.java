@@ -24,12 +24,12 @@ package org.soulwing.cas.filter;
  */
 public interface FilterConstants {
 
-  String SERVER_URL = "serverUrl";
-  String FILTER_PATH = "filterPath";
-  String SERVICE_URL = "serviceUrl";
-  String PROXY_CALLBACK_URL = "proxyCallbackUrl";
-  String GATEWAY = "gateway";
-  String RENEW = "renew";
+  String SERVER_URL = "casServerUrl";
+  String FILTER_PATH = "casFilterPath";
+  String SERVICE_URL = "casServiceUrl";
+  String PROXY_CALLBACK_URL = "casProxyCallbackUrl";
+  String GATEWAY = "casGateway";
+  String RENEW = "casRenew";
   String AUTH_FAILED_URL = "authFailedUrl";
   String TRUSTED_PROXIES = "trustedProxies";
   String SOURCE_CLASS_NAME = "sourceClassName";
