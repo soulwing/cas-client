@@ -47,7 +47,7 @@ public class SimpleAuthorizationFilter implements Filter {
   private String authorizedUsers[] = new String[0];
   
   public void init(FilterConfig config) throws ServletException {
-    String users = new FilterConfigurator(config).getRequiredParameter(
+    String users = new Configurator(config).getRequiredParameter(
         FilterConstants.AUTHORIZED_USERS);
     setAuthorizedUsers(users.split("\\s*,\\s*"));
     try {

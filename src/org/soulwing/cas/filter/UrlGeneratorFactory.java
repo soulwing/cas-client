@@ -32,34 +32,17 @@ import org.soulwing.cas.client.UrlGenerator;
  */
 class UrlGeneratorFactory {
 
-  private static ProtocolConfiguration config;
-
-  /**
-   * Gets the ProtocolConfiguration configured for this factory.
-   * @return configuration for this factory.
-   */
-  public static synchronized ProtocolConfiguration getProtocolConfiguration() {
-    return config;
-  }
-  
-  /**
-   * Sets the ProtocolConfiguration to use in this factory.
-   * @param config configuration to use for this factory.
-   */
-  public static synchronized void setProtocolConfiguration(
-      ProtocolConfiguration config) {
-    UrlGeneratorFactory.config = config;
-  }
-  
   /**
    * Gets a UrlGenerator from this factory, configured as this factory
    * is configured. 
    * @param request request for which a UrlGenerator is needed
+   * @param protocolConfiguration CAS protocol configuration
    * @return <code>UrlGenerator</code> instance
    */
-  public static UrlGenerator getUrlGenerator(HttpServletRequest request) {
+  public static UrlGenerator getUrlGenerator(HttpServletRequest request, 
+      ProtocolConfiguration protocolConfiguration) {
     return new SimpleUrlGenerator(
-        new ContextProtocolConfiguration(request, config));
+        new ContextProtocolConfiguration(request, protocolConfiguration));
   }
 
   /**

@@ -33,6 +33,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.soulwing.cas.client.ProtocolConfiguration;
+import org.soulwing.cas.client.ProtocolConfigurationHolder;
 import org.soulwing.cas.client.ServiceValidationResponse;
 import org.soulwing.cas.client.SimpleUrlGenerator;
 import org.soulwing.cas.support.ValidationUtils;
@@ -59,7 +60,7 @@ import org.soulwing.cas.support.ValidationUtils;
  *   enabled), then the browser will be directed to this URL.</li>
  * <li><code>protocolConfiguration</code> &mdash; CAS protocol configuration
  *   bean, required only when <code>globalLogout</code> is enabled.  Will be
- *   obtained from ProtocolConfigurationFilter if this filter is wired into
+ *   obtained from ProtocolConfigurationHolder if this filter is wired into
  *   the application's deployment descriptor (web.xml) as opposed to being
  *   used as a simple bean (e.g. with FilterToBeanProxy)</li>
  *    
@@ -171,6 +172,10 @@ public class LogoutFilter implements Filter {
    * Gets the CAS protocol configuration bean.
    */
   public ProtocolConfiguration getProtocolConfiguration() {
+    if (protocolConfiguration == null) {
+      setProtocolConfiguration(
+          ProtocolConfigurationHolder.getRequiredConfiguration());
+    }
     return protocolConfiguration;
   }
 
@@ -192,17 +197,13 @@ public class LogoutFilter implements Filter {
     if (getLogoutPath() == null) {
       throw new IllegalStateException("must set logoutPath property");
     }
-    if (isGlobalLogout() && getProtocolConfiguration() == null) {
-      throw new IllegalStateException(
-          "globalLogout requires that the protocolConfiguration property be set");
-    }
   }
   
   /*
    * @see javax.servlet.Filter#init(javax.servlet.FilterConfig)
    */
   public void init(FilterConfig filterConfig) throws ServletException {
-    FilterConfigurator fc = new FilterConfigurator(filterConfig);
+    Configurator fc = new Configurator(filterConfig);
     setLogoutPath(fc.getRequiredParameter(FilterConstants.LOGOUT_PATH));
     setApplicationLogout(Boolean.parseBoolean(
         fc.getParameter(FilterConstants.APPLICATION_LOGOUT, 
@@ -210,9 +211,8 @@ public class LogoutFilter implements Filter {
     setGlobalLogout(Boolean.parseBoolean(
         fc.getParameter(FilterConstants.GLOBAL_LOGOUT,
             GLOBAL_LOGOUT_DEFAULT)));
-    setRedirectUrl(new FilterConfigurator(filterConfig)
+    setRedirectUrl(new Configurator(filterConfig)
         .getParameter(FilterConstants.REDIRECT_URL));
-    setProtocolConfiguration(ProtocolConfigurationFilter.getConfiguration());
     try {
       init();
     }

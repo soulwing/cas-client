@@ -21,7 +21,7 @@ import javax.servlet.ServletException;
 
 
 /**
- * An exception thrown by FilterConfigurator when there's a problem with
+ * An exception thrown by Configurator when there's a problem with
  * a parameter.
  *
  * @author Carl Harris

@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import junit.framework.TestCase;
 
 import org.soulwing.cas.client.ProtocolConfiguration;
+import org.soulwing.cas.client.ProtocolConfigurationHolder;
 import org.soulwing.cas.client.StringProtocolSource;
 import org.soulwing.servlet.MockFilterChain;
 import org.soulwing.servlet.MockFilterConfig;
@@ -53,7 +54,7 @@ public class ServiceValidationFilterTest extends TestCase {
     protocolConfig.setServerUrl(SERVER_URL);
     protocolConfig.setServiceUrl(SERVICE_URL);
     protocolConfig.setProxyCallbackUrl(PROXY_CALLBACK_URL);
-    ProtocolConfigurationFilter.setConfiguration(protocolConfig);
+    ProtocolConfigurationHolder.setConfiguration(protocolConfig);
     config = new MockFilterConfig();
     config.setInitParameter(FilterConstants.SOURCE_CLASS_NAME,
         SOURCE_CLASS_NAME);
@@ -67,7 +68,7 @@ public class ServiceValidationFilterTest extends TestCase {
   }
   
   protected void tearDown() throws Exception {
-    ProtocolConfigurationFilter.setConfiguration(null);
+    ProtocolConfigurationHolder.setConfiguration(null);
   }
 
   public void testLoginRedirect() throws Exception {

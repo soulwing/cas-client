@@ -16,6 +16,7 @@ package org.soulwing.cas.filter;
 import junit.framework.TestCase;
 
 import org.soulwing.cas.client.ProtocolConfiguration;
+import org.soulwing.cas.client.ProtocolConfigurationHolder;
 import org.soulwing.servlet.MockFilterChain;
 import org.soulwing.servlet.MockFilterConfig;
 import org.soulwing.servlet.http.MockHttpServletRequest;
@@ -32,24 +33,24 @@ public class AbstractValidationFilterTest extends TestCase {
   private MockFilterAuthenticator authenticator;
   private MockValidationFilter filter;
   private MockFilterChain filterChain;
+  private ProtocolConfiguration protocolConfiguration;
   
   protected void setUp() throws Exception {
     authenticator = new MockFilterAuthenticator();
     filter = new MockValidationFilter(authenticator);
     filterChain = new MockFilterChain();
-    ProtocolConfiguration config = new ProtocolConfiguration();
-    config.setServerUrl(SERVER_URL);
-    config.setServiceUrl(CONTEXT_URL);
-    ProtocolConfigurationFilter.setConfiguration(config);
+    protocolConfiguration = new ProtocolConfiguration();
+    protocolConfiguration.setServerUrl(SERVER_URL);
+    protocolConfiguration.setServiceUrl(CONTEXT_URL);
+    ProtocolConfigurationHolder.setConfiguration(protocolConfiguration);
   }
   
   protected void tearDown() throws Exception {
-    ProtocolConfigurationFilter.setConfiguration(null);
+    ProtocolConfigurationHolder.setConfiguration(null);
   }
   
   private MockFilterConfig requiredFilterConfig() {
     MockFilterConfig filterConfig = new MockFilterConfig();
-    filterConfig.setInitParameter(FilterConstants.SERVER_URL, SERVER_URL);
     filterConfig.setInitParameter(FilterConstants.FILTER_PATH, FILTER_PATH);
     return filterConfig;
   }
@@ -70,7 +71,8 @@ public class AbstractValidationFilterTest extends TestCase {
     MockHttpServletResponse response = newServletResponse();
     filter.doFilter(request, response, filterChain);
     assertTrue(!filterChain.isChainInvoked());
-    assertEquals(UrlGeneratorFactory.getUrlGenerator(request).getLoginUrl(), 
+    assertEquals(UrlGeneratorFactory.getUrlGenerator(request, 
+        protocolConfiguration).getLoginUrl(), 
           response.getRedirect());
   }
   

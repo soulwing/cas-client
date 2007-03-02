@@ -1,5 +1,5 @@
 /*
- * FilterConfigurator.java
+ * Configurator.java
  *
  * Created on Feb 7, 2007
  *
@@ -18,6 +18,7 @@
 package org.soulwing.cas.filter;
 
 import javax.servlet.FilterConfig;
+import javax.servlet.ServletContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -28,15 +29,21 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author Carl Harris
  */
-public class FilterConfigurator {
+public class Configurator {
 
-  private static final Log log = LogFactory.getLog(FilterConfigurator.class);
-  private final FilterConfig filterConfig;
+  private static final Log log = LogFactory.getLog(Configurator.class);
+  private final ParameterProvider parameterProvider;
   
-  public FilterConfigurator(FilterConfig filterConfig) {
-    this.filterConfig = filterConfig;
+  public Configurator(FilterConfig filterConfig) {
+    this.parameterProvider = 
+        new FilterConfigParameterProvider(filterConfig);
   }
-  
+
+  public Configurator(ServletContext servletContext) {
+    this.parameterProvider = 
+        new ServletContextParameterProvider(servletContext);
+  }
+
   /**
    * Gets the log instance.  Subclasses may override to use a different
    * logger.
@@ -54,7 +61,7 @@ public class FilterConfigurator {
    *    set in the backing FilterConfig instance for this configurator
    */
   public String getParameter(String parameterName) {
-    String value = filterConfig.getInitParameter(parameterName);
+    String value = parameterProvider.getInitParameter(parameterName);
     if (value != null) {
       log().info(parameterName + " parameter set to '" + value + "'");
     }
@@ -92,7 +99,7 @@ public class FilterConfigurator {
    */
   public String getRequiredParameter(String parameterName) 
       throws FilterParameterException {
-    String value = filterConfig.getInitParameter(parameterName);
+    String value = parameterProvider.getInitParameter(parameterName);
     if (value != null) {
       log().info(parameterName + " parameter set to '" + value + "'");
       return value;
@@ -169,4 +176,35 @@ public class FilterConfigurator {
     }
   }
 
+  interface ParameterProvider {
+    String getInitParameter(String parameterName);
+  }
+  
+  class FilterConfigParameterProvider implements ParameterProvider {
+  
+    private final FilterConfig config;
+    
+    public FilterConfigParameterProvider(FilterConfig config) {
+      this.config = config;
+    }
+    
+    public String getInitParameter(String parameterName) {
+      return config.getInitParameter(parameterName);
+    }
+    
+  }
+  
+  class ServletContextParameterProvider implements ParameterProvider {
+    
+    private final ServletContext context;
+    
+    public ServletContextParameterProvider(ServletContext context) {
+      this.context = context;
+    }
+    
+    public String getInitParameter(String parameterName) {
+      return context.getInitParameter(parameterName);
+    }
+    
+  }
 }

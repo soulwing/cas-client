@@ -83,18 +83,13 @@ public abstract class AbstractValidationFilter implements Filter {
    */
   public final void init(FilterConfig filterConfig) throws ServletException {
     ValidationConfiguration config = new ValidationConfiguration();
-    FilterConfigurator fc = new FilterConfigurator(filterConfig);
+    Configurator fc = new Configurator(filterConfig);
     config.setFilterPath(fc.getParameter(FilterConstants.FILTER_PATH));
     config.setAuthFailedUrl(fc.getParameter(FilterConstants.AUTH_FAILED_URL));
     config.setTrustedProxies(fc.getParameter(FilterConstants.TRUSTED_PROXIES));
     config.setProtocolSourceClass(
         fc.getClassFromParameter(FilterConstants.SOURCE_CLASS_NAME,
         ValidationConfiguration.SOURCE_CLASS_DEFAULT));
-    if (ProtocolConfigurationFilter.getConfiguration() == null) {
-      throw new ServletException("Must configure ProtocolConfigurationFilter");
-    }
-    config.setProtocolConfiguration(
-        ProtocolConfigurationFilter.getConfiguration());
     try {
       config.init();
       setConfiguration(config);
@@ -302,7 +297,7 @@ public abstract class AbstractValidationFilter implements Filter {
   private void redirectToLogin(HttpServletRequest request,
       HttpServletResponse response) throws IOException {
     log.debug("Redirecting request to CAS login");
-    response.sendRedirect(UrlGeneratorFactory.getUrlGenerator(request)
+    response.sendRedirect(UrlGeneratorFactory.getUrlGenerator(request, getConfiguration().getProtocolConfiguration())
         .getLoginUrl());
   }
   

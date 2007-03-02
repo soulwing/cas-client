@@ -24,6 +24,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.soulwing.cas.client.ProtocolConfiguration;
 import org.soulwing.cas.client.ProtocolConstants;
 import org.soulwing.cas.client.NoTicketException;
 import org.soulwing.cas.client.ProxyValidationResponse;
@@ -40,9 +41,12 @@ import org.soulwing.cas.client.ValidatorFactory;
  */
 class ProxyValidationAuthenticator implements FilterAuthenticator {
 
+  private final ProtocolConfiguration protocolConfiguration;
   private List trustedProxies = new ArrayList(0);
 
-  ProxyValidationAuthenticator(String trustedProxies) {
+  ProxyValidationAuthenticator(ProtocolConfiguration protocolConfiguration,
+      String trustedProxies) {
+    this.protocolConfiguration = protocolConfiguration;
     setTrustedProxies(trustedProxies);
   }
   
@@ -66,7 +70,8 @@ class ProxyValidationAuthenticator implements FilterAuthenticator {
     
     ProxyValidationResponse casResponse = 
         ValidatorFactory.getValidator(
-                UrlGeneratorFactory.getUrlGenerator(request))
+                UrlGeneratorFactory.getUrlGenerator(request, 
+                    protocolConfiguration))
             .proxyValidate(new ValidationRequest(){
                 public String getTicket() {
                   return request.getParameter(ProtocolConstants.TICKET_PARAM);

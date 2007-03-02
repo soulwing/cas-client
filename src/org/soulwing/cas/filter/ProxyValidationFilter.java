@@ -26,14 +26,9 @@ package org.soulwing.cas.filter;
  */
 public class ProxyValidationFilter extends AbstractValidationFilter { 
   
-  private ProxyValidationAuthenticator authenticator;
-  
   protected FilterAuthenticator getAuthenticator() {
-    return authenticator;
-  }
-  
-  protected void doInit() {
-    authenticator = new ProxyValidationAuthenticator( 
+    return new ProxyValidationAuthenticator(
+        getConfiguration().getProtocolConfiguration(),
         getConfiguration().getTrustedProxies());
   }
   

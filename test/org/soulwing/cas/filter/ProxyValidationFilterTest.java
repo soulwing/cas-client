@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import junit.framework.TestCase;
 
 import org.soulwing.cas.client.ProtocolConfiguration;
+import org.soulwing.cas.client.ProtocolConfigurationHolder;
 import org.soulwing.cas.client.StringProtocolSource;
 import org.soulwing.servlet.MockFilterChain;
 import org.soulwing.servlet.MockFilterConfig;
@@ -56,7 +57,7 @@ public class ProxyValidationFilterTest extends TestCase {
     ProtocolConfiguration protocolConfig = new ProtocolConfiguration();
     protocolConfig.setServerUrl(SERVER_URL);
     protocolConfig.setServiceUrl(SERVICE_URL);
-    ProtocolConfigurationFilter.setConfiguration(protocolConfig);
+    ProtocolConfigurationHolder.setConfiguration(protocolConfig);
     MockFilterConfig config = new MockFilterConfig();
     config.setInitParameter(FilterConstants.TRUSTED_PROXIES, TRUSTED_PROXIES);
     config.setInitParameter(FilterConstants.SOURCE_CLASS_NAME,
@@ -71,7 +72,7 @@ public class ProxyValidationFilterTest extends TestCase {
   }
 
   protected void tearDown() throws Exception {
-    ProtocolConfigurationFilter.setConfiguration(null);
+    ProtocolConfigurationHolder.setConfiguration(null);
   }
 
   public void testLoginRedirect() throws Exception {

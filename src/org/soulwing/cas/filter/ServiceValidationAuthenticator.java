@@ -20,6 +20,7 @@ package org.soulwing.cas.filter;
 import javax.servlet.http.HttpServletRequest;
 
 import org.soulwing.cas.client.NoTicketException;
+import org.soulwing.cas.client.ProtocolConfiguration;
 import org.soulwing.cas.client.ProtocolConstants;
 import org.soulwing.cas.client.ServiceValidationResponse;
 import org.soulwing.cas.client.ValidationRequest;
@@ -33,11 +34,17 @@ import org.soulwing.cas.client.ValidatorFactory;
  */
 class ServiceValidationAuthenticator implements FilterAuthenticator {
   
+  private final ProtocolConfiguration protocolConfiguration;
+  
+  ServiceValidationAuthenticator(ProtocolConfiguration protocolConfiguration) {
+    this.protocolConfiguration = protocolConfiguration;
+  }
+  
   public ServiceValidationResponse authenticate(
       final HttpServletRequest request) 
       throws NoTicketException {
     return ValidatorFactory.getValidator(
-            UrlGeneratorFactory.getUrlGenerator(request))
+            UrlGeneratorFactory.getUrlGenerator(request, protocolConfiguration))
         .serviceValidate(new ValidationRequest() {
             public String getTicket() {
               return request.getParameter(ProtocolConstants.TICKET_PARAM);

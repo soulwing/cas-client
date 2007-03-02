@@ -98,7 +98,7 @@ public class ProxyCallbackFilter implements Filter {
    * @see javax.servlet.Filter#init(javax.servlet.FilterConfig)
    */
   public void init(FilterConfig config) throws ServletException {
-    setFilterPath(new FilterConfigurator(config)
+    setFilterPath(new Configurator(config)
         .getRequiredParameter(FilterConstants.FILTER_PATH));
     try {
       init();

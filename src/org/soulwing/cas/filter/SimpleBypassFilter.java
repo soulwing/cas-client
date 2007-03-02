@@ -70,7 +70,7 @@ public class SimpleBypassFilter extends LogoutFilter {
    * @see javax.servlet.Filter#init(javax.servlet.FilterConfig)
    */
   public void init(FilterConfig filterConfig) throws ServletException {
-    setBypassPaths(new FilterConfigurator(filterConfig)
+    setBypassPaths(new Configurator(filterConfig)
         .getRequiredParameter(BYPASS_PATHS));
     super.init(filterConfig);
   }

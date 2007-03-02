@@ -27,14 +27,9 @@ package org.soulwing.cas.filter;
  */
 public class ServiceValidationFilter extends AbstractValidationFilter {
 
-  private FilterAuthenticator authenticator;
-  
   protected FilterAuthenticator getAuthenticator() {
-    return authenticator;
-  }
-
-  protected void doInit() {
-    authenticator = new ServiceValidationAuthenticator();
+    return new ServiceValidationAuthenticator(
+        getConfiguration().getProtocolConfiguration());
   }
 
 }

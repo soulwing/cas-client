@@ -25,11 +25,11 @@ public class FilterConfiguratorTest extends TestCase {
   private static final String DEFAULT_VALUE = "defaultValue";
   
   private MockFilterConfig filterConfig;
-  private FilterConfigurator configurator;
+  private Configurator configurator;
   
   protected void setUp() throws Exception {
     filterConfig = new MockFilterConfig();
-    configurator = new FilterConfigurator(filterConfig);
+    configurator = new Configurator(filterConfig);
   }
 
   public void testGetParameterIsSet() throws Exception {

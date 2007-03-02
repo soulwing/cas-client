@@ -20,6 +20,7 @@ package org.soulwing.cas.filter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.soulwing.cas.client.ProtocolConfiguration;
+import org.soulwing.cas.client.ProtocolConfigurationHolder;
 import org.soulwing.cas.client.ProtocolSource;
 import org.soulwing.cas.client.UrlProtocolSource;
 
@@ -42,8 +43,7 @@ public class ValidationConfiguration {
   private String authFailedUrl;
   private String trustedProxies;
   private ProtocolSource protocolSource;
-  private ProtocolConfiguration protocolConfiguration =
-      new ProtocolConfiguration();
+  private ProtocolConfiguration protocolConfiguration;
   
   /**
    * Initializes this ValidationConfiguration instance.  
@@ -54,10 +54,6 @@ public class ValidationConfiguration {
    * @throws Exception 
    */
   public void init() throws Exception {
-    if (getProtocolConfiguration() == null) {
-      throw new FilterParameterException(
-          "protocolConfiguration property is required");
-    }
     if (getProtocolSource() == null) {
       setProtocolSourceClass(SOURCE_CLASS_DEFAULT);
     }
@@ -65,7 +61,7 @@ public class ValidationConfiguration {
   
   
   /* 
-   * @see org.soulwing.cas.filter.FilterConfigurator#log()
+   * @see org.soulwing.cas.filter.Configurator#log()
    */
   protected Log log() {
     return log;
@@ -117,6 +113,10 @@ public class ValidationConfiguration {
    * @return protocol configuration
    */
   public ProtocolConfiguration getProtocolConfiguration() {
+    if (protocolConfiguration == null) {
+      setProtocolConfiguration(
+          ProtocolConfigurationHolder.getRequiredConfiguration());
+    }
     return protocolConfiguration;
   }
 
@@ -132,7 +132,6 @@ public class ValidationConfiguration {
           + " property is required");
     }
     this.protocolConfiguration = protocolConfiguration;
-    UrlGeneratorFactory.setProtocolConfiguration(protocolConfiguration);
   }
 
   /**
