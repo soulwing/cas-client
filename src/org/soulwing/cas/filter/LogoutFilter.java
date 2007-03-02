@@ -247,19 +247,21 @@ public class LogoutFilter implements Filter {
 
   protected void doHttpFilter(HttpServletRequest request, 
       HttpServletResponse response, FilterChain filterChain) 
-      throws IOException, ServletException { 
-
-    if (isApplicationLogout()) {
-      filterChain.doFilter(request, response);
-    }
+      throws IOException, ServletException {
     if (request.getServletPath().equals(logoutPath)) {
+      if (isApplicationLogout()) {
+        filterChain.doFilter(request, response);
+      }
       removeSessionState(request);
+      if (isGlobalLogout()) {
+        doGlobalLogout(response);
+      }
+      else if (getRedirectUrl() != null) {
+        doLogoutRedirect(response);
+      }
     }
-    if (isGlobalLogout()) {
-      doGlobalLogout(response);
-    }
-    else if (getRedirectUrl() != null) {
-      doLogoutRedirect(response);
+    else {
+      filterChain.doFilter(request, response);
     }
   }
 
