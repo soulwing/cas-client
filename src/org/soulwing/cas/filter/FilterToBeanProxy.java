@@ -19,7 +19,8 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 
 
 /**
- * A Filter that acts as a proxy for a Spring bean.
+ * A Filter that acts as a proxy for a Spring bean.  The idea for this
+ * filter is due to the authors of the Acegi Security framework.
  *
  * @author Carl Harris
  */

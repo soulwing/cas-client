@@ -37,6 +37,7 @@ public class MockHttpServletResponse implements HttpServletResponse {
   private int statusCode;
   private String message;
   private String redirectUrl;
+  private boolean committed;
   
   public void addCookie(Cookie arg0) {
     throw new UnsupportedOperationException();
@@ -76,6 +77,11 @@ public class MockHttpServletResponse implements HttpServletResponse {
   
   public void sendRedirect(String redirectUrl) throws IOException {
     this.redirectUrl = redirectUrl;
+    this.committed = true;
+  }
+
+  public boolean isCommitted() {
+    return committed;
   }
 
   public void setDateHeader(String arg0, long arg1) {
@@ -112,11 +118,13 @@ public class MockHttpServletResponse implements HttpServletResponse {
   
   public void setStatus(int statusCode) {
     this.statusCode = statusCode;
+    this.committed = true;
   }
 
   public void setStatus(int statusCode, String message) {
     this.statusCode = statusCode;
     this.message = message;
+    this.committed = true;
   }
 
   public String getCharacterEncoding() {
@@ -160,10 +168,6 @@ public class MockHttpServletResponse implements HttpServletResponse {
   }
 
   public void resetBuffer() {
-    throw new UnsupportedOperationException();
-  }
-
-  public boolean isCommitted() {
     throw new UnsupportedOperationException();
   }
 

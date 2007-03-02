@@ -26,7 +26,6 @@ public interface FilterConstants {
 
   String SERVER_URL = "serverUrl";
   String FILTER_PATH = "filterPath";
-  String LOGOUT_PATH = "logoutPath";
   String SERVICE_URL = "serviceUrl";
   String PROXY_CALLBACK_URL = "proxyCallbackUrl";
   String GATEWAY = "gateway";
@@ -35,7 +34,11 @@ public interface FilterConstants {
   String TRUSTED_PROXIES = "trustedProxies";
   String SOURCE_CLASS_NAME = "sourceClassName";
   String AUTHORIZED_USERS = "authorizedUsers";
-  
+  String LOGOUT_PATH = "logoutPath";
+  String APPLICATION_LOGOUT = "applicationLogout";
+  String GLOBAL_LOGOUT = "globalLogout";
+  String REDIRECT_URL = "redirectUrl";
+
   String ATTRIBUTE_PREFIX = "org.soulwing.cas.";
   
   String PROTOCOL_CONFIGURATION_ATTRIBUTE = ATTRIBUTE_PREFIX

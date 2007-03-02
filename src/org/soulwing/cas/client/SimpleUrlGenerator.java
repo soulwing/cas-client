@@ -121,7 +121,7 @@ public class SimpleUrlGenerator implements UrlGenerator {
    * @param url a URL for post CAS logout redirection or <code>null</code>  
    * @return <code>String</code> CAS logout URL.  Includes the 
    *    <code>url</code> query parameter if <code>url</code> is
-   *    non-empty.
+   *    non-null and non-empty.
    */
   public String getLogoutUrl(String url) {
     StringBuilder sb = new StringBuilder(100);
