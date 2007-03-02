@@ -46,6 +46,10 @@ public class LogoutFilterTest extends TestCase {
     filter = new LogoutFilter();
   }
 
+  protected void tearDown() throws Exception {
+    ProtocolConfigurationFilter.setConfiguration(null);
+  }
+
   private void setRequiredConfig() {
     filterConfig.setInitParameter(FilterConstants.LOGOUT_PATH, LOGOUT_PATH);
   }
@@ -63,6 +67,7 @@ public class LogoutFilterTest extends TestCase {
   public void testInitGlobalLogoutWithoutProtocolConfiguration() 
     throws Exception {
     setRequiredConfig();
+    ProtocolConfigurationFilter.setConfiguration(null);
     filterConfig.setInitParameter(FilterConstants.GLOBAL_LOGOUT, "true");
     try {
       filter.init(filterConfig);

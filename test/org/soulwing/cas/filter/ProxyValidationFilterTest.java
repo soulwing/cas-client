@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import junit.framework.TestCase;
 
+import org.soulwing.cas.client.ProtocolConfiguration;
 import org.soulwing.cas.client.StringProtocolSource;
 import org.soulwing.servlet.MockFilterChain;
 import org.soulwing.servlet.MockFilterConfig;
@@ -31,6 +32,9 @@ import org.soulwing.servlet.http.MockHttpServletResponse;
 
 public class ProxyValidationFilterTest extends TestCase {
 
+  private static final String SOURCE_CLASS_NAME = "org.soulwing.cas.client.StringProtocolSource";
+  private static final String SERVICE_URL = "https://localhost/myapp";
+  private static final String SERVER_URL = "https://localhost/cas";
   private static final String URL = "https://localhost/myapp/myapp.htm";
   private static final String TICKET = "TEST TICKET";
   private static final String USER = "TEST USER";
@@ -49,12 +53,14 @@ public class ProxyValidationFilterTest extends TestCase {
   
   
   protected void setUp() throws Exception {
+    ProtocolConfiguration protocolConfig = new ProtocolConfiguration();
+    protocolConfig.setServerUrl(SERVER_URL);
+    protocolConfig.setServiceUrl(SERVICE_URL);
+    ProtocolConfigurationFilter.setConfiguration(protocolConfig);
     MockFilterConfig config = new MockFilterConfig();
-    config.setInitParameter("serverUrl", "https://localhost/cas");
-    config.setInitParameter("serviceUrl", "https://localhost/myapp");
-    config.setInitParameter("trustedProxies", TRUSTED_PROXIES);
-    config.setInitParameter("sourceClassName",
-        "org.soulwing.cas.client.StringProtocolSource");
+    config.setInitParameter(FilterConstants.TRUSTED_PROXIES, TRUSTED_PROXIES);
+    config.setInitParameter(FilterConstants.SOURCE_CLASS_NAME,
+        SOURCE_CLASS_NAME);
     this.filter = new ProxyValidationFilter();
     filter.init(config);
     source = (StringProtocolSource)
@@ -63,7 +69,11 @@ public class ProxyValidationFilterTest extends TestCase {
     request = new MockHttpServletRequest();
     response = new MockHttpServletResponse();
   }
-  
+
+  protected void tearDown() throws Exception {
+    ProtocolConfigurationFilter.setConfiguration(null);
+  }
+
   public void testLoginRedirect() throws Exception {
     request.setRequestURL(URL);
     filter.doFilter(request, response, filterChain);

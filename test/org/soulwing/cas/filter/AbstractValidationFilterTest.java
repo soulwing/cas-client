@@ -15,6 +15,7 @@ package org.soulwing.cas.filter;
 
 import junit.framework.TestCase;
 
+import org.soulwing.cas.client.ProtocolConfiguration;
 import org.soulwing.servlet.MockFilterChain;
 import org.soulwing.servlet.MockFilterConfig;
 import org.soulwing.servlet.http.MockHttpServletRequest;
@@ -36,12 +37,19 @@ public class AbstractValidationFilterTest extends TestCase {
     authenticator = new MockFilterAuthenticator();
     filter = new MockValidationFilter(authenticator);
     filterChain = new MockFilterChain();
+    ProtocolConfiguration config = new ProtocolConfiguration();
+    config.setServerUrl(SERVER_URL);
+    config.setServiceUrl(CONTEXT_URL);
+    ProtocolConfigurationFilter.setConfiguration(config);
+  }
+  
+  protected void tearDown() throws Exception {
+    ProtocolConfigurationFilter.setConfiguration(null);
   }
   
   private MockFilterConfig requiredFilterConfig() {
     MockFilterConfig filterConfig = new MockFilterConfig();
     filterConfig.setInitParameter(FilterConstants.SERVER_URL, SERVER_URL);
-    filterConfig.setInitParameter(FilterConstants.SERVICE_URL, CONTEXT_URL);
     filterConfig.setInitParameter(FilterConstants.FILTER_PATH, FILTER_PATH);
     return filterConfig;
   }

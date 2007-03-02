@@ -66,6 +66,10 @@ public class ServiceValidationFilterTest extends TestCase {
     response = new MockHttpServletResponse();
   }
   
+  protected void tearDown() throws Exception {
+    ProtocolConfigurationFilter.setConfiguration(null);
+  }
+
   public void testLoginRedirect() throws Exception {
     request.setRequestURL(URL);
     filter.doFilter(request, response, filterChain);
