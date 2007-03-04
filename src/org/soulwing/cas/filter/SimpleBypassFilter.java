@@ -19,6 +19,7 @@ package org.soulwing.cas.filter;
 
 import java.io.IOException;
 
+import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
@@ -42,7 +43,7 @@ import org.apache.commons.logging.LogFactory;
  * 
  * @author Carl Harris
  */
-public class SimpleBypassFilter {
+public class SimpleBypassFilter implements Filter {
 
   private static final Log log = LogFactory.getLog(SimpleBypassFilter.class);
   private ServletPathMatcher pathMatcher;
