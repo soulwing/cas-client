@@ -1,5 +1,5 @@
 /*
- * SimpleBypassFilter.java
+ * SessionBypassFilter.java
  *
  * Created on Feb 13, 2007
  *
@@ -29,30 +29,24 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.oro.text.GlobCompiler;
-import org.apache.oro.text.regex.MalformedPatternException;
-import org.apache.oro.text.regex.Pattern;
-import org.apache.oro.text.regex.Perl5Matcher;
 
 
 /**
- * A filter that detects requests for servlet paths that should bypass
- * CAS authentication.  The <code>bypassPath</code> property is set to 
- * a comma-separated string of glob expressions that describe one or
- * more servlet paths that should be marked for CAS bypass.  When a request
+ * A filter that detects requests for servlet paths that should cause
+ * CAS authentication to be bypassed for an entire session.  
+ * The <code>bypassPaths</code> property is set to a comma-separated 
+ * string of glob expressions that describe one or more servlet paths that 
+ * should cause the session to be marked for CAS bypass.  When a request
  * for a path that matches one of the configured glob expressions is
  * received by the filter, it adds an attribute to the session that the
- * AbstractValidationFilter will observe as a request to bypass validation of
- * CAS credentials.
+ * AbstractValidationFilter can observe.
  *
  * @author Carl Harris
  */
-public class SimpleBypassFilter extends LogoutFilter {
+public class SessionBypassFilter extends LogoutFilter {
 
-  private static final String BYPASS_PATHS = "bypassPaths";
-  
-  private static final Log log = LogFactory.getLog(LogoutFilter.class);
-  private Pattern[] bypassPaths;
+  private static final Log log = LogFactory.getLog(SessionBypassFilter.class);
+  private ServletPathMatcher pathMatcher;
 
   /**
    * Sets the list of path expressions for which CAS authentication
@@ -62,7 +56,7 @@ public class SimpleBypassFilter extends LogoutFilter {
    *    or a string containing glob wildcards.
    */
   public void setBypassPaths(String bypassPaths) {
-    setBypassPaths(bypassPaths.split("\\s*,\\s*"));
+    pathMatcher = new ServletPathMatcher(bypassPaths.split("\\s*,\\s*"));
   }
 
   /**
@@ -72,7 +66,7 @@ public class SimpleBypassFilter extends LogoutFilter {
    * @throws Exception
    */
   public void init() throws Exception {
-    if (bypassPaths == null) {
+    if (pathMatcher == null) {
       throw new IllegalStateException("must set bypassPaths property");
     }
     super.init();
@@ -83,7 +77,7 @@ public class SimpleBypassFilter extends LogoutFilter {
    */
   public void init(FilterConfig filterConfig) throws ServletException {
     setBypassPaths(new Configurator(filterConfig)
-        .getRequiredParameter(BYPASS_PATHS));
+        .getRequiredParameter(FilterConstants.BYPASS_PATHS));
     super.init(filterConfig);
   }
 
@@ -115,7 +109,7 @@ public class SimpleBypassFilter extends LogoutFilter {
       HttpServletResponse response, FilterChain filterChain) 
       throws IOException, ServletException { 
 
-    if (isBypassPath(request.getServletPath())) {
+    if (pathMatcher.matches(request.getServletPath())) {
       log.debug("servlet path " + request.getServletPath() 
           + " marked for bypass");
       removeSessionState(request);
@@ -125,28 +119,4 @@ public class SimpleBypassFilter extends LogoutFilter {
     super.doHttpFilter(request, response, filterChain);
   }
 
-  private void setBypassPaths(String[] paths) {
-    if (paths.length > 0) {
-      GlobCompiler compiler = new GlobCompiler();
-      bypassPaths = new Pattern[paths.length];
-      for (int i = 0; i < paths.length; i++) {
-        try {
-          bypassPaths[i] = compiler.compile(paths[i]);
-        }
-        catch (MalformedPatternException ex) {
-          throw new IllegalArgumentException("compile error for pattern "
-              + paths[i] + ": ", ex);
-        }
-      }
-    }
-  }
-  
-  private boolean isBypassPath(String servletPath) {
-    boolean match = false;
-    Perl5Matcher matcher = new Perl5Matcher();
-    for (int i = 0; !match && i < bypassPaths.length; i++) {
-      match = matcher.matches(servletPath, bypassPaths[i]);
-    }
-    return match;
-  }
 }

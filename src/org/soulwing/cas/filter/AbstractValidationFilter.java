@@ -27,7 +27,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -229,9 +228,7 @@ public abstract class AbstractValidationFilter implements Filter {
   }
 
   private boolean isRequestForBypass(HttpServletRequest request) {
-    HttpSession session = request.getSession(false);
-    return session != null 
-        && session.getAttribute(FilterConstants.BYPASS_ATTRIBUTE) != null;
+    return ValidationUtils.isValidationBypassed(request);
   }
   
   private boolean isRequestForFilterPath(HttpServletRequest request) {

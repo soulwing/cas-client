@@ -22,31 +22,33 @@ import org.soulwing.servlet.http.MockHttpServletResponse;
 
 import junit.framework.TestCase;
 
-public class SimpleBypassFilterTest extends TestCase {
+public class SessionBypassFilterTest extends TestCase {
 
-  private static final String BYPASS_PATHS = "/other.action,/css/*";
-  private static final String BYPASS_URL = "https://localhost/css/my.css";
+  private static final String LOGOUT_PATH = "/logout.action";
+  private static final String BYPASS_PATHS = "/other.action,/login.action";
+  private static final String BYPASS_URL = "https://localhost/login.action";
   private static final String OTHER_URL = "https://localhost/some/other/path";
   
   private MockFilterConfig filterConfig;
   private MockFilterChain filterChain;
   private MockHttpServletRequest request;
   private MockHttpServletResponse response;
-  private SimpleBypassFilter filter;
+  private SessionBypassFilter filter;
   
   protected void setUp() throws Exception {
     filterConfig = new MockFilterConfig();
     filterChain = new MockFilterChain();
     request = new MockHttpServletRequest();
     response = new MockHttpServletResponse();
-    filter = new SimpleBypassFilter();
+    filter = new SessionBypassFilter();
   }
 
   private void setRequiredConfig() {
+    filterConfig.setInitParameter("logoutPath", LOGOUT_PATH);
     filterConfig.setInitParameter("bypassPaths", BYPASS_PATHS);
   }
   
-  public void testInitNoBypassPaths() throws Exception {
+  public void testInitNoBypassPath() throws Exception {
     try {
       filter.init(filterConfig);
       fail("Expected ServletException");
@@ -62,7 +64,8 @@ public class SimpleBypassFilterTest extends TestCase {
     request.setRequestURL(BYPASS_URL);
     filter.doFilter(request, response, filterChain);
     assertTrue(filterChain.isChainInvoked());
-    assertNotNull(request.getAttribute(FilterConstants.BYPASS_ATTRIBUTE));
+    assertNotNull(request.getSession().getAttribute(
+        FilterConstants.BYPASS_ATTRIBUTE));
   }
 
   public void testRequestForOtherPath() throws Exception {
@@ -71,7 +74,8 @@ public class SimpleBypassFilterTest extends TestCase {
     request.setRequestURL(OTHER_URL);
     filter.doFilter(request, response, filterChain);
     assertTrue(filterChain.isChainInvoked());
-    assertNull(request.getAttribute(FilterConstants.BYPASS_ATTRIBUTE));
+    assertNull(request.getSession().getAttribute(
+        FilterConstants.BYPASS_ATTRIBUTE));
   }
 
 }

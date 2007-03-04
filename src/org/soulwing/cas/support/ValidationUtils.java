@@ -86,4 +86,17 @@ public class ValidationUtils {
     return null;
   }
   
+  /**
+   * Determines whether a request has bypassed CAS validation.
+   * @param request request to inspect
+   * @return <code>true</code> if <code>request</code> was not subjected to
+   *    CAS authentication ticket validation
+   */
+  public static boolean isValidationBypassed(HttpServletRequest request) {
+    return request.getAttribute(FilterConstants.BYPASS_ATTRIBUTE) != null
+        || (request.getSession(false) != null 
+          && request.getSession().getAttribute(FilterConstants.BYPASS_ATTRIBUTE) 
+              != null);
+  }
+
 }

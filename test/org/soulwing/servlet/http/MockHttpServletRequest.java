@@ -49,6 +49,7 @@ import org.soulwing.servlet.MockRequestDispatcher;
 public class MockHttpServletRequest implements HttpServletRequest {
 
   private Map parameters = new LinkedHashMap();
+  private Map attributes = new LinkedHashMap();
   private final String contextPath;
   private String servletPath;
   private String scheme;
@@ -180,6 +181,18 @@ public class MockHttpServletRequest implements HttpServletRequest {
     this.parameters = parameters;
   }
   
+  public Object getAttribute(String name) {
+    return attributes.get(name);
+  }
+
+  public void setAttribute(String name, Object value) {
+    attributes.put(name, value);
+  }
+
+  public void removeAttribute(String name) {
+    attributes.remove(name);
+  }
+
   public String getScheme() {
     return this.scheme;
   }
@@ -233,6 +246,10 @@ public class MockHttpServletRequest implements HttpServletRequest {
     
   }
   
+  public Enumeration getAttributeNames() {
+    throw new UnsupportedOperationException();
+  }
+
   public String getAuthType() {
     throw new UnsupportedOperationException();
   }
@@ -305,14 +322,6 @@ public class MockHttpServletRequest implements HttpServletRequest {
     throw new UnsupportedOperationException();
   }
 
-  public Object getAttribute(String arg0) {
-    throw new UnsupportedOperationException();
-  }
-
-  public Enumeration getAttributeNames() {
-    throw new UnsupportedOperationException();
-  }
-
   public String getCharacterEncoding() {
     throw new UnsupportedOperationException();
   }
@@ -358,14 +367,6 @@ public class MockHttpServletRequest implements HttpServletRequest {
   }
 
   public String getRemoteHost() {
-    throw new UnsupportedOperationException();
-  }
-
-  public void setAttribute(String arg0, Object arg1) {
-    throw new UnsupportedOperationException();
-  }
-
-  public void removeAttribute(String arg0) {
     throw new UnsupportedOperationException();
   }
 

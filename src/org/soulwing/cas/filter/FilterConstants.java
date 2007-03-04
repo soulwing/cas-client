@@ -35,6 +35,7 @@ public interface FilterConstants {
   String SOURCE_CLASS_NAME = "sourceClassName";
   String AUTHORIZED_USERS = "authorizedUsers";
   String LOGOUT_PATH = "logoutPath";
+  String BYPASS_PATHS = "bypassPaths";
   String APPLICATION_LOGOUT = "applicationLogout";
   String GLOBAL_LOGOUT = "globalLogout";
   String REDIRECT_URL = "redirectUrl";
