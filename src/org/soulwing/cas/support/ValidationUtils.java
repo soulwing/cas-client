@@ -87,16 +87,40 @@ public class ValidationUtils {
   }
   
   /**
-   * Determines whether a request has bypassed CAS validation.
+   * Determines whether a request has bypassed CAS validation.  
    * @param request request to inspect
-   * @return <code>true</code> if <code>request</code> was not subjected to
-   *    CAS authentication ticket validation
+   * @return <code>true</code> if <code>request</code> will not be subject to
+   *    CAS authentication ticket validation either because the request or
+   *    the session is marked for bypass.
    */
   public static boolean isValidationBypassed(HttpServletRequest request) {
     return request.getAttribute(FilterConstants.BYPASS_ATTRIBUTE) != null
-        || (request.getSession(false) != null 
-          && request.getSession().getAttribute(FilterConstants.BYPASS_ATTRIBUTE) 
-              != null);
+        || isValidationBypassedForSession(request);
+  }
+
+  /**
+   * Determines whether the session for a request is set to bypass
+   * CAS validation.
+   * @param request request to inspect
+   * @return <code>true</code> if <code>request</code> will not be subject to
+   *    CAS authentication ticket validation because the session is marked
+   *    for bypass.
+   */
+  public static boolean isValidationBypassedForSession(
+      HttpServletRequest request) {
+    return request.getSession(false) != null 
+        && isValidationBypassedForSession(request.getSession()); 
+  }
+
+  /**
+   * Determines whether a session is set to be bypass CAS validation.
+   * @param session session to inspect
+   * @return <code>true</code> if requests received for <code>session</code> 
+   *    will not be subject to CAS authentication ticket validation.
+   */
+  public static boolean isValidationBypassedForSession(
+      HttpSession session) {
+    return session.getAttribute(FilterConstants.BYPASS_ATTRIBUTE) != null;
   }
 
 }

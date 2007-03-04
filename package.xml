@@ -14,7 +14,7 @@
  -->
 <project name="soulwing-casclient" default="dist.zip" basedir=".">
   <property name="name" value="${ant.project.name}"/>
-  <property name="version" value="0.3rc1"/>
+  <property name="version" value="0.3rc2"/>
   <property name="name.version" value="${name}-${version}"/>
   <property name="doc.dir" location="doc"/>
   <property name="build.dir" location="build"/>

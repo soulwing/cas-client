@@ -252,8 +252,10 @@ public class LogoutFilter implements Filter {
       if (isApplicationLogout()) {
         filterChain.doFilter(request, response);
       }
+      boolean sessionBypassed = 
+          ValidationUtils.isValidationBypassedForSession(request);
       removeSessionState(request);
-      if (isGlobalLogout()) {
+      if (isGlobalLogout() && !sessionBypassed) {
         doGlobalLogout(response);
       }
       else if (getRedirectUrl() != null) {
