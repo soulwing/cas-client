@@ -28,6 +28,7 @@ import junit.framework.TestCase;
 public class LogoutFilterTest extends TestCase {
 
   private static final String REDIRECT_URL = "http://localhost/afterLogout";
+  private static final String BYPASS_REDIRECT_URL = "/afterLogoutBypassed";
   private static final String SERVER_URL = "http://localhost/cas";
   private static final String LOGOUT_PATH = "/logout.action";
   private static final String LOGOUT_URL = "https://localhost" + LOGOUT_PATH;
@@ -133,6 +134,21 @@ public class LogoutFilterTest extends TestCase {
     assertEquals(
         new SimpleUrlGenerator(config).getLogoutUrl(filter.getRedirectUrl()), 
         response.getRedirect());
+  }
+
+  public void testGlobalLogoutBypass() throws Exception {
+    ProtocolConfiguration config = new ProtocolConfiguration();
+    ProtocolConfigurationHolder.setConfiguration(config);
+    config.setServerUrl(SERVER_URL);
+    setRequiredConfig();
+    filterConfig.setInitParameter(FilterConstants.GLOBAL_LOGOUT, "true");
+    filterConfig.setInitParameter(FilterConstants.BYPASS_REDIRECT_URL, 
+        BYPASS_REDIRECT_URL);
+    request.getSession().setAttribute(FilterConstants.BYPASS_ATTRIBUTE, "bypass");
+    filter.init(filterConfig);
+    request.setRequestURL(LOGOUT_URL);
+    filter.doFilter(request, response, filterChain);
+    assertEquals(filter.getBypassRedirectUrl(), response.getRedirect());
   }
 
   public void testRedirectUrl() throws Exception {

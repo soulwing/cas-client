@@ -39,7 +39,8 @@ public interface FilterConstants {
   String APPLICATION_LOGOUT = "applicationLogout";
   String GLOBAL_LOGOUT = "globalLogout";
   String REDIRECT_URL = "redirectUrl";
-
+  String BYPASS_REDIRECT_URL = "bypassRedirectUrl";
+  
   String ATTRIBUTE_PREFIX = "org.soulwing.cas.";
   
   String PROTOCOL_CONFIGURATION_ATTRIBUTE = ATTRIBUTE_PREFIX

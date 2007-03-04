@@ -74,6 +74,7 @@ public class LogoutFilter implements Filter {
   private static final Log log = LogFactory.getLog(LogoutFilter.class);
   private String logoutPath;
   private String redirectUrl;
+  private String bypassRedirectUrl;
   private boolean applicationLogout = true;
   private boolean globalLogout = false;
   private ProtocolConfiguration protocolConfiguration;
@@ -154,7 +155,7 @@ public class LogoutFilter implements Filter {
   /**
    * Sets the URL which will be used to send a redirect after logout is
    * completed.
-   * @param redirectUrl
+   * @param redirectUrl <code>String</code> URL
    *
    * Note: if <code>applicationLogout</code> is also set, the redirect 
    *    will occur only if no downstream filter or servlet has committed 
@@ -168,6 +169,29 @@ public class LogoutFilter implements Filter {
     this.redirectUrl = redirectUrl;
   }
 
+  /**
+   * Gets the URL which will be used to send a redirect in lieu of CAS
+   * global logout for a session that has bypassed CAS.
+   * @return <code>String</code> URL.
+   */  
+  public String getBypassRedirectUrl() {
+    return bypassRedirectUrl;
+  }
+  
+  /**
+   * Sets the URL which will be used to send a redirect in lieu of CAS
+   * global logout for a session that has bypassed CAS.
+   * @param bypassRedirectUrl <code>String</code> URL
+   * 
+   * Note: if <code>applicationLogout</code> is also set, the redirect 
+   *    will occur only if no downstream filter or servlet has committed 
+   *    the response.
+   */
+  public void setBypassRedirectUrl(String bypassRedirectUrl) {
+    this.bypassRedirectUrl = bypassRedirectUrl;
+  }
+  
+  
   /**
    * Gets the CAS protocol configuration bean.
    */
@@ -213,6 +237,8 @@ public class LogoutFilter implements Filter {
             GLOBAL_LOGOUT_DEFAULT)));
     setRedirectUrl(new Configurator(filterConfig)
         .getParameter(FilterConstants.REDIRECT_URL));
+    setBypassRedirectUrl(new Configurator(filterConfig)
+        .getParameter(FilterConstants.BYPASS_REDIRECT_URL));
     try {
       init();
     }
@@ -255,11 +281,16 @@ public class LogoutFilter implements Filter {
       boolean sessionBypassed = 
           ValidationUtils.isValidationBypassedForSession(request);
       removeSessionState(request);
-      if (isGlobalLogout() && !sessionBypassed) {
-        doGlobalLogout(response);
+      if (isGlobalLogout()) {
+        if (!sessionBypassed) {
+          doGlobalLogout(response);
+        }
+        else if (getBypassRedirectUrl() != null) {
+          doLogoutRedirect(response, getBypassRedirectUrl());
+        }
       }
       else if (getRedirectUrl() != null) {
-        doLogoutRedirect(response);
+        doLogoutRedirect(response, getRedirectUrl());
       }
     }
     else {
@@ -298,9 +329,10 @@ public class LogoutFilter implements Filter {
     }
   }
   
-  private void doLogoutRedirect(HttpServletResponse response) throws IOException {
+  private void doLogoutRedirect(HttpServletResponse response, String url) 
+      throws IOException {
     if (!response.isCommitted()) {
-      response.sendRedirect(getRedirectUrl());
+      response.sendRedirect(url);
     }
     else {
       log.debug("skipping logout redirect because response is committed");
