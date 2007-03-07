@@ -76,11 +76,14 @@ public class DefaultValidatorImpl implements Validator {
    */
   public ServiceValidationResponse serviceValidate(ValidationRequest request) 
       throws NoTicketException {
-    
+    String ticket = request.getTicket();
+    if (ticket == null) {
+      throw new NoTicketException();
+    }
     return (ServiceValidationResponse) 
         this.serviceValidateHandler.processResult(
             getProtocolSource().getSource(
-                getUrlGenerator().getServiceValidateUrl(request.getTicket())));
+                getUrlGenerator().getServiceValidateUrl(ticket)));
   }
 
   /**
@@ -88,11 +91,14 @@ public class DefaultValidatorImpl implements Validator {
    */
   public ProxyValidationResponse proxyValidate(ValidationRequest request) 
       throws NoTicketException {
-
+    String ticket = request.getTicket();
+    if (ticket == null) {
+      throw new NoTicketException();
+    }
     return (ProxyValidationResponse) 
         this.proxyValidateHandler.processResult(
             getProtocolSource().getSource(
-                getUrlGenerator().getProxyValidateUrl(request.getTicket())));
+                getUrlGenerator().getProxyValidateUrl(ticket)));
   }
 
 }

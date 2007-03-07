@@ -31,7 +31,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.soulwing.cas.client.NoTicketException;
-import org.soulwing.cas.client.ProtocolConstants;
 import org.soulwing.cas.client.ServiceValidationResponse;
 import org.soulwing.cas.client.ValidatorFactory;
 import org.soulwing.cas.support.ValidationUtils;
@@ -84,6 +83,9 @@ public abstract class AbstractValidationFilter implements Filter {
     ValidationConfiguration config = new ValidationConfiguration();
     Configurator fc = new Configurator(filterConfig);
     config.setFilterPath(fc.getParameter(FilterConstants.FILTER_PATH));
+    config.setRedirectToLogin(Boolean.parseBoolean(
+        fc.getParameter(FilterConstants.REDIRECT_TO_LOGIN, 
+            Boolean.toString(ValidationConfiguration.REDIRECT_TO_LOGIN_DEFAULT))));
     config.setAuthFailedUrl(fc.getParameter(FilterConstants.AUTH_FAILED_URL));
     config.setTrustedProxies(fc.getParameter(FilterConstants.TRUSTED_PROXIES));
     config.setProtocolSourceClass(
@@ -194,27 +196,45 @@ public abstract class AbstractValidationFilter implements Filter {
       wrapAndPassToFilterChain(request, response, filterChain,
           new ValidationResponse(getSessionValidation(request)));
     }
-    else if (isRequestForFilterPath(request)) {
-      try {
-        validate(request, response, filterChain);
-      }
-      catch (NoTicketException ex) {
-        redirectToAuthFailed(response);
-      }
-    }
-    else if (isAuthenticationInProgress(request)) {
-      try {
-        validate(request, response, filterChain);
-      }
-      catch (NoTicketException ex) {
-        redirectToLogin(request, response);
-      }
+    else if (isFilterPathConfigured()) {
+      doFilterPathAuthentication(request, response, filterChain);
     }
     else {
-      redirectToLogin(request, response);
+      try {
+        validate(request, response, filterChain);
+      }
+      catch (NoTicketException ex) {
+        redirectOnNoTicket(request, response);
+      }
     }
   }
 
+  private void doFilterPathAuthentication(HttpServletRequest request, 
+      HttpServletResponse response, FilterChain filterChain) 
+      throws IOException, ServletException {
+    
+    if (isRequestForFilterPath(request)) {
+      try {
+        validate(request, response, filterChain);
+      }
+      catch (NoTicketException ex) {
+        redirectOnNoTicket(request, response);
+      }
+    }
+    else {
+      bypassValidation(request, response, filterChain);
+    }
+  }
+
+  private void redirectOnNoTicket(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    if (getConfiguration().isRedirectToLogin()) {
+      redirectToLogin(request, response);
+    }
+    else {
+      redirectToAuthFailed(response);
+    }
+  }
+  
   private void bypassValidation(HttpServletRequest request, 
       HttpServletResponse response, FilterChain filterChain) 
       throws IOException, ServletException {
@@ -235,9 +255,15 @@ public abstract class AbstractValidationFilter implements Filter {
     return request.getServletPath().equals(getConfiguration().getFilterPath());
   }
   
+  private boolean isFilterPathConfigured() {
+    return getConfiguration().getFilterPath() != null;
+  }
+
+  /*
   private boolean isAuthenticationInProgress(HttpServletRequest request) {
     return request.getParameter(ProtocolConstants.TICKET_PARAM) != null;
   }
+  */
   
   private void validate(HttpServletRequest request, 
       HttpServletResponse response, FilterChain filterChain) 

@@ -70,10 +70,7 @@ public class AbstractValidationFilterTest extends TestCase {
     MockHttpServletRequest request = newServletRequest(SOME_OTHER_PATH);
     MockHttpServletResponse response = newServletResponse();
     filter.doFilter(request, response, filterChain);
-    assertTrue(!filterChain.isChainInvoked());
-    assertEquals(UrlGeneratorFactory.getUrlGenerator(request, 
-        protocolConfiguration).getLoginUrl(), 
-          response.getRedirect());
+    assertTrue(filterChain.isChainInvoked());
   }
   
 }

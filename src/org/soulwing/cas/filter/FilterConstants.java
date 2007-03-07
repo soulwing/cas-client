@@ -30,6 +30,7 @@ public interface FilterConstants {
   String GATEWAY = "casGateway";
   String RENEW = "casRenew";
   String FILTER_PATH = "filterPath";
+  String REDIRECT_TO_LOGIN = "redirectToLogin";
   String AUTH_FAILED_URL = "authFailedUrl";
   String TRUSTED_PROXIES = "trustedProxies";
   String SOURCE_CLASS_NAME = "sourceClassName";

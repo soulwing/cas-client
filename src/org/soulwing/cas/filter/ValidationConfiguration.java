@@ -38,8 +38,10 @@ public class ValidationConfiguration {
       LogFactory.getLog(ValidationConfiguration.class);
 
   public static final Class SOURCE_CLASS_DEFAULT = UrlProtocolSource.class; 
+  public static final boolean REDIRECT_TO_LOGIN_DEFAULT = true;
  
   private String filterPath;
+  private boolean redirectToLogin = REDIRECT_TO_LOGIN_DEFAULT;
   private String authFailedUrl;
   private String trustedProxies;
   private ProtocolSource protocolSource;
@@ -173,10 +175,46 @@ public class ValidationConfiguration {
     }
   }
 
+  /**
+   * Gets the flag that indicates whether the filter should redirect to
+   * the CAS login when a request is received that does not have an 
+   * authentication ticket and no authentication session has been established.
+   * 
+   * @return <code>boolean</code> flag state; if
+   */
+  public boolean isRedirectToLogin() {
+    return redirectToLogin;
+  }
+
+  /**
+   * Sets the flag that indicates whether the filter should redirect to
+   * the CAS login when a request is received that does not have an 
+   * authentication ticket and no authentication session has been established.
+   * 
+   * @param redirectToLogin <code>true</code> if you want requests from an
+   *    unauthenticated session that do not include a CAS authentication ticket 
+   *    to be redirected to the CAS login form; <code>false</code> if you want
+   *    such requests to be redirected to the URL specified by 
+   *    <code>authFailedUrl</code>.  The default setting for this flag is 
+   *    <code>true</code>.  Typically, it would be set to false only for backend
+   *    services that are expecting to get an authentication ticket that was
+   *    generated via the proxy mechanism by a front-end web application.   
+   */
+  public void setRedirectToLogin(boolean redirectToLogin) {
+    this.redirectToLogin = redirectToLogin;
+  }
+
+  /**
+   * Gets the list of proxies that should be trusted by this filter.
+   */
   public String getTrustedProxies() {
     return trustedProxies;
   }
 
+  /**
+   * Sets the list of proxies that should be trusted by this filter.
+   * @param trustedProxies
+   */
   public void setTrustedProxies(String trustedProxies) {
     this.trustedProxies = trustedProxies;
   }

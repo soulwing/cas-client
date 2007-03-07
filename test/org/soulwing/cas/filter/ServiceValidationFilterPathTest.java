@@ -20,6 +20,7 @@ import junit.framework.TestCase;
 
 import org.soulwing.cas.client.ProtocolConfiguration;
 import org.soulwing.cas.client.ProtocolConfigurationHolder;
+import org.soulwing.cas.client.ProtocolConstants;
 import org.soulwing.cas.client.StringProtocolSource;
 import org.soulwing.servlet.MockFilterChain;
 import org.soulwing.servlet.MockFilterConfig;
@@ -40,16 +41,18 @@ public class ServiceValidationFilterPathTest extends TestCase {
       "https://localhost" + FILTER_PATH;
   private static final String SOURCE_CLASS_NAME = 
       "org.soulwing.cas.client.StringProtocolSource";
-  
+  private static final String AUTH_FAILED_URL = "mock_redirect_url";
+
   private ServiceValidationFilter filter;
   private MockFilterConfig config;
   private MockFilterChain filterChain;
   private MockHttpServletRequest request;
   private MockHttpServletResponse response;
   private StringProtocolSource source;
+  private ProtocolConfiguration protocolConfig;
   
   protected void setUp() throws Exception {
-    ProtocolConfiguration protocolConfig = new ProtocolConfiguration();
+    protocolConfig = new ProtocolConfiguration();
     protocolConfig.setServerUrl(SERVER_URL);
     protocolConfig.setServiceUrl(SERVICE_URL);
     ProtocolConfigurationHolder.setConfiguration(protocolConfig);
@@ -68,25 +71,49 @@ public class ServiceValidationFilterPathTest extends TestCase {
   
   public void testValidationFailureError() throws Exception {
     request.setRequestURL(URL);
-    request.setParameter("ticket", TICKET);
+    request.setParameter(ProtocolConstants.TICKET_PARAM, TICKET);
     source.setText(getFailureText());
     filter.doFilter(request, response, filterChain);
     assertEquals(false, filterChain.isChainInvoked());
     assertEquals(HttpServletResponse.SC_FORBIDDEN, response.getStatus());
   }
 
-  public void testValidationFailureRedirect() throws Exception {
-    final String authFailedUrl = "mock_redirect_url";
-    config.setInitParameter(FilterConstants.AUTH_FAILED_URL, authFailedUrl);
+  public void testNoTicketRedirectToLogin() throws Exception {
+    config.setInitParameter(FilterConstants.AUTH_FAILED_URL, AUTH_FAILED_URL);
     filter.init(config);
     source = (StringProtocolSource)
         filter.getConfiguration().getProtocolSource();
     request.setRequestURL(URL);
-    request.setParameter("ticket", TICKET);
+    filter.doFilter(request, response, filterChain);
+    assertEquals(false, filterChain.isChainInvoked());
+    assertEquals(UrlGeneratorFactory.getUrlGenerator(request, 
+        protocolConfig).getLoginUrl(), response.getRedirect());
+  }
+
+  public void testNoTicketRedirectToAuthFailed() throws Exception {
+    config.setInitParameter(FilterConstants.AUTH_FAILED_URL, AUTH_FAILED_URL);
+    config.setInitParameter(FilterConstants.REDIRECT_TO_LOGIN, 
+        Boolean.toString(false));
+    filter.init(config);
+    source = (StringProtocolSource)
+        filter.getConfiguration().getProtocolSource();
+    request.setRequestURL(URL);
+    filter.doFilter(request, response, filterChain);
+    assertEquals(false, filterChain.isChainInvoked());
+    assertEquals(AUTH_FAILED_URL, response.getRedirect());
+  }
+
+  public void testValidationFailureRedirect() throws Exception {
+    config.setInitParameter(FilterConstants.AUTH_FAILED_URL, AUTH_FAILED_URL);
+    filter.init(config);
+    source = (StringProtocolSource)
+        filter.getConfiguration().getProtocolSource();
+    request.setRequestURL(URL);
+    request.setParameter(ProtocolConstants.TICKET_PARAM, TICKET);
     source.setText(getFailureText());
     filter.doFilter(request, response, filterChain);
     assertEquals(false, filterChain.isChainInvoked());
-    assertEquals(authFailedUrl, response.getRedirect());
+    assertEquals(AUTH_FAILED_URL, response.getRedirect());
   }
 
   private String getFailureText() {
@@ -103,7 +130,7 @@ public class ServiceValidationFilterPathTest extends TestCase {
   
   public void testValidationSuccess() throws Exception {
     request.setRequestURL(URL);
-    request.setParameter("ticket", TICKET);
+    request.setParameter(ProtocolConstants.TICKET_PARAM, TICKET);
     source.setText(getSuccessText());
     filter.doFilter(request, response, filterChain);
     assertEquals(true, filterChain.isChainInvoked());
