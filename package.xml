@@ -26,6 +26,10 @@
   <property name="jar.name" value="${name.version}.jar"/>
   <property name="jar.path" location="${dist.dir}/${jar.name}"/>
   <property name="zip.path" location="${dist.dir}/${name.version}.zip"/>
+  <property name="javadoc.web.xml" location="resources/javadoc-web.xml"/>
+  <property name="javadoc.war.path" location="${dist.dir}/casclient-docs.war"/>
+  
+  <target name="all" depends="dist.zip, javadoc.war"/>
   
   <target name="clean">
     <delete dir="${dist.dir}"/>
@@ -53,5 +57,13 @@
       </zipfileset>
     </zip>
   </target>
+
+  <target name="javadoc.war" depends="prepare">
+    <war destfile="${javadoc.war.path}" basedir="${doc.dir}"
+         webxml="${javadoc.web.xml}" 
+         excludes="WEB-INF/web.xml, META-INF/MANIFEST.MF">
+    </war>
+  </target>
+  
   
 </project>  
