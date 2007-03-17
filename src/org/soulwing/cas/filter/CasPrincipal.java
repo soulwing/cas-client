@@ -17,6 +17,8 @@
  */
 package org.soulwing.cas.filter;
 
+import java.io.Serializable;
+
 import org.soulwing.cas.client.ServiceValidationResponse;
 
 /**
@@ -24,7 +26,9 @@ import org.soulwing.cas.client.ServiceValidationResponse;
  *
  * @author Carl Harris
  */
-class CasPrincipal implements java.security.Principal {
+class CasPrincipal implements java.security.Principal, Serializable {
+
+  private static final long serialVersionUID = -9217520836500471161L;
   private String name;
 
   public CasPrincipal(String userName) {
