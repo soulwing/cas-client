@@ -13,10 +13,11 @@
  */
 package org.soulwing.cas.client;
 
+import junit.framework.TestCase;
+
 import org.jdom.Element;
 import org.soulwing.cas.client.jdom.ProxyValidateMappingStrategy;
-
-import junit.framework.TestCase;
+import org.soulwing.cas.client.jdom.ServiceValidateMappingStrategy;
 
 public class ValidatorFactoryTest extends TestCase {
 
@@ -24,6 +25,11 @@ public class ValidatorFactoryTest extends TestCase {
     super.setUp();
   }
 
+  protected void tearDown() throws Exception {
+    ValidatorFactory.setServiceValidateMappingStrategy(
+        new ServiceValidateMappingStrategy());
+    super.tearDown();
+  }
   public void testConfigureProxyValidateMappingStrategy() {
     ValidatorFactory.setServiceValidateMappingStrategy(
         new MockProtocolMappingStrategy());
