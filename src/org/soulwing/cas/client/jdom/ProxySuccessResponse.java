@@ -1,5 +1,5 @@
 /*
- * ProxyResponse.java
+ * ProxySuccessResponse.java
  *
  * Created on Sep 7, 2006
  *
@@ -15,7 +15,10 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  */
-package org.soulwing.cas.client;
+package org.soulwing.cas.client.jdom;
+
+import org.soulwing.cas.client.AbstractResponse;
+import org.soulwing.cas.client.ProxyResponse;
 
 
 /**
@@ -24,13 +27,14 @@ package org.soulwing.cas.client;
  *
  * @author Carl Harris
  */
-public class ProxyResponse extends AbstractResponse {
+public class ProxySuccessResponse extends AbstractResponse 
+    implements ProxyResponse {
 
   private String proxyTicket;
   
-  /**
-   * Gets the proxy ticket issued by the CAS server.
-   * @return <code>String</code> proxy ticket
+  /*
+   * (non-Javadoc)
+   * @see org.soulwing.cas.client.ProxyResponse#getProxyTicket()
    */
   public String getProxyTicket() {
     return proxyTicket;
@@ -38,7 +42,7 @@ public class ProxyResponse extends AbstractResponse {
 
   /**
    * Sets the proxy ticket that was issued by the CAS server for request
-   * corresponding to this ProxyResponse.
+   * corresponding to this ProxySuccessResponse.
    * @param proxyTicket <code>String</code> proxy ticket
    */
   public void setProxyTicket(String proxyTicket) {

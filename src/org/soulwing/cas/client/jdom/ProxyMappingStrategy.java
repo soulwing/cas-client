@@ -19,12 +19,11 @@ import org.jdom.Element;
 import org.soulwing.cas.client.AbstractResponse;
 import org.soulwing.cas.client.ProtocolConstants;
 import org.soulwing.cas.client.ProtocolViolationException;
-import org.soulwing.cas.client.ProxyResponse;
 import org.soulwing.cas.client.Response;
 
 /**
  * A <code>ProtocolMappingStrategy</code> that maps to an instance
- * of <code>ProxyResponse</code>.
+ * of <code>ProxySuccessResponse</code>.
  *
  * @author Carl Harris
  */
@@ -57,7 +56,7 @@ public class ProxyMappingStrategy extends AbstractResponseMappingStrategy {
    * @return an appropriate subclass of <code>Response</code>
    */
   private Response mapSuccessResponse(Element element) {
-    ProxyResponse response = new ProxyResponse();
+    ProxySuccessResponse response = new ProxySuccessResponse();
     response.setSuccessful(true);
     response.setProxyTicket(getProxyTicket(
         JdomUtil.getChild(element, ProtocolConstants.PROXY_TICKET)));
@@ -84,7 +83,7 @@ public class ProxyMappingStrategy extends AbstractResponseMappingStrategy {
    * @see org.soulwing.cas.client.jdom.AbstractResponseMappingStrategy#newFailureResponse()
    */
   protected AbstractResponse newFailureResponse() {
-    return new ProxyResponse();
+    return new ProxyFailureResponse();
   }
 
 }

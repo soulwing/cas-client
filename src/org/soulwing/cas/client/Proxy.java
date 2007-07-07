@@ -17,6 +17,8 @@
  */
 package org.soulwing.cas.client;
 
+import org.soulwing.cas.client.jdom.ProxySuccessResponse;
+
 
 /**
  * A service interface that requests proxy tickets using a CAS proxy granting 
@@ -31,6 +33,6 @@ public interface Proxy {
    * @param request proxy request
    * @return proxy response from the CAS server.
    */
-  ProxyResponse proxy(ProxyRequest request);
+  ProxySuccessResponse proxy(ProxyRequest request);
 
 }

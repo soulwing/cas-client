@@ -17,7 +17,6 @@ import java.io.StringReader;
 
 import junit.framework.TestCase;
 
-import org.soulwing.cas.client.ProxyResponse;
 import org.soulwing.cas.client.Response;
 import org.xml.sax.InputSource;
 
@@ -36,8 +35,8 @@ public class ProxyMappingStrategyTest extends TestCase {
   public void testProcessSuccessResult() throws Exception {
     Response response = handler.processResult(
         constructSuccessResponse(), strategy);
-    assertTrue(response instanceof ProxyResponse);
-    ProxyResponse proxyResponse = (ProxyResponse) response;
+    assertTrue(response instanceof ProxySuccessResponse);
+    ProxySuccessResponse proxyResponse = (ProxySuccessResponse) response;
     assertTrue(proxyResponse.isSuccessful() == true);
     assertEquals("TEST TICKET", proxyResponse.getProxyTicket());
   }
