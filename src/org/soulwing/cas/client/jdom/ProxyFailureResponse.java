@@ -1,7 +1,7 @@
 /*
- * ProxyTicketException.java
+ * ProxySuccessResponse.java
  *
- * Created on Feb 12, 2007
+ * Created on Sep 7, 2006
  *
  * Copyright (C) 2006, 2007 Carl E Harris, Jr.
  * 
@@ -15,22 +15,27 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  */
-package org.soulwing.cas.support;
+package org.soulwing.cas.client.jdom;
 
-import org.soulwing.cas.client.jdom.ProxySuccessResponse;
+import org.soulwing.cas.client.AbstractResponse;
+import org.soulwing.cas.client.ProxyResponse;
 
 
 /**
- * An exception thrown when a request for a CAS proxy ticket fails.
+ * A response received for an invocation of the CAS <code>/proxy</code>
+ * operation.
  *
  * @author Carl Harris
  */
-public class ProxyTicketException extends RuntimeException {
+public class ProxyFailureResponse extends AbstractResponse 
+    implements ProxyResponse {
 
-  private static final long serialVersionUID = 6323178515814921510L;
-
-  public ProxyTicketException(ProxySuccessResponse response) {
-    super(response.getResultMessage() + "(" + response.getResultCode() + ")");
+  /*
+   * (non-Javadoc)
+   * @see org.soulwing.cas.client.ProxyResponse#getProxyTicket()
+   */
+  public String getProxyTicket() {
+    throw new IllegalStateException("Can't get proxy ticket from failed response");
   }
 
 }

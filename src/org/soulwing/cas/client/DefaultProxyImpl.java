@@ -17,6 +17,8 @@
  */
 package org.soulwing.cas.client;
 
+import org.soulwing.cas.client.jdom.ProxySuccessResponse;
+
 
 /**
  * The default implementation of the Proxy interface as a POJO with
@@ -34,8 +36,8 @@ public class DefaultProxyImpl implements Proxy {
   /* 
    * @see org.soulwing.cas.client.Proxy#proxy(ProxyRequest)
    */
-  public ProxyResponse proxy(ProxyRequest request) {
-    return (ProxyResponse)
+  public ProxySuccessResponse proxy(ProxyRequest request) {
+    return (ProxySuccessResponse)
         this.protocolHandler.processResult(
             getProtocolSource().getSource(
                 getUrlGenerator().getProxyUrl(

@@ -1,7 +1,7 @@
 /*
  * ProxyResponse.java
  *
- * Created on Sep 7, 2006
+ * Created on Jul 7, 2007
  *
  * Copyright (C) 2006, 2007 Carl E Harris, Jr.
  * 
@@ -13,36 +13,22 @@
  * This library is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
  * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
+ * License for more details. 
  */
 package org.soulwing.cas.client;
 
-
 /**
- * A response received for an invocation of the CAS <code>/proxy</code>
- * operation.
+ * A response received for an invocation of the CAS <code>/proxy
+ * </code> operation.
  *
  * @author Carl Harris
  */
-public class ProxyResponse extends AbstractResponse {
+public interface ProxyResponse extends Response {
 
-  private String proxyTicket;
-  
   /**
    * Gets the proxy ticket issued by the CAS server.
    * @return <code>String</code> proxy ticket
    */
-  public String getProxyTicket() {
-    return proxyTicket;
-  }
-
-  /**
-   * Sets the proxy ticket that was issued by the CAS server for request
-   * corresponding to this ProxyResponse.
-   * @param proxyTicket <code>String</code> proxy ticket
-   */
-  public void setProxyTicket(String proxyTicket) {
-    this.proxyTicket = proxyTicket;
-  }
+  String getProxyTicket();
   
 }
