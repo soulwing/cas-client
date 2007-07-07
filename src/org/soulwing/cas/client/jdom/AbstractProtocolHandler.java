@@ -20,10 +20,14 @@ package org.soulwing.cas.client.jdom;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
+import org.jdom.output.Format;
+import org.jdom.output.XMLOutputter;
 import org.soulwing.cas.client.ProtocolConstants;
 import org.soulwing.cas.client.ProtocolViolationException;
 import org.soulwing.cas.client.Response;
@@ -40,6 +44,9 @@ import org.xml.sax.InputSource;
  */
 public abstract class AbstractProtocolHandler implements ProtocolHandler {
 
+  private static final Log log = 
+      LogFactory.getLog(AbstractProtocolHandler.class);
+  
   /** 
    * @see org.soulwing.cas.client.ProtocolHandler#processResult(
    *    org.xml.sax.InputSource)
@@ -73,8 +80,13 @@ public abstract class AbstractProtocolHandler implements ProtocolHandler {
       throw new ServiceAccessException(ex);
     }
     
+    log.debug(new XMLOutputter(Format.getCompactFormat())
+        .outputString(document));
+
     Element rootElement = document.getRootElement();
-    if (!rootElement.getQualifiedName().equals(ProtocolConstants.SERVICE_RESPONSE)) {
+    if (!rootElement.getQualifiedName()
+        .equals(ProtocolConstants.SERVICE_RESPONSE)) {
+      log.error("Invalid root element: " + rootElement.getQualifiedName());
       throw new ProtocolViolationException("Invalid root element");
     }
     
