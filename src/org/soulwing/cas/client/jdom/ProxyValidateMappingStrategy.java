@@ -72,7 +72,7 @@ public class ProxyValidateMappingStrategy extends
    *    <code>/serviceValidate</code> response.
    */
   public void setServiceValidateMappingStrategy(
-      ServiceValidateMappingStrategy serviceValidateMappingStrategy) {
+      ProtocolMappingStrategy serviceValidateMappingStrategy) {
     this.serviceValidateMappingStrategy = serviceValidateMappingStrategy;
   }
 

@@ -17,6 +17,9 @@
  */
 package org.soulwing.cas.client;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import org.soulwing.cas.client.jdom.JdomProtocolHandlerImpl;
 import org.soulwing.cas.client.jdom.ProxyValidateMappingStrategy;
 import org.soulwing.cas.client.jdom.ServiceValidateMappingStrategy;
@@ -109,6 +112,7 @@ public class ValidatorFactory {
       ProtocolMappingStrategy proxyValidateMappingStrategy) {
     ValidatorFactory.proxyValidateMappingStrategy =
         proxyValidateMappingStrategy;
+    configureProxyValidateMappingStrategy();
   }
 
   /**
@@ -128,6 +132,32 @@ public class ValidatorFactory {
       ProtocolMappingStrategy serviceValidateMappingStrategy) {
     ValidatorFactory.serviceValidateMappingStrategy =
         serviceValidateMappingStrategy;
+    configureProxyValidateMappingStrategy();
+  }
+
+  /**
+   * Configures the <code>serviceValidateMappingStrategy</code> on the
+   * <code>proxyValidateMappingStrategy</code> if a setter method exists
+   * for doing so.
+   */
+  private static void configureProxyValidateMappingStrategy() {
+    try {
+      Class strategyClass = proxyValidateMappingStrategy.getClass();
+      Method serviceValidateMappingStrategySetter = 
+          strategyClass.getMethod("setServiceValidateMappingStrategy",
+              new Class[] { ProtocolMappingStrategy.class });
+      serviceValidateMappingStrategySetter.invoke(proxyValidateMappingStrategy,
+          new Object[] { serviceValidateMappingStrategy });
+    }
+    catch (NoSuchMethodException ex) {
+      // oh well... can't set it if the method doesn't exist
+    }
+    catch (IllegalAccessException ex) {
+      // oh well... can't set it if we can't access it
+    }
+    catch (InvocationTargetException ex) {
+      throw new RuntimeException(ex);
+    }
   }
 
 }
