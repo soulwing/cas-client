@@ -39,7 +39,7 @@ public class MockFilterAuthenticator implements FilterAuthenticator {
       throw new NoTicketException();
     }
     else {
-      ServiceValidationResponse response = new ServiceValidationResponse();
+      MockServiceValidationResponse response = new MockServiceValidationResponse();
       response.setSuccessful(successFlag);
       response.setUserName(userName);
       return response;

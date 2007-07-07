@@ -24,6 +24,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.soulwing.cas.client.AbstractResponse;
 import org.soulwing.cas.client.ProtocolConfiguration;
 import org.soulwing.cas.client.ProtocolConstants;
 import org.soulwing.cas.client.NoTicketException;
@@ -81,7 +82,7 @@ class ProxyValidationAuthenticator implements FilterAuthenticator {
     if (casResponse.isSuccessful() 
         && !allProxiesTrusted(casResponse.getProxies())) {
 
-      casResponse = new UntrustedProxyResponse();
+      casResponse = new UntrustedProxyResponse(casResponse);
     }
     
     return casResponse;
@@ -106,11 +107,29 @@ class ProxyValidationAuthenticator implements FilterAuthenticator {
   /**
    * CAS pseudo-response for an untrusted proxy.
    */
-  private class UntrustedProxyResponse extends ProxyValidationResponse {
-    UntrustedProxyResponse() {
+  private class UntrustedProxyResponse extends AbstractResponse 
+      implements ProxyValidationResponse {
+    
+    private final ProxyValidationResponse response;
+    
+    UntrustedProxyResponse(ProxyValidationResponse response) {
       super();
+      setSuccessful(false);
       setResultCode("UNTRUSTED_PROXY");
-      setResultMessage("Response contained an untrusted proxy");
+      setResultMessage("CAS response contained an untrusted proxy");
+      this.response = response;
+    }
+
+    public List getProxies() {
+      return response.getProxies();
+    }
+
+    public String getProxyGrantingTicketIou() {
+      return response.getProxyGrantingTicketIou();
+    }
+
+    public String getUserName() {
+      return response.getUserName();
     }
   }
 

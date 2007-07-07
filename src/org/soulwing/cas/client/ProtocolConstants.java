@@ -19,34 +19,26 @@ package org.soulwing.cas.client;
 
 /**
  * Constants used in the CAS protocol.
- *
+ * 
  * @author Carl Harris
- *
+ * 
  */
 public interface ProtocolConstants {
 
-  String SERVICE_RESPONSE = 
-      "cas:serviceResponse";
-  String AUTHENTICATION_SUCCESS = 
-      "cas:authenticationSuccess";
-  String AUTHENTICATION_FAILURE = 
-      "cas:authenticationFailure";
-  String PROXY_SUCCESS =
-      "cas:proxySuccess";
-  String PROXY_FAILURE =
-      "cas:proxyFailure";
-  String USER = 
-      "cas:user";
-  String PROXY_GRANTING_TICKET =
-      "cas:proxyGrantingTicket";
-  String PROXIES =
-      "cas:proxies";
-  String PROXY = 
-      "cas:proxy";
-  String PROXY_TICKET =
-      "cas:proxyTicket";
+  String NAMESPACE_URI = "http://www.yale.edu/tp/cas";
+  String NAMESPACE_PREFIX = "cas";
+  String SERVICE_RESPONSE = "serviceResponse";
+  String AUTHENTICATION_SUCCESS = "authenticationSuccess";
+  String AUTHENTICATION_FAILURE = "authenticationFailure";
+  String PROXY_SUCCESS = "proxySuccess";
+  String PROXY_FAILURE = "proxyFailure";
+  String USER = "user";
+  String PROXY_GRANTING_TICKET = "proxyGrantingTicket";
+  String PROXIES = "proxies";
+  String PROXY = "proxy";
+  String PROXY_TICKET = "proxyTicket";
   String CODE = "code";
-  
+
   String LOGIN_PATH = "/login";
   String SERVICE_VALIDATE_PATH = "/serviceValidate";
   String PROXY_VALIDATE_PATH = "/proxyValidate";
@@ -62,5 +54,5 @@ public interface ProtocolConstants {
   String PGT_URL_PARAM = "pgtUrl";
   String GATEWAY_PARAM = "gateway";
   String RENEW_PARAM = "renew";
-  
+
 }

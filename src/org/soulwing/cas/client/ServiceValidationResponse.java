@@ -24,41 +24,18 @@ package org.soulwing.cas.client;
  *
  * @author Carl Harris
  */
-public class ServiceValidationResponse extends Response {
-
-  private String userName;
-  private String proxyGrantingTicketIou;
+public interface ServiceValidationResponse extends Response {
 
   /**
-   * Gets the username from the CAS response.
-   * @return String username
+   * Gets the name of the subject user for the CAS response
+   * @return <code>String</code> remote user name
    */
-  public String getUserName() {
-    return this.userName;
-  }
-  
-  /**
-   * Sets the username for a CAS response.
-   * @param userName username string.
-   */
-  public void setUserName(String userName) {
-    this.userName = userName;
-  }
-  
-  /**
-   * Gets the proxy granting ticket IOU from a CAS response.
-   * @return proxy granting ticket IOU string.
-   */
-  public String getProxyGrantingTicketIou() {
-    return proxyGrantingTicketIou;
-  }
+  String getUserName();
 
   /**
-   * Sets the proxy granting ticket for a CAS response.
-   * @param proxyGrantingTicketIou proxy granting ticket IOU string.
+   * Gets the proxy granting ticket IOU (PGTIOU) from the CAS response.
+   * @return <code>String</code> PGTIOU
    */
-  public void setProxyGrantingTicketIou(String proxyGrantingTicketIou) {
-    this.proxyGrantingTicketIou = proxyGrantingTicketIou;
-  }
+  String getProxyGrantingTicketIou();
   
 }

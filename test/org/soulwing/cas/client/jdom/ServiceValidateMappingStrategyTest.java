@@ -17,28 +17,37 @@ import java.io.StringReader;
 
 import junit.framework.TestCase;
 
-import org.soulwing.cas.client.ProxyResponse;
 import org.soulwing.cas.client.Response;
-import org.soulwing.cas.client.jdom.ProxyHandler;
+import org.soulwing.cas.client.ServiceValidationResponse;
 import org.xml.sax.InputSource;
 
-// TODO: add tests for invalid responses
+//TODO: add tests for invalid responses and responses with optional
+//elements omitted.
 
-public class ProxyHandlerTest extends TestCase {
+public class ServiceValidateMappingStrategyTest extends TestCase {
+
+  private ServiceValidateMappingStrategy strategy;
+  private JdomProtocolHandlerImpl handler;
+
+  protected void setUp() throws Exception {
+    strategy = new ServiceValidateMappingStrategy();
+    handler = new JdomProtocolHandlerImpl();
+  }
 
   public void testProcessSuccessResult() throws Exception {
-    ProxyHandler callback = new ProxyHandler();
-    Response response = callback.processResult(constructSuccessResponse());
-    assertTrue(response instanceof ProxyResponse);
-    ProxyResponse proxyResponse = (ProxyResponse) response;
-    assertTrue(proxyResponse.isSuccessful() == true);
-    assertEquals("TEST TICKET", proxyResponse.getProxyTicket());
+    Response response = handler.processResult(
+        constructSuccessResponse(), strategy);
+    assertTrue(response instanceof ServiceValidationResponse);
+    ServiceValidationResponse svResponse = (ServiceValidationResponse) response;
+    assertTrue(svResponse.isSuccessful() == true);
+    assertEquals("TEST USER", svResponse.getUserName());
+    assertEquals("TEST TICKET", svResponse.getProxyGrantingTicketIou());
   }
 
   public void testProcessFailureResult() throws Exception {
-    ProxyHandler callback = new ProxyHandler();
-    Response response = callback.processResult(constructFailureResponse());
-    assertTrue(response.isSuccessful() == false);
+    Response response = handler.processResult(
+        constructFailureResponse(), strategy);
+    assertTrue(!response.isSuccessful());
     assertEquals("TEST CODE", response.getResultCode());
     assertEquals("TEST MESSAGE", response.getResultMessage());
   }
@@ -46,9 +55,9 @@ public class ProxyHandlerTest extends TestCase {
   public InputSource constructFailureResponse() {
     StringBuilder sb = new StringBuilder();
     sb.append("<cas:serviceResponse xmlns:cas='http://www.yale.edu/tp/cas'>");
-    sb.append("<cas:proxyFailure code='TEST CODE'>");
+    sb.append("<cas:authenticationFailure code='TEST CODE'>");
     sb.append("TEST MESSAGE");
-    sb.append("</cas:proxyFailure>");
+    sb.append("</cas:authenticationFailure>");
     sb.append("</cas:serviceResponse>");
     return new InputSource(new StringReader(sb.toString()));
   }
@@ -56,9 +65,10 @@ public class ProxyHandlerTest extends TestCase {
   public InputSource constructSuccessResponse() {
     StringBuilder sb = new StringBuilder();
     sb.append("<cas:serviceResponse xmlns:cas='http://www.yale.edu/tp/cas'>");
-    sb.append("<cas:proxySuccess>");
-    sb.append("<cas:proxyTicket>TEST TICKET</cas:proxyTicket>");
-    sb.append("</cas:proxySuccess>");
+    sb.append("<cas:authenticationSuccess>");
+    sb.append("<cas:user>TEST USER</cas:user>");
+    sb.append("<cas:proxyGrantingTicket>TEST TICKET</cas:proxyGrantingTicket>");
+    sb.append("</cas:authenticationSuccess>");
     sb.append("</cas:serviceResponse>");
     return new InputSource(new StringReader(sb.toString()));
   }

@@ -20,17 +20,24 @@ import junit.framework.TestCase;
 
 import org.soulwing.cas.client.ProxyValidationResponse;
 import org.soulwing.cas.client.Response;
-import org.soulwing.cas.client.jdom.ProxyValidateHandler;
 import org.xml.sax.InputSource;
 
 // TODO: add tests for invalid responses and responses with optional
 // elements omitted.
 
-public class ProxyValidateHandlerTest extends TestCase {
+public class ProxyValidateMappingStrategyTest extends TestCase {
+
+  private ProxyValidateMappingStrategy strategy;
+  private JdomProtocolHandlerImpl handler;
+
+  protected void setUp() throws Exception {
+    strategy = new ProxyValidateMappingStrategy();
+    handler = new JdomProtocolHandlerImpl();
+  }
 
   public void testProcessSuccessResult() throws Exception {
-    ProxyValidateHandler callback = new ProxyValidateHandler();
-    Response response = callback.processResult(constructSuccessResponse());
+    Response response = handler.processResult(
+        constructSuccessResponse(), strategy);
     assertTrue(response instanceof ProxyValidationResponse);
     ProxyValidationResponse pvResponse = (ProxyValidationResponse) response;
     assertTrue(pvResponse.isSuccessful() == true);
@@ -43,8 +50,8 @@ public class ProxyValidateHandlerTest extends TestCase {
   }
 
   public void testProcessFailureResult() throws Exception {
-    ProxyValidateHandler callback = new ProxyValidateHandler();
-    Response response = callback.processResult(constructFailureResponse());
+    Response response = handler.processResult(
+        constructFailureResponse(), strategy);
     assertTrue(response.isSuccessful() == false);
     assertEquals("TEST CODE", response.getResultCode());
     assertEquals("TEST MESSAGE", response.getResultMessage());

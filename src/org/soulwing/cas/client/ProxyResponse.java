@@ -24,7 +24,7 @@ package org.soulwing.cas.client;
  *
  * @author Carl Harris
  */
-public class ProxyResponse extends Response {
+public class ProxyResponse extends AbstractResponse {
 
   private String proxyTicket;
   

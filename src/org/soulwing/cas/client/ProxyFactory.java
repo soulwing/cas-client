@@ -17,21 +17,27 @@
  */
 package org.soulwing.cas.client;
 
-import org.soulwing.cas.client.jdom.ProxyHandler;
+import org.soulwing.cas.client.jdom.JdomProtocolHandlerImpl;
+import org.soulwing.cas.client.jdom.ProxyMappingStrategy;
 
 
 /**
  * A factory for generating Proxy instances.  The default configuration
  * of this factory uses org.soulwing.cas.jdom.ProxyHandler for the
- * proxyHandler property.
+ * protocolHandler property.
  *
  * @author Carl Harris
  */
 public class ProxyFactory {
 
-  private static ProtocolHandler proxyHandler = new ProxyHandler();
+  private static ProtocolSource protocolSource = 
+      new UrlProtocolSource();
 
-  private static ProtocolSource protocolSource = new UrlProtocolSource();
+  private static ProtocolHandler protocolHandler = 
+    new JdomProtocolHandlerImpl();
+
+private static ProtocolMappingStrategy proxyMappingStrategy =
+    new ProxyMappingStrategy();
 
   /**
    * Obtains an instance of Proxy from the factory.  The Proxy is configured
@@ -42,25 +48,27 @@ public class ProxyFactory {
    *    and a ProxyHandler and ProtocolSource as configured for the factory.
    */
   public static final Proxy getProxy(UrlGenerator urlGenerator) {
-    DefaultProxyImpl proxy = new DefaultProxyImpl();
-    proxy.setUrlGenerator(urlGenerator);
+    DefaultProxyImpl proxy = new DefaultProxyImpl(); 
     proxy.setProtocolSource(protocolSource);
+    proxy.setProtocolHandler(protocolHandler);
+    proxy.setProxyMappingStrategy(proxyMappingStrategy);
+    proxy.setUrlGenerator(urlGenerator);
     return proxy;
   }
   
   /**
    * Gets the handler for the CAS <code>/proxy</code> function.
    */
-  public static ProtocolHandler getProxyHandler() {
-    return proxyHandler;
+  public static ProtocolHandler getProtocolHandler() {
+    return protocolHandler;
   }
 
   /**
    * Sets the handler for the CAS <code>/proxy</code> function.
    */
-  public static synchronized void setProxyHandler(
+  public static synchronized void setProtocolHandler(
       ProtocolHandler proxyHandler) {
-    ProxyFactory.proxyHandler = proxyHandler;
+    ProxyFactory.protocolHandler = proxyHandler;
   }
 
   /**

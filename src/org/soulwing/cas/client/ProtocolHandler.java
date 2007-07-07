@@ -32,12 +32,13 @@ import org.xml.sax.InputSource;
 public interface ProtocolHandler {
 
   /**
-   * Processes a CAS response from the given <code>result</code>
-   * InputSource.
-   * @param result SAX input source containing the response from the CAS
-   *    server.
+   * Processes a CAS response from the given SAX <code>InputSource</code>,
+   * producing a <code>Response</code> object.
+   * InputSource 
+   * @param result SAX <code>InputSource</code> containing the response from
+   *    the CAS server.
    * @return protocol response as a subclass of Response.
    */
-  Response processResult(InputSource result);
+  Response processResult(InputSource result, ProtocolMappingStrategy strategy);
   
 }

@@ -17,66 +17,95 @@
  */
 package org.soulwing.cas.client;
 
-import org.soulwing.cas.client.jdom.ProxyHandler;
-
 
 /**
- * The default implementation of the Proxy interface.
+ * The default implementation of the Proxy interface as a POJO with
+ * configurable properties.
  *
  * @author Carl Harris
  */
 public class DefaultProxyImpl implements Proxy {
 
-  private final ProtocolHandler proxyHandler;
-  private UrlGenerator generator;
-  private ProtocolSource source = new UrlProtocolSource();
-
-  public DefaultProxyImpl() {
-    this.proxyHandler = new ProxyHandler();
-  }
-
-  /**
-   * Gets the ProtocolSource used by this Proxy.
-   * @return configured ProtocolSource.
-   */
-  public ProtocolSource setProtocolSource() {
-    return this.source;
-  }
-  
-  /**
-   * Sets the ProtocolSource that will be used by this Proxy.
-   * @param source ProtocolSource to configure.
-   */
-  public void setProtocolSource(ProtocolSource source) {
-    this.source = source;
-  }
-  
-  /**
-   * Gets the UrlGenerator instance that will be used by this Proxy.
-   * @return configured UrlGenerator instance
-   */
-  public UrlGenerator getUrlGenerator() {
-    return this.generator;
-  }
-  
-  /**
-   * Sets the UrlGenerator instance that will be used by this Proxy.
-   * @param generator UrlGenerator to configure.
-   */
-  public void setUrlGenerator(UrlGenerator generator) {
-    this.generator = generator;
-  }
+  private ProtocolHandler protocolHandler;
+  private ProtocolMappingStrategy proxyMappingStrategy;
+  private UrlGenerator urlGenerator;
+  private ProtocolSource protocolSource = new UrlProtocolSource();
 
   /* 
    * @see org.soulwing.cas.client.Proxy#proxy(ProxyRequest)
    */
   public ProxyResponse proxy(ProxyRequest request) {
     return (ProxyResponse)
-        this.proxyHandler.processResult(
-            setProtocolSource().getSource(
+        this.protocolHandler.processResult(
+            getProtocolSource().getSource(
                 getUrlGenerator().getProxyUrl(
                     request.getProxyGrantingTicket(), 
-                    request.getTargetService())));
+                    request.getTargetService())), proxyMappingStrategy);
+  }
+
+  /**
+   * Gets the <code>urlGenerator</code> property.
+   * @return <code>UrlGenerator}</code> property value
+   */
+  public UrlGenerator getUrlGenerator() {
+    return urlGenerator;
+  }
+
+  /**
+   * Sets the <code>urlGenerator</code> property.
+   * @param urlGenerator <code>UrlGenerator</code> property value
+   */
+  public void setUrlGenerator(UrlGenerator generator) {
+    this.urlGenerator = generator;
+  }
+
+  /**
+   * Gets the <code>protocolHandler</code> property.
+   * @return <code>ProtocolHandler}</code> property value
+   */
+  public ProtocolHandler getProtocolHandler() {
+    return protocolHandler;
+  }
+
+  /**
+   * Sets the <code>protocolHandler</code> property.
+   * @param protocolHandler <code>ProtocolHandler</code> property value
+   */
+  public void setProtocolHandler(ProtocolHandler protocolHandler) {
+    this.protocolHandler = protocolHandler;
+  }
+
+  /**
+   * Gets the <code>proxyMappingStrategy</code> property.
+   * @return <code>ProtocolMappingStrategy}</code> property value
+   */
+  public ProtocolMappingStrategy getProxyMappingStrategy() {
+    return proxyMappingStrategy;
+  }
+
+  /**
+   * Sets the <code>proxyMappingStrategy</code> property.
+   * @param proxyMappingStrategy <code>ProtocolMappingStrategy</code> property value
+   */
+  public void setProxyMappingStrategy(
+      ProtocolMappingStrategy proxyMappingStrategy) {
+    this.proxyMappingStrategy = proxyMappingStrategy;
+  }
+
+  /**
+   * Gets the <code>protocolSource</code> property.
+   * @return <code>ProtocolSource}</code> property value
+   */
+  public ProtocolSource getProtocolSource() {
+    return protocolSource;
+  }
+
+  /**
+   * Sets the <code>protocolSource</code> property.
+   * @param protocolSource <code>ProtocolSource</code> property value
+   */
+  public void setProtocolSource(ProtocolSource source) {
+    this.protocolSource = source;
   }
 
 }

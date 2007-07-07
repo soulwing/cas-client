@@ -17,9 +17,6 @@
  */
 package org.soulwing.cas.client;
 
-import org.soulwing.cas.client.jdom.ProxyValidateHandler;
-import org.soulwing.cas.client.jdom.ServiceValidateHandler;
-
 
 /**
  * Default implementation of the Validator interface.
@@ -27,50 +24,12 @@ import org.soulwing.cas.client.jdom.ServiceValidateHandler;
  */
 public class DefaultValidatorImpl implements Validator {
 
-  private final ProtocolHandler serviceValidateHandler;
-  private final ProtocolHandler proxyValidateHandler;
-  private UrlGenerator generator;
-  private ProtocolSource source = new UrlProtocolSource();
+  private ProtocolHandler protocolHandler;
+  private ProtocolMappingStrategy serviceValidateMappingStrategy;
+  private ProtocolMappingStrategy proxyValidateMappingStrategy;
+  private UrlGenerator urlGenerator;
+  private ProtocolSource protocolSource = new UrlProtocolSource();
   
-  public DefaultValidatorImpl(
-      ProtocolHandler serviceValidateHandler,
-      ProtocolHandler proxyValidateHandler) {
-    this.serviceValidateHandler = new ServiceValidateHandler();
-    this.proxyValidateHandler = new ProxyValidateHandler();
-  }
-
-  /**
-   * Gets the ProtocolSource used by this Validator.
-   * @return configured ProtocolSource.
-   */
-  public ProtocolSource getProtocolSource() {
-    return this.source;
-  }
-  
-  /**
-   * Sets the ProtocolSource that will be used by this Validator.
-   * @param source ProtocolSource to configure.
-   */
-  public void setProtocolSource(ProtocolSource source) {
-    this.source = source;
-  }
-  
-  /**
-   * Gets the UrlGenerator used by this Validator.
-   * @return configured UrlGenerator instance
-   */
-  public UrlGenerator getUrlGenerator() {
-    return this.generator;
-  }
-  
-  /**
-   * Sets the UrlGenerator that will be used by this Validator.
-   * @param generator UrlGenerator to configure.
-   */
-  public void setUrlGenerator(UrlGenerator generator) {
-    this.generator = generator;
-  }
-
   /**
    * @see Validator#serviceValidate(ValidationRequest)
    */
@@ -81,9 +40,10 @@ public class DefaultValidatorImpl implements Validator {
       throw new NoTicketException();
     }
     return (ServiceValidationResponse) 
-        this.serviceValidateHandler.processResult(
+        this.protocolHandler.processResult(
             getProtocolSource().getSource(
-                getUrlGenerator().getServiceValidateUrl(ticket)));
+                getUrlGenerator().getServiceValidateUrl(ticket)),
+                serviceValidateMappingStrategy);
   }
 
   /**
@@ -96,9 +56,92 @@ public class DefaultValidatorImpl implements Validator {
       throw new NoTicketException();
     }
     return (ProxyValidationResponse) 
-        this.proxyValidateHandler.processResult(
+        this.protocolHandler.processResult(
             getProtocolSource().getSource(
-                getUrlGenerator().getProxyValidateUrl(ticket)));
+                getUrlGenerator().getProxyValidateUrl(ticket)),
+                proxyValidateMappingStrategy);
+  }
+
+  /**
+   * Gets the <code>protocolHandler</code> property.
+   * @return <code>ProtocolHandler}</code> property value
+   */
+  public ProtocolHandler getProtocolHandler() {
+    return protocolHandler;
+  }
+
+  /**
+   * Sets the <code>protocolHandler</code> property.
+   * @param protocolHandler <code>ProtocolHandler</code> property value
+   */
+  public void setProtocolHandler(ProtocolHandler protocolHandler) {
+    this.protocolHandler = protocolHandler;
+  }
+
+  /**
+   * Gets the <code>protocolSource</code> property.
+   * @return <code>ProtocolSource}</code> property value
+   */
+  public ProtocolSource getProtocolSource() {
+    return protocolSource;
+  }
+
+  /**
+   * Sets the <code>protocolSource</code> property.
+   * @param protocolSource <code>ProtocolSource</code> property value
+   */
+  public void setProtocolSource(ProtocolSource protocolSource) {
+    this.protocolSource = protocolSource;
+  }
+
+  /**
+   * Gets the <code>proxyValidateMappingStrategy</code> property.
+   * @return <code>ProtocolMappingStrategy}</code> property value
+   */
+  public ProtocolMappingStrategy getProxyValidateMappingStrategy() {
+    return proxyValidateMappingStrategy;
+  }
+
+  /**
+   * Sets the <code>proxyValidateMappingStrategy</code> property.
+   * @param proxyValidateMappingStrategy <code>ProtocolMappingStrategy</code> property value
+   */
+  public void setProxyValidateMappingStrategy(
+      ProtocolMappingStrategy proxyValidateMappingStrategy) {
+    this.proxyValidateMappingStrategy = proxyValidateMappingStrategy;
+  }
+
+  /**
+   * Gets the <code>serviceValidateMappingStrategy</code> property.
+   * @return <code>ProtocolMappingStrategy}</code> property value
+   */
+  public ProtocolMappingStrategy getServiceValidateMappingStrategy() {
+    return serviceValidateMappingStrategy;
+  }
+
+  /**
+   * Sets the <code>serviceValidateMappingStrategy</code> property.
+   * @param serviceValidateMappingStrategy <code>ProtocolMappingStrategy</code> property value
+   */
+  public void setServiceValidateMappingStrategy(
+      ProtocolMappingStrategy serviceValidateMappingStrategy) {
+    this.serviceValidateMappingStrategy = serviceValidateMappingStrategy;
+  }
+
+  /**
+   * Gets the <code>urlGenerator</code> property.
+   * @return <code>UrlGenerator}</code> property value
+   */
+  public UrlGenerator getUrlGenerator() {
+    return urlGenerator;
+  }
+
+  /**
+   * Sets the <code>urlGenerator</code> property.
+   * @param urlGenerator <code>UrlGenerator</code> property value
+   */
+  public void setUrlGenerator(UrlGenerator urlGenerator) {
+    this.urlGenerator = urlGenerator;
   }
 
 }

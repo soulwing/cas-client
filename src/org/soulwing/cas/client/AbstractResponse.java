@@ -1,5 +1,5 @@
 /*
- * Response.java
+ * AbstractResponse.java
  *
  * Created on Sep 7, 2006
  *
@@ -19,21 +19,20 @@ package org.soulwing.cas.client;
 
 
 /**
- * A value class for the result to a CAS request.
+ * An abstract base class for the response to a CAS request.
  *
  * @author Carl Harris
  * 
  */
-public class Response {
+public class AbstractResponse implements Response {
 
   private boolean successful;
   private String resultCode;
   private String resultMessage;
   
-  /**
-   * Gets the value of the success flag.
-   * @return <code>true</code> if the validation representated by this
-   *    response was successful.
+  /*
+   * (non-Javadoc)
+   * @see org.soulwing.cas.client.Response#isSuccessful()
    */
   public boolean isSuccessful() {
     return successful;
@@ -47,10 +46,9 @@ public class Response {
     this.successful = successful;
   }
 
-  /**
-   * Gets the result code for the response to an unsuccessful validation.
-   * @return response code if <code>isSuccessful == true</code>, else
-   *    <code>null</code>.
+  /*
+   * (non-Javadoc)
+   * @see org.soulwing.cas.client.Response#getResultCode()
    */
   public String getResultCode() {
     return resultCode;
@@ -64,10 +62,9 @@ public class Response {
     this.resultCode = resultCode;
   }
   
-  /**
-   * Gets the result message for the response to an unsuccessful validation.
-   * @return response message if <code>isSuccessful == true</code>, else
-   *    <code>null</code>.
+  /*
+   * (non-Javadoc)
+   * @see org.soulwing.cas.client.Response#getResultMessage()
    */
   public String getResultMessage() {
     return resultMessage;

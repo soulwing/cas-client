@@ -15,14 +15,13 @@ package org.soulwing.cas.filter;
 
 import javax.servlet.ServletException;
 
+import junit.framework.TestCase;
+
 import org.soulwing.cas.client.ProtocolConstants;
-import org.soulwing.cas.client.ServiceValidationResponse;
 import org.soulwing.servlet.MockFilterChain;
 import org.soulwing.servlet.MockFilterConfig;
 import org.soulwing.servlet.http.MockHttpServletRequest;
 import org.soulwing.servlet.http.MockHttpServletResponse;
-
-import junit.framework.TestCase;
 
 public class ProxyCallbackFilterTest extends TestCase {
 
@@ -92,7 +91,7 @@ public class ProxyCallbackFilterTest extends TestCase {
 
   public void testValidatedRequestMatchingTicket() throws Exception {
     initFilter();
-    ServiceValidationResponse validation = new ServiceValidationResponse();
+    MockServiceValidationResponse validation = new MockServiceValidationResponse();
     validation.setProxyGrantingTicketIou(TICKET_IOU);
     request.getSession().setAttribute(FilterConstants.VALIDATION_ATTRIBUTE, 
         validation);
@@ -106,7 +105,7 @@ public class ProxyCallbackFilterTest extends TestCase {
   
   public void testValidatedRequestDifferentTicket() throws Exception {
     initFilter();
-    ServiceValidationResponse validation = new ServiceValidationResponse();
+    MockServiceValidationResponse validation = new MockServiceValidationResponse();
     validation.setProxyGrantingTicketIou(OTHER_TICKET_IOU);
     request.getSession().setAttribute(FilterConstants.VALIDATION_ATTRIBUTE, 
         validation);

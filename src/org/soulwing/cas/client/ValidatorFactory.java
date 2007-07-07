@@ -17,8 +17,9 @@
  */
 package org.soulwing.cas.client;
 
-import org.soulwing.cas.client.jdom.ProxyValidateHandler;
-import org.soulwing.cas.client.jdom.ServiceValidateHandler;
+import org.soulwing.cas.client.jdom.JdomProtocolHandlerImpl;
+import org.soulwing.cas.client.jdom.ProxyValidateMappingStrategy;
+import org.soulwing.cas.client.jdom.ServiceValidateMappingStrategy;
 
 
 /**
@@ -31,76 +32,102 @@ import org.soulwing.cas.client.jdom.ServiceValidateHandler;
  */
 public class ValidatorFactory {
 
-  private static ProtocolHandler serviceValidateHandler =
-      new ServiceValidateHandler();
-  
-  private static ProtocolHandler proxyValidateHandler =
-      new ProxyValidateHandler();
-  
   private static ProtocolSource protocolSource =
       new UrlProtocolSource();
   
+  private static ProtocolHandler protocolHandler =
+      new JdomProtocolHandlerImpl();
+  
+  private static ProtocolMappingStrategy serviceValidateMappingStrategy =
+      new ServiceValidateMappingStrategy();
+
+  private static ProtocolMappingStrategy proxyValidateMappingStrategy =
+      new ProxyValidateMappingStrategy();
+
+
   /**
    * Gets a new validator instance that uses the JDOM implementation
    * of the various ProtocolHandler instances.
    * @return Validator instance.
    */
   public static final Validator getValidator(UrlGenerator generator) {
-
-    DefaultValidatorImpl validator = new DefaultValidatorImpl(
-        getServiceValidateHandler(),
-        getProxyValidateHandler());
-    
+    DefaultValidatorImpl validator = new DefaultValidatorImpl();
     validator.setProtocolSource(getProtocolSource());
+    validator.setProtocolHandler(protocolHandler);
+    validator.setServiceValidateMappingStrategy(serviceValidateMappingStrategy);
+    validator.setProxyValidateMappingStrategy(proxyValidateMappingStrategy);
     validator.setUrlGenerator(generator);
     return validator;
   }
 
   /**
-   * Gets the handler for the CAS <code>/proxyValidate</code> function.
+   * Gets the <code>protocolHandler</code> property.
+   * @return <code>ProtocolHandler}</code> property value
    */
-  public static ProtocolHandler getProxyValidateHandler() {
-    return proxyValidateHandler;
+  public static ProtocolHandler getProtocolHandler() {
+    return protocolHandler;
   }
 
   /**
-   * Sets the handler for the CAS <code>/proxyValidate</code> function.
+   * Sets the <code>protocolHandler</code> property.
+   * @param protocolHandler <code>ProtocolHandler</code> property value
    */
-  public static synchronized void setProxyValidateHandler(
-      ProtocolHandler proxyValidateHandler) {
-    ValidatorFactory.proxyValidateHandler = proxyValidateHandler;
+  public static void setProtocolHandler(ProtocolHandler protocolHandler) {
+    ValidatorFactory.protocolHandler = protocolHandler;
   }
 
   /**
-   * Gets the handler for the CAS <code>/serviceValidate</code> function.
-   */
-  public static ProtocolHandler getServiceValidateHandler() {
-    return serviceValidateHandler;
-  }
-
-  /**
-   * Sets the handler for the CAS <code>/serviceValidate</code> function.
-   */
-  public static synchronized void setServiceValidateHandler(
-      ProtocolHandler serviceValidateHandler) {
-    ValidatorFactory.serviceValidateHandler = serviceValidateHandler;
-  }
-
-  /**
-   * Gets the ProtocolSource that will be used by Validator instances
-   * created by this factory.
+   * Gets the <code>protocolSource</code> property.
+   * @return <code>ProtocolSource}</code> property value
    */
   public static ProtocolSource getProtocolSource() {
     return protocolSource;
   }
 
   /**
-   * Sets the ProtocolSource that will be used by Validator instances
-   * created by this factory.
+   * Sets the <code>protocolSource</code> property.
+   * @param protocolSource <code>ProtocolSource</code> property value
    */
-  public static synchronized void setProtocolSource(
-      ProtocolSource protocolSource) {
+  public static void setProtocolSource(ProtocolSource protocolSource) {
     ValidatorFactory.protocolSource = protocolSource;
+  }
+
+  /**
+   * Gets the <code>proxyValidateMappingStrategy</code> property.
+   * @return <code>ProtocolMappingStrategy}</code> property value
+   */
+  public static ProtocolMappingStrategy getProxyValidateMappingStrategy() {
+    return proxyValidateMappingStrategy;
+  }
+
+  /**
+   * Sets the <code>proxyValidateMappingStrategy</code> property.
+   * @param proxyValidateMappingStrategy <code>ProtocolMappingStrategy</code>
+   *    property value
+   */
+  public static void setProxyValidateMappingStrategy(
+      ProtocolMappingStrategy proxyValidateMappingStrategy) {
+    ValidatorFactory.proxyValidateMappingStrategy =
+        proxyValidateMappingStrategy;
+  }
+
+  /**
+   * Gets the <code>serviceValidateMappingStrategy</code> property.
+   * @return <code>ProtocolMappingStrategy}</code> property value
+   */
+  public static ProtocolMappingStrategy getServiceValidateMappingStrategy() {
+    return serviceValidateMappingStrategy;
+  }
+
+  /**
+   * Sets the <code>serviceValidateMappingStrategy</code> property.
+   * @param serviceValidateMappingStrategy <code>ProtocolMappingStrategy</code>
+   *    property value
+   */
+  public static void setServiceValidateMappingStrategy(
+      ProtocolMappingStrategy serviceValidateMappingStrategy) {
+    ValidatorFactory.serviceValidateMappingStrategy =
+        serviceValidateMappingStrategy;
   }
 
 }
