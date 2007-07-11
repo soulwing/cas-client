@@ -17,6 +17,8 @@
  */
 package org.soulwing.cas.client.jdom;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jdom.Element;
 import org.soulwing.cas.client.AbstractResponse;
 import org.soulwing.cas.client.ProtocolConstants;
@@ -31,11 +33,15 @@ import org.soulwing.cas.client.ProtocolMappingStrategy;
 public abstract class AbstractResponseMappingStrategy implements
     ProtocolMappingStrategy {
 
+  protected Log log = LogFactory.getLog(AbstractResponseMappingStrategy.class);
+  
   protected AbstractResponse mapFailureResponse(Element element) {
     AbstractResponse response = newFailureResponse();
     response.setSuccessful(false);
     response.setResultCode(element.getAttributeValue(ProtocolConstants.CODE));
     response.setResultMessage(element.getTextTrim());
+    log.debug("result code " + response.getResultCode());
+    log.debug("result message " + response.getResultMessage());
     return response;
   }
 

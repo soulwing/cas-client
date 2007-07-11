@@ -32,7 +32,7 @@ import org.soulwing.cas.client.Response;
  */
 public abstract class AbstractValidationResponseMappingStrategy 
     extends AbstractResponseMappingStrategy {
-
+  
   /*
    * (non-Javadoc)
    * @see org.soulwing.cas.client.ProtocolMappingStrategy#mapResponse(org.jdom.Element)
@@ -41,12 +41,14 @@ public abstract class AbstractValidationResponseMappingStrategy
     Element responseElement = JdomUtil.getChild(
         element, ProtocolConstants.AUTHENTICATION_SUCCESS);
     if (responseElement != null) {
+      log.debug("authentication success");
       return mapSuccessResponse(responseElement);
     }
     
     responseElement = JdomUtil.getChild(
         element, ProtocolConstants.AUTHENTICATION_FAILURE);
     if (responseElement != null) {
+      log.debug("authentication failure");
       return mapFailureResponse(responseElement);
     }
 

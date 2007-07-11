@@ -24,10 +24,12 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.soulwing.cas.client.AbstractResponse;
+import org.soulwing.cas.client.NoTicketException;
 import org.soulwing.cas.client.ProtocolConfiguration;
 import org.soulwing.cas.client.ProtocolConstants;
-import org.soulwing.cas.client.NoTicketException;
 import org.soulwing.cas.client.ProxyValidationResponse;
 import org.soulwing.cas.client.ServiceValidationResponse;
 import org.soulwing.cas.client.ValidationRequest;
@@ -43,6 +45,7 @@ import org.soulwing.cas.client.ValidatorFactory;
 class ProxyValidationAuthenticator implements FilterAuthenticator {
 
   private final ProtocolConfiguration protocolConfiguration;
+  private final Log log = LogFactory.getLog(ProxyValidationAuthenticator.class); 
   private List trustedProxies = new ArrayList(0);
 
   ProxyValidationAuthenticator(ProtocolConfiguration protocolConfiguration,
@@ -59,6 +62,12 @@ class ProxyValidationAuthenticator implements FilterAuthenticator {
   public void setTrustedProxies(String trustedProxies) {
     if (trustedProxies != null) {
       this.trustedProxies = Arrays.asList(trustedProxies.split("\\s*,\\s*"));
+    }
+    if (this.trustedProxies.isEmpty()) {
+      log.warn("no trusted proxies configured; all proxies will be trusted");
+    }
+    for (Iterator i = this.trustedProxies.iterator(); i.hasNext(); ) {
+      log.info("trusted proxy " + i.next());
     }
   }
   
@@ -78,10 +87,8 @@ class ProxyValidationAuthenticator implements FilterAuthenticator {
                   return request.getParameter(ProtocolConstants.TICKET_PARAM);
                 }
               });
-    
     if (casResponse.isSuccessful() 
         && !allProxiesTrusted(casResponse.getProxies())) {
-
       casResponse = new UntrustedProxyResponse(casResponse);
     }
     
@@ -93,11 +100,12 @@ class ProxyValidationAuthenticator implements FilterAuthenticator {
    * appears in <code>trustedProxies</code>.
    */
   private boolean allProxiesTrusted(List proxies) {
-    if (proxies == null) {
+    if (proxies == null || trustedProxies == null || trustedProxies.size() == 0) {
       return true;
     }
     for (Iterator i = proxies.iterator(); i.hasNext(); ) {
-      if (!trustedProxies.contains(i.next())) {
+      String proxy = (String) i.next();
+      if (!trustedProxies.contains(proxy)) {
         return false;
       }
     }

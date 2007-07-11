@@ -276,6 +276,8 @@ public abstract class AbstractValidationFilter implements Filter {
           validationResponse);
     }
     else {
+      log.warn("authentication failed: " + 
+          validationResponse.getResponse().getResultMessage());
       redirectToAuthFailed(response);
     }
   }
