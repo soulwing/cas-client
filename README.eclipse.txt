@@ -28,9 +28,7 @@ selector.
        folder and click OK.  Select the Output folder option for the "test"
        source folder, click Edit, and set the output folder name to
        "build/test-classes".
-5b.    Select the Libraries tab, and click Add Class Folder... select the
-       folder soulwing-casclient/vendor/classes and click OK.
-5c.    Also in the Libraries tab, click Add JARs... select all of the JAR
+5b.    Also in the Libraries tab, click Add JARs... select all of the JAR
        files in soulwing-casclient/vendor/lib and 
        soulwing-casclient/vendor/test-lib and click OK.
 

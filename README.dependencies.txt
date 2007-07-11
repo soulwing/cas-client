@@ -21,6 +21,10 @@ seraph-0.7.23.jar (build-time)
 		Supporting classes needed to compile the application adapters for 
 		Atlassian JIRA and Confluence
 
+confluence-2.2.7.jar (build-time)
+		Supporting classes needed to compile the application adapters for
+		Atlassian Confluence
+		
 servlet-api.jar (build-time)
 		Supporting classes for Servlet API version 2.4
 
