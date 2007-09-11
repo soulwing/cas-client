@@ -36,7 +36,7 @@ public class DefaultProxyImpl implements Proxy {
   /* 
    * @see org.soulwing.cas.client.Proxy#proxy(ProxyRequest)
    */
-  public ProxySuccessResponse proxy(ProxyRequest request) {
+  public ProxyResponse proxy(ProxyRequest request) {
     return (ProxySuccessResponse)
         this.protocolHandler.processResult(
             getProtocolSource().getSource(

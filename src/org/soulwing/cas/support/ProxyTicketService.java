@@ -22,9 +22,9 @@ import org.apache.commons.logging.LogFactory;
 import org.soulwing.cas.client.ProtocolConfiguration;
 import org.soulwing.cas.client.Proxy;
 import org.soulwing.cas.client.ProxyFactory;
+import org.soulwing.cas.client.ProxyResponse;
 import org.soulwing.cas.client.SimpleProxyRequest;
 import org.soulwing.cas.client.SimpleUrlGenerator;
-import org.soulwing.cas.client.jdom.ProxySuccessResponse;
 
 
 /**
@@ -80,7 +80,7 @@ public class ProxyTicketService {
    */
   public String getTicket(String targetService) {
     log.debug("Requesting ticket for target " + targetService);
-    ProxySuccessResponse response = proxy.proxy(
+    ProxyResponse response = proxy.proxy(
         new SimpleProxyRequest(getProxyGrantingTicket(), targetService));
     if (!response.isSuccessful()) {
       throw new ProxyTicketException(response);

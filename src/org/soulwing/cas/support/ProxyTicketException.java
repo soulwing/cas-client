@@ -17,7 +17,7 @@
  */
 package org.soulwing.cas.support;
 
-import org.soulwing.cas.client.jdom.ProxySuccessResponse;
+import org.soulwing.cas.client.ProxyResponse;
 
 
 /**
@@ -29,7 +29,7 @@ public class ProxyTicketException extends RuntimeException {
 
   private static final long serialVersionUID = 6323178515814921510L;
 
-  public ProxyTicketException(ProxySuccessResponse response) {
+  public ProxyTicketException(ProxyResponse response) {
     super(response.getResultMessage() + "(" + response.getResultCode() + ")");
   }
 
