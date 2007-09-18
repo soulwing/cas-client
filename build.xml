@@ -118,9 +118,6 @@
   <target name="product-doc" depends="product-prepare, product-javadoc"
       description="generates a WAR containing product documentation">
     <war destfile="${dist}/${product.doc.war}" webxml="${doc.web.xml}">
-      <zipfileset dir="${doc}">
-        <exclude name="web.xml"/>
-      </zipfileset>
       <zipfileset dir="${javadoc}" prefix="api"/> 
     </war> 
   </target>
