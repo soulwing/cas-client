@@ -126,12 +126,10 @@
   </target>
   
   <target name="product-javadoc">
-    <javadoc sourcepath="${src}" destdir="${javadoc}" author="true" version="true" use="true">
-      <classpath refid="project.classpath"/>
-      <doctitle><![CDATA[<h1>${javadoc.title}</h1>]]></doctitle>
-      <bottom><![CDATA[<i>${javadoc.footer}</i>]]></bottom>
-    </javadoc>
-    <javadoc sourcepath="${test}" destdir="${javadoc}" author="true" version="true" use="true">
+    <delete dir="${javadoc}"/>
+    <javadoc destdir="${javadoc}" author="true" version="true" use="true">
+      <fileset dir="${src}"/>
+      <fileset dir="${test}"/>
       <classpath refid="project.classpath"/>
       <doctitle><![CDATA[<h1>${javadoc.title}</h1>]]></doctitle>
       <bottom><![CDATA[<i>${javadoc.footer}</i>]]></bottom>
