@@ -57,8 +57,8 @@ public class DefaultProxyImpl implements Proxy {
    * Sets the <code>urlGenerator</code> property.
    * @param urlGenerator <code>UrlGenerator</code> property value
    */
-  public void setUrlGenerator(UrlGenerator generator) {
-    this.urlGenerator = generator;
+  public void setUrlGenerator(UrlGenerator urlGenerator) {
+    this.urlGenerator = urlGenerator;
   }
 
   /**
@@ -106,8 +106,8 @@ public class DefaultProxyImpl implements Proxy {
    * Sets the <code>protocolSource</code> property.
    * @param protocolSource <code>ProtocolSource</code> property value
    */
-  public void setProtocolSource(ProtocolSource source) {
-    this.protocolSource = source;
+  public void setProtocolSource(ProtocolSource protocolSource) {
+    this.protocolSource = protocolSource;
   }
 
 }

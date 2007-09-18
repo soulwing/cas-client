@@ -34,8 +34,3 @@ spring-context.jar, spring-web.jar (run-time, optional)
 		filters as beans in a Spring application context. 
     If your application includes the entire spring.jar,  it includes the 
     classes in these jar files.
-
-xercesImpl.jar (run-time, optional)
-		Xerces JAXP parser implementation.  You can use a different JAXP
-		parser, if you prefer -- JDOM uses the standard JAXP API to obtain
-		an XML parser.
