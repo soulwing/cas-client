@@ -125,11 +125,15 @@
     </war> 
   </target>
   
+  <path id="source.path">
+    <pathelement location="${src}"/>
+    <pathelement location="${test}"/>
+  </path>
+  
   <target name="product-javadoc">
     <delete dir="${javadoc}"/>
-    <javadoc destdir="${javadoc}" author="true" version="true" use="true">
-      <fileset dir="${src}"/>
-      <fileset dir="${test}"/>
+    <javadoc sourcepathref="source.path" destdir="${javadoc}" 
+        author="true" version="true" use="true">
       <classpath refid="project.classpath"/>
       <doctitle><![CDATA[<h1>${javadoc.title}</h1>]]></doctitle>
       <bottom><![CDATA[<i>${javadoc.footer}</i>]]></bottom>
