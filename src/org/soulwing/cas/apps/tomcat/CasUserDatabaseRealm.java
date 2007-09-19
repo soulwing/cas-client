@@ -1,10 +1,27 @@
+/*
+ * CasUserDatabaseRealm.java
+ *
+ * Created on Sep 19, 2007
+ *
+ * Copyright (C) 2006, 2007 Carl E Harris, Jr.
+ * 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or (at
+ * your option) any later version.
+ * 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+ * License for more details.
+ */
 package org.soulwing.cas.apps.tomcat;
 
 import java.lang.reflect.Constructor;
 import java.security.Principal;
 
 import org.apache.catalina.LifecycleException;
-import org.apache.catalina.realm.RealmBase;
+import org.apache.catalina.realm.UserDatabaseRealm;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.soulwing.cas.client.ProtocolConfiguration;
@@ -14,11 +31,13 @@ import org.soulwing.cas.client.ProtocolConfiguration;
  *
  * @author Carl Harris
  */
-public class CasRealm extends RealmBase {
+public class CasUserDatabaseRealm 
+    extends UserDatabaseRealm 
+    implements CasRealm {
   
-  private static final Log log = LogFactory.getLog(CasRealm.class);
+  private static final Log log = LogFactory.getLog(CasUserDatabaseRealm.class);
 
-  private Class strategy;
+  private String strategy = ServiceValidationStrategy.class.getCanonicalName();
   
   private AuthenticationStrategy authenticationStrategy;
   
@@ -27,24 +46,25 @@ public class CasRealm extends RealmBase {
 
   private String trustedProxies;
   
+  /* (non-Javadoc)
+   * @see org.soulwing.cas.apps.tomcat.CasRealm#getAuthenticationStrategy()
+   */
   public AuthenticationStrategy getAuthenticationStrategy() {
     return authenticationStrategy;
   }
   
+  /* (non-Javadoc)
+   * @see org.soulwing.cas.apps.tomcat.CasRealm#getProtocolConfiguration()
+   */
   public ProtocolConfiguration getProtocolConfiguration() {
     return protocolConfiguration;
   }
   
-  public Class getStrategy() {
-    return strategy.getClass();
+  public String getStrategy() {
+    return strategy;
   }
   
-  public void setStrategy(Class strategy) {
-    if (AuthenticationStrategy.class.isAssignableFrom(strategy)) {
-      throw new IllegalArgumentException("a subclass of "
-          + AuthenticationStrategy.class.getCanonicalName()
-          + " is required");
-    }
+  public void setStrategy(String strategy) {
     this.strategy = strategy;
   }
   
@@ -96,32 +116,40 @@ public class CasRealm extends RealmBase {
     this.trustedProxies = trustedProxies;
   }
 
-  protected String getName() {
-    return CasRealm.class.getSimpleName();
+  public Principal getPrincipal(String username) {
+    return super.getPrincipal(username);
   }
-
-  protected Principal getPrincipal(String username) {
-    throw new UnsupportedOperationException();
-  }
-
+  
   protected String getPassword(String username) {
     throw new UnsupportedOperationException();
   }
 
   public void start() throws LifecycleException {
     super.start();
-    log.debug("serverUrl=" + protocolConfiguration.getServerUrl() 
+    log.debug("strategy=" + strategy
+        + " serverUrl=" + protocolConfiguration.getServerUrl() 
         + " serviceUrl=" + protocolConfiguration.getServiceUrl()
         + " proxyCallbackUrl=" + protocolConfiguration.getProxyCallbackUrl()
         + " renew=" + protocolConfiguration.getRenewFlag()
-        + " gateway=" + protocolConfiguration.getGatewayFlag());
+        + " gateway=" + protocolConfiguration.getGatewayFlag()
+        + " trustedProxies=" + trustedProxies);
     authenticationStrategy = newAuthenticationStrategy(strategy);
+    if (authenticationStrategy instanceof ProxyValidationStrategy) {
+      ((ProxyValidationStrategy) authenticationStrategy)
+          .setTrustedProxies(trustedProxies);
+    }
   }
 
-  private AuthenticationStrategy newAuthenticationStrategy(Class strategy) 
+  private AuthenticationStrategy newAuthenticationStrategy(String strategy) 
       throws LifecycleException {
     try {
-      Constructor constructor = strategy.getConstructor(
+      Class strategyClass = Class.forName(strategy);
+      if (!(AuthenticationStrategy.class.isAssignableFrom(strategyClass))) {
+        throw new IllegalArgumentException("a subclass of "
+            + AuthenticationStrategy.class.getCanonicalName()
+            + " is required");
+      }
+      Constructor constructor = strategyClass.getConstructor(
           new Class[] { ProtocolConfiguration.class });
       return (AuthenticationStrategy)
           constructor.newInstance(
@@ -134,10 +162,5 @@ public class CasRealm extends RealmBase {
           + " instance", ex);  
     }
   } 
-
-  public void stop() throws LifecycleException {
-    log.info("CasRealm shut down");
-    super.stop();
-  }
 
 }

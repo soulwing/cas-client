@@ -42,17 +42,17 @@ import org.soulwing.cas.client.ValidatorFactory;
  *
  * @author Carl Harris
  */
-class ProxyValidationStrategy implements AuthenticationStrategy {
+public class ProxyValidationStrategy implements AuthenticationStrategy {
 
   private final ProtocolConfiguration protocolConfiguration;
   private final Log log = LogFactory.getLog(ProxyValidationStrategy.class); 
   private List trustedProxies = new ArrayList(0);
 
-  ProxyValidationStrategy(ProtocolConfiguration protocolConfiguration) {
+  public ProxyValidationStrategy(ProtocolConfiguration protocolConfiguration) {
     this.protocolConfiguration = protocolConfiguration;
   }
 
-  ProxyValidationStrategy(ProtocolConfiguration protocolConfiguration,
+  public ProxyValidationStrategy(ProtocolConfiguration protocolConfiguration,
       String trustedProxies) {
     this(protocolConfiguration);
     setTrustedProxies(trustedProxies);

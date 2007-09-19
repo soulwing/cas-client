@@ -32,11 +32,11 @@ import org.soulwing.cas.client.ValidatorFactory;
  *
  * @author Carl Harris
  */
-class ServiceValidationStrategy implements AuthenticationStrategy {
+public class ServiceValidationStrategy implements AuthenticationStrategy {
   
   private final ProtocolConfiguration protocolConfiguration;
   
-  ServiceValidationStrategy(ProtocolConfiguration protocolConfiguration) {
+  public ServiceValidationStrategy(ProtocolConfiguration protocolConfiguration) {
     this.protocolConfiguration = protocolConfiguration;
   }
   

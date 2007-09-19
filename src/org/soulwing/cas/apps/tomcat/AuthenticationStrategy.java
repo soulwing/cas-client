@@ -1,7 +1,7 @@
 /*
- * FilterAuthenticator.java
+ * AuthenticationStrategy.java
  *
- * Created on Sep 12, 2006
+ * Created on Sep 18, 2007
  *
  * Copyright (C) 2006, 2007 Carl E Harris, Jr.
  * 

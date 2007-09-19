@@ -26,7 +26,7 @@ import org.soulwing.cas.client.ServiceValidationResponse;
  *
  * @author Carl Harris
  */
-class CasPrincipal implements java.security.Principal, Serializable {
+public class CasPrincipal implements java.security.Principal, Serializable {
 
   private static final long serialVersionUID = -9217520836500471161L;
   private String name;
@@ -46,4 +46,9 @@ class CasPrincipal implements java.security.Principal, Serializable {
   private void setName(String name) {
     this.name = name;
   }
+  
+  public String toString() {
+    return getName();
+  }
+
 }
