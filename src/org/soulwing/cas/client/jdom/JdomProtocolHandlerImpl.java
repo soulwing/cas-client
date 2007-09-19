@@ -31,7 +31,7 @@ import org.soulwing.cas.client.ProtocolConstants;
 import org.soulwing.cas.client.ProtocolHandler;
 import org.soulwing.cas.client.ProtocolMappingStrategy;
 import org.soulwing.cas.client.ProtocolViolationException;
-import org.soulwing.cas.client.Response;
+import org.soulwing.cas.client.ValidationResponse;
 import org.soulwing.cas.client.ServiceAccessException;
 import org.xml.sax.InputSource;
 
@@ -49,7 +49,7 @@ public class JdomProtocolHandlerImpl implements ProtocolHandler {
    * (non-Javadoc)
    * @see org.soulwing.cas.client.ProtocolHandler#processResult(org.xml.sax.InputSource, org.soulwing.cas.client.ProtocolMappingStrategy)
    */
-  public Response processResult(InputSource result, 
+  public ValidationResponse processResult(InputSource result, 
       ProtocolMappingStrategy strategy) {
     return strategy.mapResponse(getResponseElement(result));
   }

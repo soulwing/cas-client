@@ -1,5 +1,5 @@
 /*
- * Response.java
+ * ValidationResponse.java
  *
  * Created on Jul 7, 2007
  *
@@ -22,7 +22,7 @@ package org.soulwing.cas.client;
  *
  * @author Carl Harris
  */
-public interface Response {
+public interface ValidationResponse {
 
   /**
    * Gets the value of the success flag.

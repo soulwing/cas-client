@@ -22,7 +22,7 @@ import org.jdom.Element;
 import org.soulwing.cas.client.AbstractResponse;
 import org.soulwing.cas.client.ProtocolConstants;
 import org.soulwing.cas.client.ProtocolViolationException;
-import org.soulwing.cas.client.Response;
+import org.soulwing.cas.client.ValidationResponse;
 
 /**
  * A <code>ProtocolMappingStrategy</code> that maps an instance of
@@ -36,7 +36,7 @@ public class ServiceValidateMappingStrategy
   /* (non-Javadoc)
    * @see org.soulwing.cas.client.jdom.AbstractResponseMappingStrategy#mapSuccessResponse(org.jdom.Element)
    */
-  public Response mapSuccessResponse(Element element) {
+  public ValidationResponse mapSuccessResponse(Element element) {
     ServiceValidationSuccessResponse response = new ServiceValidationSuccessResponse();
     response.setSuccessful(true);
     response.setUserName(getUserName(

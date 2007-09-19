@@ -19,7 +19,7 @@ import org.jdom.Element;
 import org.soulwing.cas.client.AbstractResponse;
 import org.soulwing.cas.client.ProtocolConstants;
 import org.soulwing.cas.client.ProtocolViolationException;
-import org.soulwing.cas.client.Response;
+import org.soulwing.cas.client.ValidationResponse;
 
 /**
  * A <code>ProtocolMappingStrategy</code> that maps to an instance
@@ -32,7 +32,7 @@ public class ProxyMappingStrategy extends AbstractResponseMappingStrategy {
   /* (non-Javadoc)
    * @see org.soulwing.cas.client.jdom.AbstractResponseMappingStrategy#mapSuccessResponse(org.jdom.Element)
    */
-  public Response mapResponse(Element element) {
+  public ValidationResponse mapResponse(Element element) {
     Element responseElement = JdomUtil.getChild(
         element, ProtocolConstants.PROXY_SUCCESS);
     if (responseElement != null) {
@@ -51,13 +51,13 @@ public class ProxyMappingStrategy extends AbstractResponseMappingStrategy {
   }
 
   /**
-   * Gets a <code>Response</code> that corresponds to the content of a 
+   * Gets a <code>ValidationResponse</code> that corresponds to the content of a 
    * JDOM <code>Element</code> representing a proxy success response
    * from the CAS server. 
    * @param element the subject CAS response <code>Element</code>
-   * @return an appropriate subclass of <code>Response</code>
+   * @return an appropriate subclass of <code>ValidationResponse</code>
    */
-  private Response mapSuccessResponse(Element element) {
+  private ValidationResponse mapSuccessResponse(Element element) {
     ProxySuccessResponse response = new ProxySuccessResponse();
     response.setSuccessful(true);
     response.setProxyTicket(getProxyTicket(

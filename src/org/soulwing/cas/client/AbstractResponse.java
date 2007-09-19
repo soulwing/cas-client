@@ -24,7 +24,7 @@ package org.soulwing.cas.client;
  * @author Carl Harris
  * 
  */
-public class AbstractResponse implements Response {
+public class AbstractResponse implements ValidationResponse {
 
   private boolean successful;
   private String resultCode;
@@ -32,7 +32,7 @@ public class AbstractResponse implements Response {
   
   /*
    * (non-Javadoc)
-   * @see org.soulwing.cas.client.Response#isSuccessful()
+   * @see org.soulwing.cas.client.ValidationResponse#isSuccessful()
    */
   public boolean isSuccessful() {
     return successful;
@@ -48,7 +48,7 @@ public class AbstractResponse implements Response {
 
   /*
    * (non-Javadoc)
-   * @see org.soulwing.cas.client.Response#getResultCode()
+   * @see org.soulwing.cas.client.ValidationResponse#getResultCode()
    */
   public String getResultCode() {
     return resultCode;
@@ -64,7 +64,7 @@ public class AbstractResponse implements Response {
   
   /*
    * (non-Javadoc)
-   * @see org.soulwing.cas.client.Response#getResultMessage()
+   * @see org.soulwing.cas.client.ValidationResponse#getResultMessage()
    */
   public String getResultMessage() {
     return resultMessage;

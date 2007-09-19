@@ -21,7 +21,7 @@ package org.soulwing.cas.client.jdom;
 import org.jdom.Element;
 import org.soulwing.cas.client.ProtocolConstants;
 import org.soulwing.cas.client.ProtocolViolationException;
-import org.soulwing.cas.client.Response;
+import org.soulwing.cas.client.ValidationResponse;
 
 /**
  * A <code>ProtocolMappingStrategy</code> that forms the basis for
@@ -37,7 +37,7 @@ public abstract class AbstractValidationResponseMappingStrategy
    * (non-Javadoc)
    * @see org.soulwing.cas.client.ProtocolMappingStrategy#mapResponse(org.jdom.Element)
    */
-  public Response mapResponse(Element element) {
+  public ValidationResponse mapResponse(Element element) {
     Element responseElement = JdomUtil.getChild(
         element, ProtocolConstants.AUTHENTICATION_SUCCESS);
     if (responseElement != null) {
@@ -56,12 +56,12 @@ public abstract class AbstractValidationResponseMappingStrategy
   }
 
   /**
-   * Gets a <code>Response</code> that corresponds to the content of a 
+   * Gets a <code>ValidationResponse</code> that corresponds to the content of a 
    * JDOM <code>Element</code> representing a validation success response
    * from the CAS server. 
    * @param element the subject CAS response <code>Element</code>
-   * @return an appropriate subclass of <code>Response</code>
+   * @return an appropriate subclass of <code>ValidationResponse</code>
    */
-  protected abstract Response mapSuccessResponse(Element element);
+  protected abstract ValidationResponse mapSuccessResponse(Element element);
   
 }

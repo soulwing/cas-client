@@ -194,7 +194,7 @@ public abstract class AbstractValidationFilter implements Filter {
     }
     else if (getSessionValidation(request) != null) {
       wrapAndPassToFilterChain(request, response, filterChain,
-          new ValidationResponse(getSessionValidation(request)));
+          new ValidationResponseWrapper(getSessionValidation(request)));
     }
     else if (isFilterPathConfigured()) {
       doFilterPathAuthentication(request, response, filterChain);
@@ -268,23 +268,23 @@ public abstract class AbstractValidationFilter implements Filter {
   private void validate(HttpServletRequest request, 
       HttpServletResponse response, FilterChain filterChain) 
       throws NoTicketException, IOException, ServletException {
-    ValidationResponse validationResponse = new ValidationResponse(
-        getAuthenticator().authenticate(request)); 
+    ValidationResponseWrapper validationResponse = 
+        new ValidationResponseWrapper(getAuthenticator().authenticate(request)); 
     if (validationResponse.success()) {
-      setSessionValidation(request, validationResponse.getResponse());
+      setSessionValidation(request, validationResponse.getWrappedResponse());
       wrapAndPassToFilterChain(request, response, filterChain, 
           validationResponse);
     }
     else {
       log.warn("authentication failed: " + 
-          validationResponse.getResponse().getResultMessage());
+          validationResponse.getWrappedResponse().getResultMessage());
       redirectToAuthFailed(response);
     }
   }
 
   private void wrapAndPassToFilterChain(HttpServletRequest request, 
       HttpServletResponse response, FilterChain filterChain, 
-      ValidationResponse validationResponse) 
+      ValidationResponseWrapper validationResponse) 
       throws IOException, ServletException {
     HttpServletRequest wrappedRequest = 
         wrapRequest(request, validationResponse.getUserName()); 
@@ -299,10 +299,10 @@ public abstract class AbstractValidationFilter implements Filter {
     filterChain.doFilter(request, response);
   }
 
-  private class ValidationResponse {
+  private class ValidationResponseWrapper {
     private ServiceValidationResponse response;
 
-    public ValidationResponse(ServiceValidationResponse response) {
+    public ValidationResponseWrapper(ServiceValidationResponse response) {
       this.response = response;
     }
     
@@ -314,7 +314,7 @@ public abstract class AbstractValidationFilter implements Filter {
       return response.getUserName();
     }
     
-    public ServiceValidationResponse getResponse() {
+    public ServiceValidationResponse getWrappedResponse() {
       return response;
     }
   }

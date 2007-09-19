@@ -72,21 +72,21 @@ public class ProxyValidationSuccessResponse implements ProxyValidationResponse {
   }
 
   /* (non-Javadoc)
-   * @see org.soulwing.cas.client.Response#getResultCode()
+   * @see org.soulwing.cas.client.ValidationResponse#getResultCode()
    */
   public String getResultCode() {
     return response.getResultCode();
   }
 
   /* (non-Javadoc)
-   * @see org.soulwing.cas.client.Response#getResultMessage()
+   * @see org.soulwing.cas.client.ValidationResponse#getResultMessage()
    */
   public String getResultMessage() {
     return response.getResultMessage();
   }
 
   /* (non-Javadoc)
-   * @see org.soulwing.cas.client.Response#isSuccessful()
+   * @see org.soulwing.cas.client.ValidationResponse#isSuccessful()
    */
   public boolean isSuccessful() {
     return response.isSuccessful();

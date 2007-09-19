@@ -24,7 +24,7 @@ import org.soulwing.cas.client.AbstractResponse;
 import org.soulwing.cas.client.ProtocolConstants;
 import org.soulwing.cas.client.ProtocolMappingStrategy;
 import org.soulwing.cas.client.ProtocolViolationException;
-import org.soulwing.cas.client.Response;
+import org.soulwing.cas.client.ValidationResponse;
 import org.soulwing.cas.client.ServiceValidationResponse;
 
 /**
@@ -79,7 +79,7 @@ public class ProxyValidateMappingStrategy extends
   /* (non-Javadoc)
    * @see org.soulwing.cas.client.jdom.AbstractResponseMappingStrategy#mapSuccessResponse(org.jdom.Element)
    */
-  public Response mapSuccessResponse(Element element) {
+  public ValidationResponse mapSuccessResponse(Element element) {
     ProxyValidationSuccessResponse response = 
         new ProxyValidationSuccessResponse((ServiceValidationResponse) 
             serviceValidateMappingStrategy.mapResponse(

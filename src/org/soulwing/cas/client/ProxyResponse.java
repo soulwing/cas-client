@@ -23,7 +23,7 @@ package org.soulwing.cas.client;
  *
  * @author Carl Harris
  */
-public interface ProxyResponse extends Response {
+public interface ProxyResponse extends ValidationResponse {
 
   /**
    * Gets the proxy ticket issued by the CAS server.

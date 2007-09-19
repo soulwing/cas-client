@@ -21,19 +21,19 @@ import org.jdom.Element;
 
 /**
  * A strategy for mapping the XML response from the CAS server to a 
- * <code>Response</code> object.
+ * <code>ValidationResponse</code> object.
  *
  * @author Carl Harris
  */
 public interface ProtocolMappingStrategy {
 
   /**
-   * Gets a <code>Response</code> that corresponds to the content of a 
+   * Gets a <code>ValidationResponse</code> that corresponds to the content of a 
    * JDOM <code>Element</code> representing the the response
    * from the CAS server. 
    * @param element the subject CAS response <code>Element</code>
-   * @return an appropriate subclass of <code>Response</code>
+   * @return an appropriate subclass of <code>ValidationResponse</code>
    */
-  Response mapResponse(Element element);
+  ValidationResponse mapResponse(Element element);
   
 }

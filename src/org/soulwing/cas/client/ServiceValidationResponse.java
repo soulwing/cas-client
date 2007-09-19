@@ -24,7 +24,7 @@ package org.soulwing.cas.client;
  *
  * @author Carl Harris
  */
-public interface ServiceValidationResponse extends Response {
+public interface ServiceValidationResponse extends ValidationResponse {
 
   /**
    * Gets the name of the subject user for the CAS response
