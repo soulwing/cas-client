@@ -59,7 +59,8 @@
   </target>
 
   <target name="compile-src" depends="prepare">
-    <javac srcdir="${src}" destdir="${build.classes}" source="${source.level}" debug="${debug}">
+    <javac srcdir="${src}" destdir="${build.classes}"
+        source="${source.level}" debug="${debug}">
       <compilerarg value="-Xlint:all"/>
       <compilerarg value="-Xlint:-deprecation"/>
       <classpath refid="project.classpath"/>
@@ -67,7 +68,8 @@
   </target>
 
   <target name="compile-test" depends="prepare">
-    <javac srcdir="${test}" destdir="${build.test.classes}" source="${source.level}" debug="true">
+    <javac srcdir="${test}" destdir="${build.test.classes}"
+        source="${source.level}" debug="true">
       <compilerarg value="-Xlint:all"/>
       <compilerarg value="-Xlint:-deprecation"/>
       <classpath refid="project.classpath"/>
