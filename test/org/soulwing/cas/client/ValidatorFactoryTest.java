@@ -42,7 +42,7 @@ public class ValidatorFactoryTest extends TestCase {
   private static class MockProtocolMappingStrategy
       implements ProtocolMappingStrategy {
 
-    public Response mapResponse(Element element) {
+    public ValidationResponse mapResponse(Element element) {
       throw new UnsupportedOperationException();
     }
     

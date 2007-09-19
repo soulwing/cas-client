@@ -49,21 +49,21 @@ public class MockServiceValidationResponse implements
   }
 
   /* (non-Javadoc)
-   * @see org.soulwing.cas.client.Response#getResultCode()
+   * @see org.soulwing.cas.client.ValidationResponse#getResultCode()
    */
   public String getResultCode() {
     return Boolean.toString(successful);
   }
 
   /* (non-Javadoc)
-   * @see org.soulwing.cas.client.Response#getResultMessage()
+   * @see org.soulwing.cas.client.ValidationResponse#getResultMessage()
    */
   public String getResultMessage() {
     return Boolean.toString(successful);
   }
 
   /* (non-Javadoc)
-   * @see org.soulwing.cas.client.Response#isSuccessful()
+   * @see org.soulwing.cas.client.ValidationResponse#isSuccessful()
    */
   public boolean isSuccessful() {
     return successful;

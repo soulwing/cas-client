@@ -17,7 +17,7 @@ import java.io.StringReader;
 
 import junit.framework.TestCase;
 
-import org.soulwing.cas.client.Response;
+import org.soulwing.cas.client.ValidationResponse;
 import org.soulwing.cas.client.ServiceValidationResponse;
 import org.xml.sax.InputSource;
 
@@ -35,7 +35,7 @@ public class ServiceValidateMappingStrategyTest extends TestCase {
   }
 
   public void testProcessSuccessResult() throws Exception {
-    Response response = handler.processResult(
+    ValidationResponse response = handler.processResult(
         constructSuccessResponse(), strategy);
     assertTrue(response instanceof ServiceValidationResponse);
     ServiceValidationResponse svResponse = (ServiceValidationResponse) response;
@@ -45,7 +45,7 @@ public class ServiceValidateMappingStrategyTest extends TestCase {
   }
 
   public void testProcessFailureResult() throws Exception {
-    Response response = handler.processResult(
+    ValidationResponse response = handler.processResult(
         constructFailureResponse(), strategy);
     assertTrue(!response.isSuccessful());
     assertEquals("TEST CODE", response.getResultCode());

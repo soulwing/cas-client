@@ -19,7 +19,7 @@ import java.util.List;
 import junit.framework.TestCase;
 
 import org.soulwing.cas.client.ProxyValidationResponse;
-import org.soulwing.cas.client.Response;
+import org.soulwing.cas.client.ValidationResponse;
 import org.xml.sax.InputSource;
 
 // TODO: add tests for invalid responses and responses with optional
@@ -36,7 +36,7 @@ public class ProxyValidateMappingStrategyTest extends TestCase {
   }
 
   public void testProcessSuccessResult() throws Exception {
-    Response response = handler.processResult(
+    ValidationResponse response = handler.processResult(
         constructSuccessResponse(), strategy);
     assertTrue(response instanceof ProxyValidationResponse);
     ProxyValidationResponse pvResponse = (ProxyValidationResponse) response;
@@ -50,7 +50,7 @@ public class ProxyValidateMappingStrategyTest extends TestCase {
   }
 
   public void testProcessFailureResult() throws Exception {
-    Response response = handler.processResult(
+    ValidationResponse response = handler.processResult(
         constructFailureResponse(), strategy);
     assertTrue(response.isSuccessful() == false);
     assertEquals("TEST CODE", response.getResultCode());
