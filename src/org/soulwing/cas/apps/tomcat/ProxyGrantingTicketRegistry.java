@@ -29,4 +29,6 @@ public interface ProxyGrantingTicketRegistry {
 
   void registerSession(String pgtIou, HttpSession session);
 
+  void registerTicket(String pgtIou, String pgt);
+  
 }

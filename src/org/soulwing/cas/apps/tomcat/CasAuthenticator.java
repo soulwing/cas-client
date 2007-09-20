@@ -45,6 +45,7 @@ public class CasAuthenticator extends AuthenticatorBase {
   private CasRealm casRealm;
   private AuthenticationStrategy authenticationStrategy;
   private ProtocolConfiguration protocolConfiguration;
+  private ProxyGrantingTicketRegistry ticketRegistry;
   
   /* (non-Javadoc)
    * @see org.apache.catalina.authenticator.AuthenticatorBase#authenticate(org.apache.catalina.connector.Request, org.apache.catalina.connector.Response, org.apache.catalina.deploy.LoginConfig)
@@ -75,6 +76,11 @@ public class CasAuthenticator extends AuthenticatorBase {
               FilterConstants.VALIDATION_ATTRIBUTE, validationResponse);
           log.debug("principal " + request.getUserPrincipal().getName()
               + " authenticated via CAS");
+          if (ticketRegistry != null) {
+            ticketRegistry.registerSession(
+                validationResponse.getProxyGrantingTicketIou(),
+                request.getSession());
+          }
           return true;
         }
         else {
@@ -110,6 +116,7 @@ public class CasAuthenticator extends AuthenticatorBase {
     casRealm = (CasRealm) realm;
     authenticationStrategy = casRealm.getAuthenticationStrategy();
     protocolConfiguration = casRealm.getProtocolConfiguration();
+    ticketRegistry = casRealm.getProxyGrantingTicketRegistry();
   }
   
 }

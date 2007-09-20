@@ -35,6 +35,8 @@ public interface CasRealm extends Realm {
 
   ProtocolConfiguration getProtocolConfiguration();
 
+  ProxyGrantingTicketRegistry getProxyGrantingTicketRegistry();
+  
   Principal getPrincipal(String username);
   
 }

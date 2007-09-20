@@ -20,7 +20,12 @@ package org.soulwing.cas.apps.tomcat;
 import java.lang.reflect.Constructor;
 import java.security.Principal;
 
+import javax.naming.Context;
+import javax.naming.NamingException;
+
 import org.apache.catalina.LifecycleException;
+import org.apache.catalina.ServerFactory;
+import org.apache.catalina.core.StandardServer;
 import org.apache.catalina.realm.UserDatabaseRealm;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -39,7 +44,11 @@ public class CasUserDatabaseRealm
 
   private String strategy = ServiceValidationStrategy.class.getCanonicalName();
   
+  private String ticketRegistryResourceName = "ProxyGrantingTicketRegistry";
+  
   private AuthenticationStrategy authenticationStrategy;
+  
+  private ProxyGrantingTicketRegistry ticketRegistry;
   
   private ProtocolConfiguration protocolConfiguration = 
       new ProtocolConfiguration();
@@ -58,6 +67,14 @@ public class CasUserDatabaseRealm
    */
   public ProtocolConfiguration getProtocolConfiguration() {
     return protocolConfiguration;
+  }
+  
+  /*
+   * (non-Javadoc)
+   * @see org.soulwing.cas.apps.tomcat.CasRealm#getProxyGrantingTicketRegistry()
+   */
+  public ProxyGrantingTicketRegistry getProxyGrantingTicketRegistry() {
+    return ticketRegistry;
   }
   
   public String getStrategy() {
@@ -88,8 +105,8 @@ public class CasUserDatabaseRealm
     return protocolConfiguration.getProxyCallbackUrl();
   }
 
-  public void setProxyCallbackUrl(String proxyCallbackUrl) {
-    protocolConfiguration.setProxyCallbackUrl(proxyCallbackUrl);
+  public void setProxyCallbackUrl(String proxyCallbackUri) {
+    protocolConfiguration.setProxyCallbackUrl(proxyCallbackUri);
   }
 
   public boolean getRenew() {
@@ -116,6 +133,14 @@ public class CasUserDatabaseRealm
     this.trustedProxies = trustedProxies;
   }
 
+  public String getTicketRegistryResourceName() {
+    return ticketRegistryResourceName;
+  }
+
+  public void setTicketRegistryResourceName(String ticketRegistryResourceName) {
+    this.ticketRegistryResourceName = ticketRegistryResourceName;
+  }
+
   public Principal getPrincipal(String username) {
     return super.getPrincipal(username);
   }
@@ -132,11 +157,15 @@ public class CasUserDatabaseRealm
         + " proxyCallbackUrl=" + protocolConfiguration.getProxyCallbackUrl()
         + " renew=" + protocolConfiguration.getRenewFlag()
         + " gateway=" + protocolConfiguration.getGatewayFlag()
-        + " trustedProxies=" + trustedProxies);
+        + " trustedProxies=" + trustedProxies
+        + " ticketRegistryResourceName=" + ticketRegistryResourceName);
     authenticationStrategy = newAuthenticationStrategy(strategy);
     if (authenticationStrategy instanceof ProxyValidationStrategy) {
       ((ProxyValidationStrategy) authenticationStrategy)
           .setTrustedProxies(trustedProxies);
+    }
+    if (protocolConfiguration.getProxyCallbackUrl() != null) {
+      ticketRegistry = getTicketRegistryResource(ticketRegistryResourceName);
     }
   }
 
@@ -162,5 +191,22 @@ public class CasUserDatabaseRealm
           + " instance", ex);  
     }
   } 
+
+  private ProxyGrantingTicketRegistry getTicketRegistryResource(
+      String ticketRegistryResourceName) throws LifecycleException {
+    try {
+      StandardServer server = (StandardServer) ServerFactory.getServer();
+      Context context = server.getGlobalNamingContext();
+      ProxyGrantingTicketRegistry ticketRegistry = (ProxyGrantingTicketRegistry) 
+          context.lookup(ticketRegistryResourceName);
+      log.debug("obtained ticket registry resource " 
+          + ticketRegistryResourceName);
+      return ticketRegistry;
+    }
+    catch (NamingException ex) {
+      throw new LifecycleException(
+          "error obtaining ticket registry resource", ex);
+    }
+  }
 
 }
