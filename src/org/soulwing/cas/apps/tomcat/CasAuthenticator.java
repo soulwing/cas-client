@@ -19,12 +19,17 @@ package org.soulwing.cas.apps.tomcat;
 
 import java.io.IOException;
 
+import javax.naming.Context;
+import javax.naming.NamingException;
+
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.Realm;
+import org.apache.catalina.ServerFactory;
 import org.apache.catalina.Session;
 import org.apache.catalina.authenticator.AuthenticatorBase;
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
+import org.apache.catalina.core.StandardServer;
 import org.apache.catalina.deploy.LoginConfig;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -42,7 +47,13 @@ public class CasAuthenticator extends AuthenticatorBase {
 
   private static final Log log = LogFactory.getLog(CasAuthenticator.class);
   
-  private CasRealm casRealm;
+  private static final String PROTOCOL_CONFIGURATION_RESOURCE =
+      "CasProtocolConfiguration";
+
+  private static final String TICKET_REGISTRY_RESOURCE = 
+      "CasProxyGrantingTicketRegistry";
+
+  private AuthorizationOnlyRealm realm;
   private AuthenticationStrategy authenticationStrategy;
   private ProtocolConfiguration protocolConfiguration;
   private ProxyGrantingTicketRegistry ticketRegistry;
@@ -58,7 +69,7 @@ public class CasAuthenticator extends AuthenticatorBase {
       ServiceValidationResponse validationResponse = (ServiceValidationResponse)
           request.getSessionInternal()
               .getNote(FilterConstants.VALIDATION_ATTRIBUTE);
-      request.setUserPrincipal(casRealm.getPrincipal(
+      request.setUserPrincipal(realm.getPrincipal(
           validationResponse.getUserName()));
       log.debug("principal " + request.getUserPrincipal().getName()
           + " authenticated via session state");
@@ -70,7 +81,7 @@ public class CasAuthenticator extends AuthenticatorBase {
         ServiceValidationResponse validationResponse =
             authenticationStrategy.authenticate(request);
         if (validationResponse.isSuccessful()) {
-          request.setUserPrincipal(casRealm.getPrincipal(
+          request.setUserPrincipal(realm.getPrincipal(
               validationResponse.getUserName()));
           request.getSessionInternal(true).setNote(
               FilterConstants.VALIDATION_ATTRIBUTE, validationResponse);
@@ -107,16 +118,25 @@ public class CasAuthenticator extends AuthenticatorBase {
    */
   public void start() throws LifecycleException {
     super.start();
-    Realm realm = getContainer().getRealm();
-    if (!(realm instanceof CasRealm)) {
-      log.error("a CasRealm is required");
-      throw new LifecycleException(this.getClass().getSimpleName()
-          + " requires a CasRealm");
+    Realm realm = super.getContainer().getRealm();
+    if (!(realm instanceof AuthorizationOnlyRealm)) {
+      throw new LifecycleException("requires an authorization-only realm");
     }
-    casRealm = (CasRealm) realm;
-    authenticationStrategy = casRealm.getAuthenticationStrategy();
-    protocolConfiguration = casRealm.getProtocolConfiguration();
-    ticketRegistry = casRealm.getProxyGrantingTicketRegistry();
+    try {
+      StandardServer server = (StandardServer) ServerFactory.getServer();
+      Context context = server.getGlobalNamingContext();
+      ticketRegistry = (ProxyGrantingTicketRegistry) 
+          context.lookup(TICKET_REGISTRY_RESOURCE);
+      log.debug("obtained ticket registry resource " 
+          + TICKET_REGISTRY_RESOURCE);
+      protocolConfiguration = (ProtocolConfiguration)
+          context.lookup(PROTOCOL_CONFIGURATION_RESOURCE);
+      log.debug("obtained protocol configuration resource "
+          + PROTOCOL_CONFIGURATION_RESOURCE);
+    }
+    catch (NamingException ex) {
+      throw new LifecycleException(ex);
+    }
   }
   
 }

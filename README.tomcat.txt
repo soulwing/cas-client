@@ -25,11 +25,22 @@ Cannot configure an authenticator for method CAS
 Global naming resources configuration needed for placing PGT into session:
 
 <GlobalNamingResources>
-  <Resource 
-      name="ProxyGrantingTicketRegistry" auth="Container"
-      type="org.soulwing.cas.apps.tomcat.ProxyGrantingTicketRegistry"
-      factory="org.soulwing.cas.apps.tomcat.ProxyGrantingTicketRegistryFactory"
-      description="CAS proxy granting ticket registry" />
+  <Resource name="CasProtocolConfiguration" auth="Container"
+            type="org.soulwing.cas.client.ProtocolConfiguration"
+            factory="org.soulwing.apps.tomcat.CasProtocolConfigurationFactory"
+            description="CAS protocol configuration"
+            serverUrl="https://localhost:8087/cas"
+            proxyCallbackUrl="https://localhost:8089/casProxyCallback" />
+  <Resource name="CasAuthenticationStrategy" auth="Container"
+            type="org.soulwing.cas.apps.tomcat.AuthenticationStrategy"
+            factory="org.soulwing.cas.apps.tomcat.CasAuthenticationStrategyFactory"
+            description="CAS proxy ticket authentication strategy"
+            strategyClass="org.soulwing.cas.apps.tomcat.ProxyAuthenticationStrategy"
+            config="CasProtocolConfiguration" />          
+  <Resource name="CasProxyGrantingTicketRegistry" auth="Container"
+            type="org.soulwing.cas.apps.tomcat.ProxyGrantingTicketRegistry"
+            factory="org.soulwing.cas.apps.tomcat.ProxyGrantingTicketRegistryFactory"
+            description="CAS proxy granting ticket registry" />
 </GlobalNamingResources>
 
 
@@ -43,15 +54,9 @@ Container configuration for CAS authentication with access to PGT in session:
 <Engine name="Catalina" defaultHost="localhost" debug="0">
   <Host name="localhost" debug="0" appBase="webapps" 
         unpackWARs="true" autoDeploy="true"/>
-  <Valve className="org.soulwing.cas.apps.tomcat.ProxyCallbackValve"
-         proxyCallbackUri="/casProxyCallback"
-         ticketRegistryResourceName="ProxyGrantingTicketRegistry" />
+  <Valve className="org.soulwing.cas.apps.tomcat.ProxyCallbackValve"/>
   <Realm className="org.soulwing.cas.apps.tomcat.CasUserDatabaseRealm"
-         serverUrl="https://localhost:8087/cas"
-         strategy="org.soulwing.cas.apps.tomcat.ProxyValidationStrategy" 
-         proxyCallbackUrl="https://localhost:8089/casProxyCallback"
-         resourceName="UserDatabase"
-         ticketRegistryResourceName="ProxyGrantingTicketRegistry" />
+         resourceName="UserDatabase"/>
 </Engine>
 
 

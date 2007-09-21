@@ -1,5 +1,5 @@
 /*
- * CasRealm.java
+ * AuthorizationOnlyRealm.java
  *
  * Created on Sep 19, 2007
  *
@@ -20,23 +20,24 @@ package org.soulwing.cas.apps.tomcat;
 import java.security.Principal;
 
 import org.apache.catalina.Realm;
-import org.soulwing.cas.client.ProtocolConfiguration;
 
 
 /**
- * Extends the Catalina Realm adding methods that allow access to the CAS
- * protocol configuration and authentication strategy.
+ * A marker interface for a Realm that performs authorization related
+ * tasks only.  This interface and the Realm subclasses in this package are
+ * necessitated by Catalina's tight coupling of authentication and
+ * authorization in the Realm abstraction.   A better design would have
+ * separated these concerns and would make it much easier to leverage CAS
+ * for authentication while utilizing a Realm merely to obtain role memberships.
+ * 
+ * This class would become unnecessary, if Realm exposed a method to simply
+ * obtain the Principal that corresponds to a username without performing
+ * any authentication.
  *
  * @author Carl Harris
  */
-public interface CasRealm extends Realm {
-
-  AuthenticationStrategy getAuthenticationStrategy();
-
-  ProtocolConfiguration getProtocolConfiguration();
-
-  ProxyGrantingTicketRegistry getProxyGrantingTicketRegistry();
+public interface AuthorizationOnlyRealm extends Realm {
   
   Principal getPrincipal(String username);
-  
+
 }

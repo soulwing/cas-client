@@ -19,6 +19,8 @@
 package org.soulwing.cas.apps.tomcat;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.naming.Context;
 import javax.naming.NamingException;
@@ -35,6 +37,7 @@ import org.apache.catalina.util.LifecycleSupport;
 import org.apache.catalina.valves.ValveBase;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.soulwing.cas.client.ProtocolConfiguration;
 import org.soulwing.cas.client.ProtocolConstants;
 
 
@@ -50,26 +53,16 @@ public class ProxyCallbackValve extends ValveBase implements Lifecycle {
   
   private final LifecycleSupport lifecycleSupport = new LifecycleSupport(this);
   
-  private String ticketRegistryResourceName = "ProxyGrantingTicketRegistry";
-  private String proxyCallbackUri;
-  private ProxyGrantingTicketRegistry ticketRegistry;
+  private static final String PROTOCOL_CONFIGURATION_RESOURCE =
+      "CasProtocolConfiguration";
+
+  private static final String TICKET_REGISTRY_RESOURCE = 
+      "CasProxyGrantingTicketRegistry";
   
-  public String getTicketRegistryResourceName() {
-    return ticketRegistryResourceName;
-  }
-
-  public void setTicketRegistryResourceName(String resourceName) {
-    this.ticketRegistryResourceName = resourceName;
-  }
-
-  public String getProxyCallbackUri() {
-    return proxyCallbackUri;
-  }
-
-  public void setProxyCallbackUri(String proxyCallbackUri) {
-    this.proxyCallbackUri = proxyCallbackUri;
-  }
-
+  private ProtocolConfiguration protocolConfiguration;
+  private ProxyGrantingTicketRegistry ticketRegistry;
+  private String proxyCallbackUri;
+  
   public void invoke(Request request, Response response)
       throws IOException, ServletException {
     if (request.getRequestURI().equals(proxyCallbackUri)) {
@@ -100,10 +93,23 @@ public class ProxyCallbackValve extends ValveBase implements Lifecycle {
       StandardServer server = (StandardServer) ServerFactory.getServer();
       Context context = server.getGlobalNamingContext();
       ticketRegistry = (ProxyGrantingTicketRegistry) 
-          context.lookup(ticketRegistryResourceName);
+          context.lookup(TICKET_REGISTRY_RESOURCE);
       log.debug("obtained ticket registry resource " 
-          + ticketRegistryResourceName);
-      log.debug("listening for URI " + proxyCallbackUri);
+          + TICKET_REGISTRY_RESOURCE);
+      protocolConfiguration = (ProtocolConfiguration)
+          context.lookup(PROTOCOL_CONFIGURATION_RESOURCE);
+      log.debug("obtained protocol configuration resource " 
+          + PROTOCOL_CONFIGURATION_RESOURCE);
+      
+      try {
+        URL url = new URL(protocolConfiguration.getProxyCallbackUrl());
+        proxyCallbackUri = url.getPath();
+        log.debug("listening for URI " + proxyCallbackUri);
+      }
+      catch (MalformedURLException ex) {
+        throw new LifecycleException("proxyCallbackUrl is malformed", ex);
+      }
+      
     }
     catch (NamingException ex) {
       throw new LifecycleException(ex);
