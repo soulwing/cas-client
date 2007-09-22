@@ -66,20 +66,17 @@ public class ProxyCallbackValve extends ValveBase implements Lifecycle {
   public void invoke(Request request, Response response)
       throws IOException, ServletException {
     if (request.getRequestURI().equals(proxyCallbackUri)) {
-      log.debug("request URI " + request.getRequestURI() + " matches");
       String pgt = request.getParameter(
           ProtocolConstants.PROXY_TICKET_PARAM);
       String pgtIou = request.getParameter(
           ProtocolConstants.PROXY_TICKET_IOU_PARAM);
       if (pgt == null || pgtIou == null) {
-        log.debug("parameters incomplete: PGT=" + pgt + " IOU=" + pgtIou);
         return;
       }
       log.debug("callback for IOU " + pgtIou + " with PGT " + pgt);
       ticketRegistry.registerTicket(pgtIou, pgt);
     }
     else {
-      log.debug("request URI " + request.getRequestURI() + " does not match");
       getNext().invoke(request, response);
     }
   }
@@ -92,24 +89,20 @@ public class ProxyCallbackValve extends ValveBase implements Lifecycle {
     try {
       StandardServer server = (StandardServer) ServerFactory.getServer();
       Context context = server.getGlobalNamingContext();
-      ticketRegistry = (ProxyGrantingTicketRegistry) 
-          context.lookup(TICKET_REGISTRY_RESOURCE);
-      log.debug("obtained ticket registry resource " 
-          + TICKET_REGISTRY_RESOURCE);
       protocolConfiguration = (ProtocolConfiguration)
           context.lookup(PROTOCOL_CONFIGURATION_RESOURCE);
-      log.debug("obtained protocol configuration resource " 
-          + PROTOCOL_CONFIGURATION_RESOURCE);
-      
+      log.debug("protocol configuration: " + protocolConfiguration);
+      ticketRegistry = (ProxyGrantingTicketRegistry) 
+          context.lookup(TICKET_REGISTRY_RESOURCE);
+      log.debug("ticket registry: " + ticketRegistry);
       try {
         URL url = new URL(protocolConfiguration.getProxyCallbackUrl());
         proxyCallbackUri = url.getPath();
-        log.debug("listening for URI " + proxyCallbackUri);
+        log.debug("callback URI: " + proxyCallbackUri);
       }
       catch (MalformedURLException ex) {
         throw new LifecycleException("proxyCallbackUrl is malformed", ex);
       }
-      
     }
     catch (NamingException ex) {
       throw new LifecycleException(ex);
@@ -122,6 +115,7 @@ public class ProxyCallbackValve extends ValveBase implements Lifecycle {
    */
   public synchronized void stop() throws LifecycleException {
     ticketRegistry = null;
+    protocolConfiguration = null;
   }
   
   /*

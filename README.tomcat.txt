@@ -27,7 +27,7 @@ Global naming resources configuration needed for placing PGT into session:
 <GlobalNamingResources>
   <Resource name="CasProtocolConfiguration" auth="Container"
             type="org.soulwing.cas.client.ProtocolConfiguration"
-            factory="org.soulwing.apps.tomcat.CasProtocolConfigurationFactory"
+            factory="org.soulwing.cas.apps.tomcat.CasProtocolConfigurationFactory"
             description="CAS protocol configuration"
             serverUrl="https://localhost:8087/cas"
             proxyCallbackUrl="https://localhost:8089/casProxyCallback" />
@@ -35,7 +35,7 @@ Global naming resources configuration needed for placing PGT into session:
             type="org.soulwing.cas.apps.tomcat.AuthenticationStrategy"
             factory="org.soulwing.cas.apps.tomcat.CasAuthenticationStrategyFactory"
             description="CAS proxy ticket authentication strategy"
-            strategyClass="org.soulwing.cas.apps.tomcat.ProxyAuthenticationStrategy"
+            strategyClass="org.soulwing.cas.apps.tomcat.ProxyValidationStrategy"
             config="CasProtocolConfiguration" />          
   <Resource name="CasProxyGrantingTicketRegistry" auth="Container"
             type="org.soulwing.cas.apps.tomcat.ProxyGrantingTicketRegistry"

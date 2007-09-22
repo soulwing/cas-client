@@ -14,8 +14,6 @@ import javax.naming.RefAddr;
 import javax.naming.Reference;
 import javax.naming.spi.ObjectFactory;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.soulwing.cas.client.ProtocolConfiguration;
 
 /**
@@ -25,9 +23,6 @@ import org.soulwing.cas.client.ProtocolConfiguration;
  */
 public class CasAuthenticationStrategyFactory implements ObjectFactory {
 
-  private static final Log log = 
-    LogFactory.getLog(CasProtocolConfigurationFactory.class);
-
   /* (non-Javadoc)
    * @see javax.naming.spi.ObjectFactory#getObjectInstance(java.lang.Object, javax.naming.Name, javax.naming.Context, java.util.Hashtable)
    */
@@ -35,15 +30,14 @@ public class CasAuthenticationStrategyFactory implements ObjectFactory {
       Hashtable env) throws Exception {
     
     if (o == null || !(o instanceof Reference)) {
-      log.error("expected a Reference object");
-      return null;
+      throw new IllegalArgumentException("expected a Reference object");
     }
     
     Reference ref = (Reference) o;
-    if (AuthenticationStrategy.class.isAssignableFrom(
-        Class.forName(ref.getClassName()))) {
-      log.error("expected an " + AuthenticationStrategy.class + " type");
-      return null;
+    if (!(AuthenticationStrategy.class.isAssignableFrom(
+        Class.forName(ref.getClassName())))) {
+      throw new IllegalArgumentException("expected an " 
+          + AuthenticationStrategy.class.getCanonicalName() + " type");
     }
 
     RefAddr ra = null;

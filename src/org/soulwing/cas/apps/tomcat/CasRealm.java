@@ -1,5 +1,5 @@
 /*
- * AuthorizationOnlyRealm.java
+ * CasRealm.java
  *
  * Created on Sep 19, 2007
  *
@@ -23,8 +23,8 @@ import org.apache.catalina.Realm;
 
 
 /**
- * A marker interface for a Realm that performs authorization related
- * tasks only.  This interface and the Realm subclasses in this package are
+ * A Catalina Realm with resources needed for perform CAS authenticatin.
+ * This interface and the Realm subclasses in this package are
  * necessitated by Catalina's tight coupling of authentication and
  * authorization in the Realm abstraction.   A better design would have
  * separated these concerns and would make it much easier to leverage CAS
@@ -36,7 +36,7 @@ import org.apache.catalina.Realm;
  *
  * @author Carl Harris
  */
-public interface AuthorizationOnlyRealm extends Realm {
+public interface CasRealm extends Realm, CasResources {
   
   Principal getPrincipal(String username);
 
