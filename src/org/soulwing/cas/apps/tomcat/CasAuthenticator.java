@@ -52,7 +52,7 @@ public class CasAuthenticator extends AuthenticatorBase {
       throws IOException {
     
     ResourceHelper helper = (ResourceHelper) 
-        request.getNote(CasResourceValve.RESOURCE_HELPER_ATTR);
+        request.getNote(ResourceValve.RESOURCE_HELPER_ATTR);
     if (isSessionAuthenticated(request)) {
       ServiceValidationResponse validationResponse = (ServiceValidationResponse)
           request.getSessionInternal()

@@ -59,7 +59,7 @@ public class ProxyCallbackValve extends ValveBase implements Lifecycle {
   public void invoke(Request request, Response response)
       throws IOException, ServletException {
     ResourceHelper helper = (ResourceHelper) 
-        request.getNote(CasResourceValve.RESOURCE_HELPER_ATTR);
+        request.getNote(ResourceValve.RESOURCE_HELPER_ATTR);
     ProxyGrantingTicketRegistry ticketRegistry =
         helper.getTicketRegistry();
     if (request.getRequestURI().equals(proxyCallbackUri)) {

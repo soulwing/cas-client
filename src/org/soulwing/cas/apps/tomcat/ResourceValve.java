@@ -1,5 +1,5 @@
 /*
- * AuthenticationStrategy.java
+ * ResourceValve.java
  *
  * Created on Nov 25, 2007
  *
@@ -40,7 +40,7 @@ import org.soulwing.cas.client.ProtocolConfiguration;
  * 
  * @author Carl Harris
  */
-public class CasResourceValve extends ValveBase implements Lifecycle {
+public class ResourceValve extends ValveBase implements Lifecycle {
 
   public static final String RESOURCE_HELPER_ATTR = 
       "org.soulwing.cas.apps.tomcat.resourceHelper";
