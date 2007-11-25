@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.soulwing.cas.client.ProtocolConstants;
-import org.soulwing.cas.client.ProtocolConfiguration;
+import org.soulwing.cas.client.ProtocolConfigurationImpl;
 import org.soulwing.cas.client.SimpleUrlGenerator;
 import org.soulwing.servlet.http.MockHttpServletRequest;
 
@@ -36,15 +36,15 @@ public class ContextProtocolConfigurationTest extends TestCase {
       + SERVLET_PATH;
   
   private MockHttpServletRequest request;
-  private ProtocolConfiguration config;
+  private ProtocolConfigurationImpl config;
   private SimpleUrlGenerator generator;
   
   protected void setUp() throws Exception {
     request = new MockHttpServletRequest();
     request.setRequestURL(REQUEST_URL);
     config = new UrlGeneratorFactory.ContextProtocolConfiguration(request, 
-        new ProtocolConfiguration()); 
-      new ProtocolConfiguration();
+        new ProtocolConfigurationImpl()); 
+      new ProtocolConfigurationImpl();
     config.setServerUrl(SERVER_URL);
     generator = new SimpleUrlGenerator(config);
   }

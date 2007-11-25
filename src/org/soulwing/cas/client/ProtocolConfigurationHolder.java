@@ -20,7 +20,7 @@ package org.soulwing.cas.client;
 
 
 /**
- * A filter that serves as a holder for a ProtocolConfiguration instance.
+ * A filter that serves as a holder for a ProtocolConfigurationImpl instance.
  * This filter can be used in applications that don't use a dependency
  * injection framework (e.g. Spring) to provide the CAS protocol configuration
  * to downstream filters.

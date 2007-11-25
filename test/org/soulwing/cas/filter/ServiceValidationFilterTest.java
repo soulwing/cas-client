@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import junit.framework.TestCase;
 
-import org.soulwing.cas.client.ProtocolConfiguration;
+import org.soulwing.cas.client.ProtocolConfigurationImpl;
 import org.soulwing.cas.client.ProtocolConfigurationHolder;
 import org.soulwing.cas.client.StringProtocolSource;
 import org.soulwing.servlet.MockFilterChain;
@@ -50,7 +50,7 @@ public class ServiceValidationFilterTest extends TestCase {
   private StringProtocolSource source;
   
   protected void setUp() throws Exception {
-    ProtocolConfiguration protocolConfig = new ProtocolConfiguration();
+    ProtocolConfigurationImpl protocolConfig = new ProtocolConfigurationImpl();
     protocolConfig.setServerUrl(SERVER_URL);
     protocolConfig.setServiceUrl(SERVICE_URL);
     protocolConfig.setProxyCallbackUrl(PROXY_CALLBACK_URL);

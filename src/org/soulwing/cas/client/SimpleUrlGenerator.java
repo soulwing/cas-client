@@ -19,19 +19,19 @@ package org.soulwing.cas.client;
 
 /**
  * A simple generator for the URL strings used in the CAS protocol.  This
- * URL generator can be provided with a <code>ProtocolConfiguration</code> 
+ * URL generator can be provided with a <code>ProtocolConfigurationImpl</code> 
  * that will be used in generating URLs for CAS operations.  Alternatively,
  * the configuration parameters can be passed in as constructor arguments. 
  *
  * @author Carl Harris
- * @see ProtocolConfiguration
+ * @see ProtocolConfigurationImpl
  */
 public class SimpleUrlGenerator implements UrlGenerator {
 
   private final ProtocolConfiguration config;
   
   /**
-   * @param config <code>ProtocolConfiguration</code> that will provide
+   * @param config <code>ProtocolConfigurationImpl</code> that will provide
    *    the configuration for this generator
    */
   public SimpleUrlGenerator(ProtocolConfiguration config) {
@@ -81,13 +81,13 @@ public class SimpleUrlGenerator implements UrlGenerator {
    */
   public SimpleUrlGenerator(String serverUrl, String serviceUrl,
       String proxyCallbackUrl, boolean gatewayFlag, boolean renewFlag) {
-    config = new ProtocolConfiguration(serverUrl, serviceUrl,
+    config = new ProtocolConfigurationImpl(serverUrl, serviceUrl,
         proxyCallbackUrl, gatewayFlag, renewFlag);
   }
 
   /**
    * Gets the configuration of this SimpleUrlGenerator.
-   * @return <code>ProtocolConfiguration</code> containing configuration
+   * @return <code>ProtocolConfigurationImpl</code> containing configuration
    *    properties for this instance.
    */
   public ProtocolConfiguration getConfiguration() {

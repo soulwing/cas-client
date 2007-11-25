@@ -1,5 +1,5 @@
 /*
- * ProtocolConfiguration.java
+ * ProtocolConfigurationImpl.java
  *
  * Created on Feb 11, 2007
  *
@@ -26,7 +26,7 @@ package org.soulwing.cas.client;
  *
  * @author Carl Harris
  */
-public class ProtocolConfiguration {
+public class ProtocolConfigurationImpl implements ProtocolConfiguration {
 
   private String serverUrl;
   private String serviceUrl;
@@ -34,23 +34,23 @@ public class ProtocolConfiguration {
   private boolean gatewayFlag;
   private boolean renewFlag;
 
-  public ProtocolConfiguration() {
+  public ProtocolConfigurationImpl() {
   }
 
-  public ProtocolConfiguration(String serverUrl) {
+  public ProtocolConfigurationImpl(String serverUrl) {
     this(serverUrl, null);
   }
   
-  public ProtocolConfiguration(String serverUrl, String serviceUrl) {
+  public ProtocolConfigurationImpl(String serverUrl, String serviceUrl) {
     this(serverUrl, serviceUrl, null);
   }
   
-  public ProtocolConfiguration(String serverUrl, String serviceUrl,
+  public ProtocolConfigurationImpl(String serverUrl, String serviceUrl,
       String proxyCallbackUrl) {
     this(serverUrl, serviceUrl, proxyCallbackUrl, false, false);
   }
 
-  public ProtocolConfiguration(String serverUrl, String serviceUrl,
+  public ProtocolConfigurationImpl(String serverUrl, String serviceUrl,
       String proxyCallbackUrl, boolean gatewayFlag, boolean renewFlag) {
     setServerUrl(serverUrl);
     setServiceUrl(serviceUrl);
@@ -59,10 +59,8 @@ public class ProtocolConfiguration {
     setRenewFlag(renewFlag);
   }
 
-  /**
-   * Gets the base URL for the CAS server.
-   * @return base URL for the CAS server used by this 
-   *    ProtocolConfiguration.
+  /* (non-Javadoc)
+   * @see org.soulwing.cas.client.ProtocolConfiguration#getServerUrl()
    */
   public String getServerUrl() {
     return serverUrl;
@@ -81,9 +79,8 @@ public class ProtocolConfiguration {
     this.serverUrl = serverUrl;
   }
   
-  /**
-   * Gets the configured URL for the application. 
-   * @return URL for the application
+  /* (non-Javadoc)
+   * @see org.soulwing.cas.client.ProtocolConfiguration#getServiceUrl()
    */
   public String getServiceUrl() {
     return serviceUrl;
@@ -100,9 +97,8 @@ public class ProtocolConfiguration {
     this.serviceUrl = serviceUrl;
   }
 
-  /**
-   * Gets the value of the URL that will be used for proxy callback.
-   * @return URL for proxy callback.
+  /* (non-Javadoc)
+   * @see org.soulwing.cas.client.ProtocolConfiguration#getProxyCallbackUrl()
    */
   public String getProxyCallbackUrl() {
     return proxyCallbackUrl;
@@ -122,9 +118,8 @@ public class ProtocolConfiguration {
     this.proxyCallbackUrl = proxyCallbackUrl;
   }
   
-  /**
-   * Gets the CAS gateway flag setting.
-   * @return gateway flag setting for this ProtocolConfiguration.
+  /* (non-Javadoc)
+   * @see org.soulwing.cas.client.ProtocolConfiguration#getGatewayFlag()
    */
   public boolean getGatewayFlag() {
     return gatewayFlag;
@@ -140,9 +135,8 @@ public class ProtocolConfiguration {
     this.gatewayFlag = gatewayFlag;
   }
   
-  /**
-   * Gets the CAS renew flag setting.
-   * @return renew flag setting for this ProtocolConfiguration
+  /* (non-Javadoc)
+   * @see org.soulwing.cas.client.ProtocolConfiguration#getRenewFlag()
    */
   public boolean getRenewFlag() {
     return renewFlag;

@@ -19,8 +19,9 @@ package org.soulwing.cas.filter;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.soulwing.cas.client.ProtocolConstants;
 import org.soulwing.cas.client.ProtocolConfiguration;
+import org.soulwing.cas.client.ProtocolConstants;
+import org.soulwing.cas.client.ProtocolConfigurationImpl;
 import org.soulwing.cas.client.SimpleUrlGenerator;
 import org.soulwing.cas.client.UrlGenerator;
 
@@ -46,14 +47,14 @@ class UrlGeneratorFactory {
   }
 
   /**
-   * An extension of ProtocolConfiguration that allows the 
+   * An extension of ProtocolConfigurationImpl that allows the 
    * value of the <code>serviceUrl</code> property to be derived from
    * an HttpServletRequest.
    *
    * @author Carl Harris
    */
   static class ContextProtocolConfiguration 
-      extends ProtocolConfiguration {
+      extends ProtocolConfigurationImpl {
     private final HttpServletRequest request;
     
     public ContextProtocolConfiguration(HttpServletRequest request,

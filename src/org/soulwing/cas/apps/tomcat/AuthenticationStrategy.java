@@ -20,6 +20,7 @@ package org.soulwing.cas.apps.tomcat;
 import javax.servlet.http.HttpServletRequest;
 
 import org.soulwing.cas.client.NoTicketException;
+import org.soulwing.cas.client.ProtocolConfiguration;
 import org.soulwing.cas.client.ServiceValidationResponse;
 
 
@@ -42,5 +43,7 @@ public interface AuthenticationStrategy {
    */
   ServiceValidationResponse authenticate(
       HttpServletRequest request) throws NoTicketException;
+  
+  void setProtocolConfiguration(ProtocolConfiguration config);
   
 }

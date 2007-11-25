@@ -20,15 +20,15 @@ package org.soulwing.cas.filter;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import org.soulwing.cas.client.ProtocolConfiguration;
+import org.soulwing.cas.client.ProtocolConfigurationImpl;
 import org.soulwing.cas.client.ProtocolConfigurationHolder;
 
 /**
  * A ServletContextListener that uses context init parameters to set the
- * properties on a ProtocolConfiguration bean and place it into the
+ * properties on a ProtocolConfigurationImpl bean and place it into the
  * ProtocolConfigurationHolder.  For applications that do not use a
  * dependency injection framework, this is the means of making the
- * ProtocolConfiguration bean available to all of the filters that need
+ * ProtocolConfigurationImpl bean available to all of the filters that need
  * it.
  *
  * @author Carl Harris
@@ -40,7 +40,7 @@ public class ProtocolConfigurationListener implements ServletContextListener {
 
   public void contextInitialized(ServletContextEvent sce) {
     Configurator configurator = new Configurator(sce.getServletContext());
-    ProtocolConfiguration config = new ProtocolConfiguration();
+    ProtocolConfigurationImpl config = new ProtocolConfigurationImpl();
     try {
       config.setServerUrl(
           configurator.getRequiredParameter(FilterConstants.SERVER_URL));

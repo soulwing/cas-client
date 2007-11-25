@@ -44,10 +44,14 @@ import org.soulwing.cas.client.ValidatorFactory;
  */
 public class ProxyValidationStrategy implements AuthenticationStrategy {
 
-  private final ProtocolConfiguration protocolConfiguration;
-  private final Log log = LogFactory.getLog(ProxyValidationStrategy.class); 
+  private Log log = LogFactory.getLog(ProxyValidationStrategy.class); 
+
+  private ProtocolConfiguration protocolConfiguration;
   private List trustedProxies = new ArrayList(0);
 
+  public ProxyValidationStrategy() {
+  }
+  
   public ProxyValidationStrategy(ProtocolConfiguration protocolConfiguration) {
     this.protocolConfiguration = protocolConfiguration;
   }
@@ -57,13 +61,21 @@ public class ProxyValidationStrategy implements AuthenticationStrategy {
     this(protocolConfiguration);
     setTrustedProxies(trustedProxies);
   }
-  
+
+  /**
+   * Sets the <code>protocolConfiguration</code> property.
+   */
+  public void setProtocolConfiguration(
+      ProtocolConfiguration protocolConfiguration) {
+    this.protocolConfiguration = protocolConfiguration;
+  }
+
   /**
    * Sets the list of proxies this ProxyValidationAuthenticator should
    * trust.
    * @param trustedProxies list of String proxy names
    */
-  public void setTrustedProxies(String trustedProxies) {
+  public final void setTrustedProxies(String trustedProxies) {
     if (trustedProxies != null) {
       this.trustedProxies = Arrays.asList(trustedProxies.split("\\s*,\\s*"));
     }
@@ -81,7 +93,9 @@ public class ProxyValidationStrategy implements AuthenticationStrategy {
   public ServiceValidationResponse authenticate(
       final HttpServletRequest request) 
       throws NoTicketException {
-    
+    if (protocolConfiguration == null) {
+      throw new IllegalStateException("must configure protocolConfiguration");
+    }
     ProxyValidationResponse casResponse = 
         ValidatorFactory.getValidator(
                 UrlGeneratorFactory.getUrlGenerator(request, 

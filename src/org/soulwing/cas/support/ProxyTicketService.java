@@ -43,7 +43,7 @@ public class ProxyTicketService {
 
   /**
    * Gets the CAS protocol configuration for this ProxyTicketService.
-   * @return <code>ProtocolConfiguration</code> instance configured for
+   * @return <code>ProtocolConfigurationImpl</code> instance configured for
    *    this ProxyTicketService.
    */
   public ProtocolConfiguration getConfiguration() {
@@ -52,7 +52,7 @@ public class ProxyTicketService {
   
   /**
    * Sets the CAS protocol configuration to use with this ProxyTicketService.
-   * @param configuration <code>ProtocolConfiguration</code> instance
+   * @param configuration <code>ProtocolConfigurationImpl</code> instance
    *    configured for this ProxyTicketService.
    */
   public void setConfiguration(ProtocolConfiguration configuration) {

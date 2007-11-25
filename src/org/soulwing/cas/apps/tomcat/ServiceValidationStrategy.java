@@ -34,15 +34,26 @@ import org.soulwing.cas.client.ValidatorFactory;
  */
 public class ServiceValidationStrategy implements AuthenticationStrategy {
   
-  private final ProtocolConfiguration protocolConfiguration;
+  private ProtocolConfiguration protocolConfiguration;
+  
+  public ServiceValidationStrategy() {
+  }
   
   public ServiceValidationStrategy(ProtocolConfiguration protocolConfiguration) {
     this.protocolConfiguration = protocolConfiguration;
   }
-  
+
+  public void setProtocolConfiguration(
+      ProtocolConfiguration protocolConfiguration) {
+    this.protocolConfiguration = protocolConfiguration;
+  }
+
   public ServiceValidationResponse authenticate(
       final HttpServletRequest request) 
       throws NoTicketException {
+    if (protocolConfiguration == null) {
+      throw new IllegalStateException("must configure protocolConfiguration");
+    }
     return ValidatorFactory.getValidator(
             UrlGeneratorFactory.getUrlGenerator(request, protocolConfiguration))
         .serviceValidate(new ValidationRequest() {

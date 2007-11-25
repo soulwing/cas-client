@@ -15,7 +15,7 @@ package org.soulwing.cas.filter;
 
 import javax.servlet.ServletException;
 
-import org.soulwing.cas.client.ProtocolConfiguration;
+import org.soulwing.cas.client.ProtocolConfigurationImpl;
 import org.soulwing.cas.client.ProtocolConfigurationHolder;
 import org.soulwing.cas.client.SimpleUrlGenerator;
 import org.soulwing.servlet.MockFilterChain;
@@ -124,7 +124,7 @@ public class LogoutFilterTest extends TestCase {
   }
 
   private void doGlobalLogout() throws Exception {
-    ProtocolConfiguration config = new ProtocolConfiguration();
+    ProtocolConfigurationImpl config = new ProtocolConfigurationImpl();
     ProtocolConfigurationHolder.setConfiguration(config);
     config.setServerUrl(SERVER_URL);
     setRequiredConfig();
@@ -137,7 +137,7 @@ public class LogoutFilterTest extends TestCase {
   }
 
   public void testGlobalLogoutBypass() throws Exception {
-    ProtocolConfiguration config = new ProtocolConfiguration();
+    ProtocolConfigurationImpl config = new ProtocolConfigurationImpl();
     ProtocolConfigurationHolder.setConfiguration(config);
     config.setServerUrl(SERVER_URL);
     setRequiredConfig();

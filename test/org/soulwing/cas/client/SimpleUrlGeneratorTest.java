@@ -30,11 +30,11 @@ public class SimpleUrlGeneratorTest extends TestCase {
   private static final String PGT_URL = "https://localhost/pgtCallback";
   private static final String TICKET = "validation_ticket";
 
-  private ProtocolConfiguration config;
+  private ProtocolConfigurationImpl config;
   private SimpleUrlGenerator generator;
   
   protected void setUp() throws Exception {
-    config = new ProtocolConfiguration();
+    config = new ProtocolConfigurationImpl();
     config.setServerUrl(SERVER_URL);
     config.setServiceUrl(SERVICE_URL);
     generator = new SimpleUrlGenerator(config);

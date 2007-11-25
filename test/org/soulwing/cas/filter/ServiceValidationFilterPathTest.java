@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import junit.framework.TestCase;
 
-import org.soulwing.cas.client.ProtocolConfiguration;
+import org.soulwing.cas.client.ProtocolConfigurationImpl;
 import org.soulwing.cas.client.ProtocolConfigurationHolder;
 import org.soulwing.cas.client.ProtocolConstants;
 import org.soulwing.cas.client.StringProtocolSource;
@@ -49,10 +49,10 @@ public class ServiceValidationFilterPathTest extends TestCase {
   private MockHttpServletRequest request;
   private MockHttpServletResponse response;
   private StringProtocolSource source;
-  private ProtocolConfiguration protocolConfig;
+  private ProtocolConfigurationImpl protocolConfig;
   
   protected void setUp() throws Exception {
-    protocolConfig = new ProtocolConfiguration();
+    protocolConfig = new ProtocolConfigurationImpl();
     protocolConfig.setServerUrl(SERVER_URL);
     protocolConfig.setServiceUrl(SERVICE_URL);
     ProtocolConfigurationHolder.setConfiguration(protocolConfig);

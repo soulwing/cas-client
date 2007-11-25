@@ -14,6 +14,7 @@ import javax.naming.Reference;
 import javax.naming.spi.ObjectFactory;
 
 import org.soulwing.cas.client.ProtocolConfiguration;
+import org.soulwing.cas.client.ProtocolConfigurationImpl;
 
 /**
  * A JNDI resource factory for CAS ProtocolConfiguration resources.
@@ -39,7 +40,7 @@ public class CasProtocolConfigurationFactory implements ObjectFactory {
           + ProtocolConfiguration.class.getCanonicalName() + " type");
     }
     
-    ProtocolConfiguration protocolConfiguration = new ProtocolConfiguration();
+    ProtocolConfigurationImpl protocolConfiguration = new ProtocolConfigurationImpl();
     RefAddr ra = null;
     
     ra = ref.get("serverUrl");
