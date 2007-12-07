@@ -32,17 +32,36 @@ import org.soulwing.cas.client.ValidatorFactory;
  *
  * @author Carl Harris
  */
-class ServiceValidationAuthenticator implements FilterAuthenticator {
+public class ServiceValidationAuthenticator implements FilterAuthenticator {
   
-  private final ProtocolConfiguration protocolConfiguration;
+  private ProtocolConfiguration protocolConfiguration;
   
-  ServiceValidationAuthenticator(ProtocolConfiguration protocolConfiguration) {
-    this.protocolConfiguration = protocolConfiguration;
+  public ServiceValidationAuthenticator() {
   }
   
+  ServiceValidationAuthenticator(ProtocolConfiguration protocolConfiguration) {
+    setProtocolConfiguration(protocolConfiguration);
+  }
+  
+  /*
+   * (non-Javadoc)
+   * @see org.soulwing.cas.filter.FilterAuthenticator#setProtocolConfiguration(org.soulwing.cas.client.ProtocolConfiguration)
+   */
+  public final void setProtocolConfiguration(
+      ProtocolConfiguration protocolConfiguration) {
+    this.protocolConfiguration = protocolConfiguration;
+  }
+
+  /*
+   * (non-Javadoc)
+   * @see org.soulwing.cas.filter.FilterAuthenticator#authenticate(javax.servlet.http.HttpServletRequest)
+   */
   public ServiceValidationResponse authenticate(
       final HttpServletRequest request) 
       throws NoTicketException {
+    if (protocolConfiguration == null) {
+      throw new IllegalStateException("must configure protocolConfiguration");
+    }
     return ValidatorFactory.getValidator(
             UrlGeneratorFactory.getUrlGenerator(request, protocolConfiguration))
         .serviceValidate(new ValidationRequest() {

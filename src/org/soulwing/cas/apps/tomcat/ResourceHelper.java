@@ -18,6 +18,7 @@
 package org.soulwing.cas.apps.tomcat;
 
 import org.soulwing.cas.client.ProtocolConfiguration;
+import org.soulwing.cas.filter.FilterAuthenticator;
 
 /**
  * Default implementation of <code>ResourceHelper</code>.
@@ -26,23 +27,23 @@ import org.soulwing.cas.client.ProtocolConfiguration;
  */
 public class ResourceHelper {
 
-  private AuthenticationStrategy authenticationStrategy;
+  private FilterAuthenticator authenticator;
   private ProtocolConfiguration protocolConfiguration;
   private ProxyGrantingTicketRegistry ticketRegistry;
 
   /**
-   * Gets the <code>authenticationStrategy</code> property.
+   * Gets the <code>authenticator</code> property.
    */
-  public AuthenticationStrategy getAuthenticationStrategy() {
-    return authenticationStrategy;
+  public FilterAuthenticator getAuthenticator() {
+    return authenticator;
   }
 
   /**
-   * Sets the <code>authenticationStrategy</code> property.
+   * Sets the <code>authenticator</code> property.
    */
-  public void setAuthenticationStrategy(
-      AuthenticationStrategy authenticationStrategy) {
-    this.authenticationStrategy = authenticationStrategy;
+  public void setAuthenticator(
+      FilterAuthenticator authenticationStrategy) {
+    this.authenticator = authenticationStrategy;
   }
 
   /**

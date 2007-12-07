@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.security.Principal;
 
 import org.apache.catalina.LifecycleException;
-import org.apache.catalina.Realm;
 import org.apache.catalina.Session;
 import org.apache.catalina.authenticator.AuthenticatorBase;
 import org.apache.catalina.connector.Request;
@@ -42,7 +41,7 @@ public class CasAuthenticator extends AuthenticatorBase {
 
   private static final Log log = LogFactory.getLog(CasAuthenticator.class);
   
-  private Realm realm;
+  private RealmWrapper realm;
  
   /* (non-Javadoc)
    * @see org.apache.catalina.authenticator.AuthenticatorBase#authenticate(org.apache.catalina.connector.Request, org.apache.catalina.connector.Response, org.apache.catalina.deploy.LoginConfig)
@@ -62,7 +61,7 @@ public class CasAuthenticator extends AuthenticatorBase {
           validationResponse.getUserName());
       if (principal == null) {
         log.warn("unauthorized CAS user " + validationResponse.getUserName());
-        return false;
+        response.sendError(Response.SC_UNAUTHORIZED);
       }
       request.setUserPrincipal(principal);
       log.debug("principal " + request.getUserPrincipal().getName()
@@ -73,10 +72,9 @@ public class CasAuthenticator extends AuthenticatorBase {
       try {
         log.debug("validating request for " + request.getRequestURI());
         ServiceValidationResponse validationResponse =
-            helper.getAuthenticationStrategy().authenticate(request);
+            helper.getAuthenticator().authenticate(request);
         if (validationResponse.isSuccessful()) {
-          Principal principal = realm.authenticate(
-              validationResponse.getUserName(),
+          Principal principal = realm.getPrincipal(
               validationResponse.getUserName());
           if (principal == null) {
             log.warn("unauthorized CAS user " + validationResponse.getUserName());
@@ -120,7 +118,14 @@ public class CasAuthenticator extends AuthenticatorBase {
    */
   public void start() throws LifecycleException {
     super.start();
-    realm = getContainer().getRealm();
+    try {
+      realm = new RealmWrapper(getContainer().getRealm());
+    }
+    catch (IllegalArgumentException ex){
+      log.error("CAS authenticator requires a Realm that extends from "
+         + "Catalina's RealmBase");
+      throw new LifecycleException(ex);
+    }
   }
   
 }

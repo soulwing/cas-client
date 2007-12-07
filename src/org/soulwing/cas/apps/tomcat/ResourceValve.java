@@ -33,6 +33,8 @@ import org.apache.catalina.core.StandardServer;
 import org.apache.catalina.util.LifecycleSupport;
 import org.apache.catalina.valves.ValveBase;
 import org.soulwing.cas.client.ProtocolConfiguration;
+import org.soulwing.cas.filter.FilterAuthenticator;
+import org.soulwing.cas.filter.ServiceValidationAuthenticator;
 
 /**
  * A <code>Valve</code> that attaches some CAS resource references to the
@@ -49,8 +51,8 @@ public class ResourceValve extends ValveBase implements Lifecycle {
 
   private String configResourceName = "CasProtocolConfiguration";
 
-  private String strategyClassName = ServiceValidationStrategy.class
-      .getCanonicalName();
+  private String authenticatorClassName = 
+      ServiceValidationAuthenticator.class.getCanonicalName();
 
   private ResourceHelper helper = new ResourceHelper();
 
@@ -62,12 +64,12 @@ public class ResourceValve extends ValveBase implements Lifecycle {
     this.configResourceName = configResourceName;
   }
 
-  public String getStrategy() {
-    return strategyClassName;
+  public String getAuthenticatorClass() {
+    return authenticatorClassName;
   }
 
-  public void setStrategy(String strategyClassName) {
-    this.strategyClassName = strategyClassName;
+  public void setAuthenticatorClass(String authenticatorClassName) {
+    this.authenticatorClassName = authenticatorClassName;
   }
 
   /*
@@ -97,9 +99,9 @@ public class ResourceValve extends ValveBase implements Lifecycle {
     try {
       helper.setProtocolConfiguration((ProtocolConfiguration)
           getResource(getConfig()));
-      AuthenticationStrategy strategy = getAuthenticationStrategy();
-      strategy.setProtocolConfiguration(helper.getProtocolConfiguration());
-      helper.setAuthenticationStrategy(strategy);
+      FilterAuthenticator authenticator = newAuthenticator();
+      authenticator.setProtocolConfiguration(helper.getProtocolConfiguration());
+      helper.setAuthenticator(authenticator);
       helper.setTicketRegistry(new ProxyGrantingTicketRegistryImpl());
     }
     catch (Exception ex) {
@@ -127,11 +129,11 @@ public class ResourceValve extends ValveBase implements Lifecycle {
     }
   }
 
-  private AuthenticationStrategy getAuthenticationStrategy() throws Exception {
-    Class strategyClass = Class.forName(getStrategy());
-    AuthenticationStrategy authenticationStrategy = (AuthenticationStrategy)
-        strategyClass.newInstance();
-    return authenticationStrategy;
+  private FilterAuthenticator newAuthenticator() throws Exception {
+    Class authenticatorClass = Class.forName(getAuthenticatorClass());
+    FilterAuthenticator authenticator = (FilterAuthenticator)
+        authenticatorClass.newInstance();
+    return authenticator;
   }
   
 }

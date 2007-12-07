@@ -42,24 +42,36 @@ import org.soulwing.cas.client.ValidatorFactory;
  *
  * @author Carl Harris
  */
-class ProxyValidationAuthenticator implements FilterAuthenticator {
+public class ProxyValidationAuthenticator implements FilterAuthenticator {
 
-  private final ProtocolConfiguration protocolConfiguration;
   private final Log log = LogFactory.getLog(ProxyValidationAuthenticator.class); 
+  private ProtocolConfiguration protocolConfiguration;
   private List trustedProxies = new ArrayList(0);
 
+  public ProxyValidationAuthenticator() {
+  }
+  
   ProxyValidationAuthenticator(ProtocolConfiguration protocolConfiguration,
       String trustedProxies) {
-    this.protocolConfiguration = protocolConfiguration;
+    setProtocolConfiguration(protocolConfiguration);
     setTrustedProxies(trustedProxies);
   }
   
+  /*
+   * (non-Javadoc)
+   * @see org.soulwing.cas.filter.FilterAuthenticator#setProtocolConfiguration(org.soulwing.cas.client.ProtocolConfiguration)
+   */
+  public final void setProtocolConfiguration(
+      ProtocolConfiguration protocolConfiguration) {
+    this.protocolConfiguration = protocolConfiguration;
+  }
+
   /**
    * Sets the list of proxies this ProxyValidationAuthenticator should
    * trust.
    * @param trustedProxies list of String proxy names
    */
-  public void setTrustedProxies(String trustedProxies) {
+  public final void setTrustedProxies(String trustedProxies) {
     if (trustedProxies != null) {
       this.trustedProxies = Arrays.asList(trustedProxies.split("\\s*,\\s*"));
     }
@@ -71,13 +83,16 @@ class ProxyValidationAuthenticator implements FilterAuthenticator {
     }
   }
   
-  /**
-   * @see FilterAuthenticator#authenticate(HttpServletRequest)
+  /*
+   * (non-Javadoc)
+   * @see org.soulwing.cas.filter.FilterAuthenticator#authenticate(javax.servlet.http.HttpServletRequest)
    */
   public ServiceValidationResponse authenticate(
       final HttpServletRequest request) 
       throws NoTicketException {
-    
+    if (protocolConfiguration == null) {
+      throw new IllegalStateException("must configure protocolConfiguration");
+    }
     ProxyValidationResponse casResponse = 
         ValidatorFactory.getValidator(
                 UrlGeneratorFactory.getUrlGenerator(request, 

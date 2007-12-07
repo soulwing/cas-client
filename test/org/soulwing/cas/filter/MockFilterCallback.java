@@ -20,6 +20,7 @@ package org.soulwing.cas.filter;
 import javax.servlet.http.HttpServletRequest;
 
 import org.soulwing.cas.client.NoTicketException;
+import org.soulwing.cas.client.ProtocolConfiguration;
 import org.soulwing.cas.client.ServiceValidationResponse;
 import org.soulwing.cas.client.Validator;
 
@@ -55,6 +56,10 @@ public class MockFilterCallback implements FilterAuthenticator {
     setFilterFlag(false);
   }
   
+  public void setProtocolConfiguration(
+      ProtocolConfiguration protocolConfiguration) {
+  }
+
   public ServiceValidationResponse authenticate(HttpServletRequest request) 
       throws NoTicketException {
     setFilterFlag(true);

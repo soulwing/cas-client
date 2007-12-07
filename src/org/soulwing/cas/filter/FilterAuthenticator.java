@@ -20,6 +20,7 @@ package org.soulwing.cas.filter;
 import javax.servlet.http.HttpServletRequest;
 
 import org.soulwing.cas.client.NoTicketException;
+import org.soulwing.cas.client.ProtocolConfiguration;
 import org.soulwing.cas.client.ServiceValidationResponse;
 
 
@@ -42,5 +43,12 @@ public interface FilterAuthenticator {
    */
   ServiceValidationResponse authenticate(
       HttpServletRequest request) throws NoTicketException;
-  
+ 
+  /**
+   * Sets the CAS protocol configuration to use with this 
+   * <code>FilterAuthenticator</code>.
+   * @param protocolConfiguration the configuration to set
+   */
+  void setProtocolConfiguration(ProtocolConfiguration protocolConfiguration);
+
 }

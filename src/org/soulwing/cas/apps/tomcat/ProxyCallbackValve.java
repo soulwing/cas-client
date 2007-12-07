@@ -63,20 +63,20 @@ public class ProxyCallbackValve extends ValveBase implements Lifecycle {
     ProxyGrantingTicketRegistry ticketRegistry =
         helper.getTicketRegistry();
     if (request.getRequestURI().equals(proxyCallbackUri)) {
-      log.debug("request URI " + request.getRequestURI() + " matches");
+      log.trace("request URI " + request.getRequestURI() + " matches");
       String pgt = request.getParameter(
           ProtocolConstants.PROXY_TICKET_PARAM);
       String pgtIou = request.getParameter(
           ProtocolConstants.PROXY_TICKET_IOU_PARAM);
       if (pgt == null || pgtIou == null) {
-        log.debug("parameters incomplete: PGT=" + pgt + " IOU=" + pgtIou);
+        log.trace("parameters incomplete: PGT=" + pgt + " IOU=" + pgtIou);
         return;
       }
       log.debug("callback for IOU " + pgtIou + " with PGT " + pgt);
       ticketRegistry.registerTicket(pgtIou, pgt);
     }
     else {
-      log.debug("request URI " + request.getRequestURI() + " does not match");
+      log.trace("request URI " + request.getRequestURI() + " does not match");
       getNext().invoke(request, response);
     }
   }
