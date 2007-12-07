@@ -50,66 +50,88 @@ public class CasAuthenticator extends AuthenticatorBase {
       LoginConfig loginConfig)
       throws IOException {
     
-    ResourceHelper helper = (ResourceHelper) 
-        request.getNote(ResourceValve.RESOURCE_HELPER_ATTR);
-    if (isSessionAuthenticated(request)) {
-      ServiceValidationResponse validationResponse = (ServiceValidationResponse)
-          request.getSessionInternal()
-              .getNote(FilterConstants.VALIDATION_ATTRIBUTE);
-      Principal principal = realm.authenticate(
-          validationResponse.getUserName(),
-          validationResponse.getUserName());
-      if (principal == null) {
-        log.warn("unauthorized CAS user " + validationResponse.getUserName());
-        response.sendError(Response.SC_UNAUTHORIZED);
-      }
-      request.setUserPrincipal(principal);
-      log.debug("principal " + request.getUserPrincipal().getName()
-          + " authenticated via session state");
-      return true;
+    ServiceValidationResponse validationResponse = 
+        getSessionValidationResponse(request);
+    if (validationResponse != null) {
+      return isKnownUser(request, response, validationResponse);
     }
     else {
-      try {
-        log.debug("validating request for " + request.getRequestURI());
-        ServiceValidationResponse validationResponse =
-            helper.getAuthenticator().authenticate(request);
-        if (validationResponse.isSuccessful()) {
-          Principal principal = realm.getPrincipal(
-              validationResponse.getUserName());
-          if (principal == null) {
-            log.warn("unauthorized CAS user " + validationResponse.getUserName());
-            return false;
-          }
-          request.setUserPrincipal(principal);
-          request.getSessionInternal(true).setNote(
-              FilterConstants.VALIDATION_ATTRIBUTE, validationResponse);
-          log.debug("principal " + request.getUserPrincipal().getName()
-              + " authenticated via CAS");
-          ProxyGrantingTicketRegistry ticketRegistry =
-              helper.getTicketRegistry();
-          if (ticketRegistry != null) {
-            ticketRegistry.registerSession(
-                validationResponse.getProxyGrantingTicketIou(),
-                request.getSession());
-          }
-          return true;
-        }
-        else {
-          return false;
-        }
-      }
-      catch (NoTicketException ex) {
-        response.sendRedirect(UrlGeneratorFactory.getUrlGenerator(request, 
-            helper.getProtocolConfiguration()).getLoginUrl());
-        return false;
-      }
+      return isAuthentic(request, response);
     }
   }
 
-  private boolean isSessionAuthenticated(Request request) {
+  private boolean isAuthentic(Request request, Response response)
+      throws IOException {
+    ResourceHelper helper = getResourceHelper(request);
+    try {
+      ServiceValidationResponse validationResponse = 
+          helper.getAuthenticator().authenticate(request);
+      if (validationResponse.isSuccessful()) {
+        boolean knownUser = isKnownUser(request, response, validationResponse);
+        if (knownUser) {
+          addSessionToTicketRegistry(request, validationResponse, helper);
+        }
+        return knownUser;
+      }
+      else {
+        return false;
+      }
+    }
+    catch (NoTicketException ex) {
+      response.sendRedirect(UrlGeneratorFactory.getUrlGenerator(request, 
+          helper.getProtocolConfiguration()).getLoginUrl());
+      return false;
+    }
+  }
+
+  private boolean isKnownUser(Request request, Response response,
+      ServiceValidationResponse validationResponse) throws IOException {
+    Principal principal = realm.getPrincipal(
+        validationResponse.getUserName());
+    if (principal == null) {
+      log.warn("unknown CAS user " + validationResponse.getUserName()
+          + " for " + request.getRequestURI());
+      response.sendError(Response.SC_UNAUTHORIZED);
+      return false;
+    }
+    request.setUserPrincipal(principal);
+    request.getSessionInternal(true).setNote(
+        FilterConstants.VALIDATION_ATTRIBUTE, validationResponse);
+    return true;
+  }
+
+  private ServiceValidationResponse getSessionValidationResponse(
+      Request request) {
     Session session = request.getSessionInternal(false);
-    return session != null 
-      && session.getNote(FilterConstants.VALIDATION_ATTRIBUTE) != null;
+    if (session == null) return null;
+    ServiceValidationResponse validationResponse = (ServiceValidationResponse)
+        session.getNote(FilterConstants.VALIDATION_ATTRIBUTE);
+    if (validationResponse == null) return null;
+    log.debug("principal " + validationResponse.getUserName()
+        + " authenticated via session state");
+    return validationResponse;
+  }
+
+  private ResourceHelper getResourceHelper(Request request) {
+    ResourceHelper helper = (ResourceHelper) 
+        request.getNote(ResourceValve.RESOURCE_HELPER_ATTR);
+    if (helper == null) {
+      throw new IllegalStateException(
+          "No ResourceHelper in private session state -- "
+           + " is a ResourceValve configured in this container?");
+    }
+    return helper;
+  }
+
+  private void addSessionToTicketRegistry(Request request,
+      ServiceValidationResponse validationResponse, ResourceHelper helper) {
+    ProxyGrantingTicketRegistry ticketRegistry =
+        helper.getTicketRegistry();
+    if (ticketRegistry != null) {
+      ticketRegistry.registerSession(
+          validationResponse.getProxyGrantingTicketIou(),
+          request.getSession());
+    }
   }
 
   /*
