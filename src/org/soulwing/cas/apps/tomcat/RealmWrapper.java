@@ -1,5 +1,5 @@
 /*
- * ProxyGrantingTicketRegistryImpl.java
+ * RealmWrapper.java
  *
  * Created on Dec 6, 2007
  *  
