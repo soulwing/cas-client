@@ -112,7 +112,18 @@ public class MockHttpServletRequest implements HttpServletRequest {
       setScheme(u.getProtocol());
       setServerName(u.getHost());
       setServerPort(u.getPort());
-      setServletPath(u.getPath());
+      if (contextPath == null || contextPath.equals("/")) {
+        setServletPath(u.getPath());
+      }
+      else {
+        String path = u.getPath();
+        if (path.startsWith(contextPath)) {
+          setServletPath(path.substring(contextPath.length()));
+        }
+        else {
+          setServletPath(path);
+        }
+      }
       setQueryString(u.getQuery());
     }
     catch (MalformedURLException ex) {

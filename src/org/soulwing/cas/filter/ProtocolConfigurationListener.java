@@ -45,7 +45,7 @@ public class ProtocolConfigurationListener implements ServletContextListener {
       config.setServerUrl(
           configurator.getRequiredParameter(FilterConstants.SERVER_URL));
       config.setServiceUrl(
-          configurator.getParameter(FilterConstants.SERVICE_URL));
+          configurator.getRequiredParameter(FilterConstants.SERVICE_URL));
       config.setGatewayFlag(
           Boolean.valueOf(configurator.getParameter(FilterConstants.GATEWAY, 
               Boolean.toString(GATEWAY_DEFAULT))).booleanValue());

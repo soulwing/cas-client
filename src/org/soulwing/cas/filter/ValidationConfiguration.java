@@ -133,6 +133,10 @@ public class ValidationConfiguration {
       throw new IllegalArgumentException(FilterConstants.SERVER_URL
           + " property is required");
     }
+    if (protocolConfiguration.getServiceUrl() == null) {
+      throw new IllegalArgumentException(FilterConstants.SERVICE_URL
+          + " property is required");
+    }
     this.protocolConfiguration = protocolConfiguration;
   }
 
