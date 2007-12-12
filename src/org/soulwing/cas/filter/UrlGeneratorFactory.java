@@ -58,6 +58,10 @@ class UrlGeneratorFactory {
     
     public ContextProtocolConfiguration(HttpServletRequest request,
         ProtocolConfiguration config) {
+      if (config.getServerUrl() == null || config.getServiceUrl() == null) {
+        throw new IllegalArgumentException(
+            "configuation must specify serverUrl and serviceUrl");
+      }
       this.request = request;
       setServerUrl(config.getServerUrl());
       setServiceUrl(config.getServiceUrl());
@@ -67,15 +71,10 @@ class UrlGeneratorFactory {
     }
 
     public String getServiceUrl() {
-      StringBuffer sb = new StringBuffer();
-      if (super.getServiceUrl() == null) { 
-        sb = request.getRequestURL();
-      }
-      else {
-        sb = new StringBuffer(100);
-        sb.append(super.getServiceUrl());
-        sb.append(request.getServletPath());
-      }
+      StringBuffer sb = new StringBuffer(100);
+      sb.append(super.getServiceUrl());
+      sb.append(request.getContextPath());
+      sb.append(request.getServletPath());
       if (request.getQueryString() != null 
           && request.getQueryString().length() > 0) {
         sb.append('?');

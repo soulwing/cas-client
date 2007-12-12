@@ -29,37 +29,39 @@ import junit.framework.TestCase;
 public class ContextProtocolConfigurationTest extends TestCase {
 
   private static final String SERVER_URL = "https://localhost/cas";
+  private static final String CONTEXT_PATH = "/appContext";
   private static final String SERVLET_PATH = "/app.action";
   private static final String TICKET = "testTicket";
   private static final String SERVICE_URL = "https://service";
   private static final String REQUEST_URL = "https://localhost"
-      + SERVLET_PATH;
+      + CONTEXT_PATH + SERVLET_PATH;
   
   private MockHttpServletRequest request;
   private ProtocolConfiguration config;
   private SimpleUrlGenerator generator;
   
   protected void setUp() throws Exception {
-    request = new MockHttpServletRequest();
-    request.setRequestURL(REQUEST_URL);
-    config = new UrlGeneratorFactory.ContextProtocolConfiguration(request, 
-        new ProtocolConfiguration()); 
-      new ProtocolConfiguration();
+    request = new MockHttpServletRequest(CONTEXT_PATH, REQUEST_URL);
+    config = new ProtocolConfiguration();
     config.setServerUrl(SERVER_URL);
-    generator = new SimpleUrlGenerator(config);
-  }
-  
-  public void testUseRequestUrl() throws Exception {
-    URL url = getServiceUrl(new URL(generator.getServiceValidateUrl(TICKET))
-        .getQuery());
-    assertEquals(REQUEST_URL, url.toString());
+    config.setServiceUrl(SERVICE_URL);
+    generator = new SimpleUrlGenerator(
+        new UrlGeneratorFactory.ContextProtocolConfiguration(request, config));
   }
 
-  public void testUseServiceUrl() throws Exception {
-    config.setServiceUrl(SERVICE_URL);
+  /*
+   * Deriving the service URL from the request URL is no longer supported
+   */
+//  public void testUseRequestUrl() throws Exception {
+//    URL url = getServiceUrl(new URL(generator.getServiceValidateUrl(TICKET))
+//        .getQuery());
+//    assertEquals(REQUEST_URL, url.toString());
+//  }
+
+  public void testServiceUrl() throws Exception {
     URL url = getServiceUrl(new URL(generator.getServiceValidateUrl(TICKET))
         .getQuery());
-    assertEquals(SERVICE_URL + SERVLET_PATH, url.toString());
+    assertEquals(SERVICE_URL + CONTEXT_PATH + SERVLET_PATH, url.toString());
   }
 
   public void testStripTicketParam() throws Exception {

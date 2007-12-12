@@ -35,56 +35,13 @@ public class SimpleUrlGenerator implements UrlGenerator {
    *    the configuration for this generator
    */
   public SimpleUrlGenerator(ProtocolConfiguration config) {
+    if (config.getServerUrl() == null || config.getServiceUrl() == null) {
+      throw new IllegalArgumentException(
+        "configuration must specify serverUrl and serviceUrl");
+    }
     this.config = config;
   }
   
-  /**
-   * @param serverUrl base URL for the CAS server, to which servlet paths
-   *    corresponding to the CAS operations (e.g. <code>/serviceValidate
-   *    </code>) will be appended
-   * @param serviceUrl full URL for the application, which will be used as
-   *    the value of the <code>service</code> query parameter in CAS
-   *    request URLs.
-   */
-  public SimpleUrlGenerator(String serverUrl, String serviceUrl) {
-    this(serverUrl, serviceUrl, null, false, false);
-  }
-  
-  /**
-   * @param serverUrl base URL for the CAS server, to which servlet paths
-   *    corresponding to the CAS operations (e.g. <code>/serviceValidate
-   *    </code>) will be appended
-   * @param serviceUrl full URL for the application, which will be used as
-   *    the value of the <code>service</code> query parameter in CAS
-   *    request URLs.
-   * @param proxyCallbackUrl URL that will be used as the value of the
-   *    <code>pgtUrl</code> query parameter in CAS request URLs.
-   */
-  public SimpleUrlGenerator(String serverUrl, String serviceUrl,
-      String proxyCallbackUrl) {
-    this(serverUrl, serviceUrl, proxyCallbackUrl, false, false);
-  }
-  
-  /**
-   * @param serverUrl base URL for the CAS server, to which servlet paths
-   *    corresponding to the CAS operations (e.g. <code>/serviceValidate
-   *    </code>) will be appended
-   * @param serviceUrl full URL for the application, which will be used as
-   *    the value of the <code>service</code> query parameter in CAS
-   *    request URLs.
-   * @param proxyCallbackUrl URL that will be used as the value of the
-   *    <code>pgtUrl</code> query parameter in CAS request URLs.
-   * @param gatewayFlag if <code>true</code>, <code>gateway=true</code>
-   *    will be included as a query parameter in CAS request URLs.
-   * @param renewFlag if <code>true</code>, <code>renew=true</code>
-   *    will be included as a query parameter in CAS request URLs.
-   */
-  public SimpleUrlGenerator(String serverUrl, String serviceUrl,
-      String proxyCallbackUrl, boolean gatewayFlag, boolean renewFlag) {
-    config = new ProtocolConfiguration(serverUrl, serviceUrl,
-        proxyCallbackUrl, gatewayFlag, renewFlag);
-  }
-
   /**
    * Gets the configuration of this SimpleUrlGenerator.
    * @return <code>ProtocolConfiguration</code> containing configuration

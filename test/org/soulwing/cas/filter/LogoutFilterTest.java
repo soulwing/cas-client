@@ -30,8 +30,9 @@ public class LogoutFilterTest extends TestCase {
   private static final String REDIRECT_URL = "http://localhost/afterLogout";
   private static final String BYPASS_REDIRECT_URL = "/afterLogoutBypassed";
   private static final String SERVER_URL = "http://localhost/cas";
+  private static final String SERVICE_URL = "https://localhost";
   private static final String LOGOUT_PATH = "/logout.action";
-  private static final String LOGOUT_URL = "https://localhost" + LOGOUT_PATH;
+  private static final String LOGOUT_URL = SERVICE_URL + LOGOUT_PATH;
   private static final String OTHER_URL = "https://localhost/some/other/path";
   
   private MockFilterConfig filterConfig;
@@ -127,6 +128,7 @@ public class LogoutFilterTest extends TestCase {
     ProtocolConfiguration config = new ProtocolConfiguration();
     ProtocolConfigurationHolder.setConfiguration(config);
     config.setServerUrl(SERVER_URL);
+    config.setServiceUrl(SERVICE_URL);
     setRequiredConfig();
     filter.init(filterConfig);
     request.setRequestURL(LOGOUT_URL);

@@ -194,7 +194,7 @@ public class Configurator {
   /**
    * A ParameterProvider that delegates to a FilterConfig.
    */
-  class FilterConfigParameterProvider implements ParameterProvider {
+  static class FilterConfigParameterProvider implements ParameterProvider {
   
     private final FilterConfig config;
     
@@ -211,7 +211,7 @@ public class Configurator {
   /**
    * A ParameterProvider that delegates to a ServletContext.
    */
-  class ServletContextParameterProvider implements ParameterProvider {
+  static class ServletContextParameterProvider implements ParameterProvider {
     
     private final ServletContext context;
     
