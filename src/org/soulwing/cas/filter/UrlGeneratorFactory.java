@@ -64,6 +64,14 @@ class UrlGeneratorFactory {
       }
       this.request = request;
       setServerUrl(config.getServerUrl());
+      String serviceUrl = config.getServiceUrl();
+      // SCC-19
+      if (serviceUrl.endsWith("/")) {
+        setServiceUrl(serviceUrl.substring(0, serviceUrl.length() - 1));
+      }
+      else {
+        setServiceUrl(serviceUrl);
+      }
       setServiceUrl(config.getServiceUrl());
       setProxyCallbackUrl(config.getProxyCallbackUrl());
       setGatewayFlag(config.getGatewayFlag());
@@ -73,8 +81,8 @@ class UrlGeneratorFactory {
     public String getServiceUrl() {
       StringBuffer sb = new StringBuffer(100);
       sb.append(super.getServiceUrl());
-      sb.append(request.getContextPath());
-      sb.append(request.getServletPath());
+      // SCC-20
+      sb.append(request.getRequestURI());
       if (request.getQueryString() != null 
           && request.getQueryString().length() > 0) {
         sb.append('?');
