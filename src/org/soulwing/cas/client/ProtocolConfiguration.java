@@ -78,7 +78,7 @@ public class ProtocolConfiguration {
    * @param serverUrl base URL to set
    */
   public void setServerUrl(String serverUrl) {
-    this.serverUrl = serverUrl;
+    this.serverUrl = stripTrailingSlash(serverUrl);
   }
   
   /**
@@ -97,7 +97,7 @@ public class ProtocolConfiguration {
    * @param serviceUrl application URL to configure
    */
   public void setServiceUrl(String serviceUrl) {
-    this.serviceUrl = serviceUrl;
+    this.serviceUrl = stripTrailingSlash(serviceUrl);
   }
 
   /**
@@ -158,4 +158,11 @@ public class ProtocolConfiguration {
     this.renewFlag = renewFlag;
   }
   
+  private String stripTrailingSlash(String url) {
+    url = url.trim();
+    if (url.endsWith("/")) {
+      url = url.substring(0, url.length() - 1);
+    }
+    return url;
+  }
 }
