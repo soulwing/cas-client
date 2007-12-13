@@ -76,7 +76,7 @@ public class ProtocolConfigurationImpl implements ProtocolConfiguration {
    * @param serverUrl base URL to set
    */
   public void setServerUrl(String serverUrl) {
-    this.serverUrl = serverUrl;
+    this.serverUrl = stripTrailingSlash(serverUrl);
   }
   
   /* (non-Javadoc)
@@ -94,7 +94,7 @@ public class ProtocolConfigurationImpl implements ProtocolConfiguration {
    * @param serviceUrl application URL to configure
    */
   public void setServiceUrl(String serviceUrl) {
-    this.serviceUrl = serviceUrl;
+    this.serviceUrl = stripTrailingSlash(serviceUrl);
   }
 
   /* (non-Javadoc)
@@ -151,5 +151,18 @@ public class ProtocolConfigurationImpl implements ProtocolConfiguration {
   public void setRenewFlag(boolean renewFlag) {
     this.renewFlag = renewFlag;
   }
-  
+
+  /**
+   * Strips a trailing slash from a URL.
+   * @param url the subject URL
+   * @return <code>url</code> with a trailing slash removed
+   */
+  private String stripTrailingSlash(String url) {
+    url = url.trim();
+    if (url.endsWith("/")) {
+      url = url.substring(0, url.length() - 1);
+    }
+    return url;
+  }
+
 }

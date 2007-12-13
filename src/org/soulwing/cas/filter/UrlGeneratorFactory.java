@@ -65,14 +65,6 @@ public class UrlGeneratorFactory {
       }
       this.request = request;
       setServerUrl(config.getServerUrl());
-      String serviceUrl = config.getServiceUrl();
-      // SCC-19
-      if (serviceUrl.endsWith("/")) {
-        setServiceUrl(serviceUrl.substring(0, serviceUrl.length() - 1));
-      }
-      else {
-        setServiceUrl(serviceUrl);
-      }
       setServiceUrl(config.getServiceUrl());
       setProxyCallbackUrl(config.getProxyCallbackUrl());
       setGatewayFlag(config.getGatewayFlag());
