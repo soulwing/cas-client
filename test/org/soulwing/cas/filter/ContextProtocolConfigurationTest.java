@@ -32,7 +32,7 @@ public class ContextProtocolConfigurationTest extends TestCase {
   private static final String CONTEXT_PATH = "/appContext";
   private static final String SERVLET_PATH = "/app.action";
   private static final String TICKET = "testTicket";
-  private static final String SERVICE_URL = "https://service";
+  private static final String SERVICE_URL = "https://service/";
   private static final String REQUEST_URL = "https://localhost"
       + CONTEXT_PATH + SERVLET_PATH;
   
@@ -57,11 +57,11 @@ public class ContextProtocolConfigurationTest extends TestCase {
 //        .getQuery());
 //    assertEquals(REQUEST_URL, url.toString());
 //  }
-
+  
   public void testServiceUrl() throws Exception {
     URL url = getServiceUrl(new URL(generator.getServiceValidateUrl(TICKET))
         .getQuery());
-    assertEquals(SERVICE_URL + CONTEXT_PATH + SERVLET_PATH, url.toString());
+    assertEquals(SERVICE_URL.substring(0, SERVICE_URL.length() - 1) + CONTEXT_PATH + SERVLET_PATH, url.toString());
   }
 
   public void testStripTicketParam() throws Exception {
