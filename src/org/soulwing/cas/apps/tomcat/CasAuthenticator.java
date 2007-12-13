@@ -31,6 +31,8 @@ import org.apache.commons.logging.LogFactory;
 import org.soulwing.cas.client.NoTicketException;
 import org.soulwing.cas.client.ServiceValidationResponse;
 import org.soulwing.cas.filter.FilterConstants;
+import org.soulwing.cas.filter.UrlGeneratorFactory;
+
 
 /**
  * A Catalina Authenticator for CAS authentication.

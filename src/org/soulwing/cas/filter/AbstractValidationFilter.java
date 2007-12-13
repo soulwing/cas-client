@@ -322,7 +322,8 @@ public abstract class AbstractValidationFilter implements Filter {
   private void redirectToLogin(HttpServletRequest request,
       HttpServletResponse response) throws IOException {
     log.debug("Redirecting request to CAS login");
-    response.sendRedirect(UrlGeneratorFactory.getUrlGenerator(request, getConfiguration().getProtocolConfiguration())
+    response.sendRedirect(UrlGeneratorFactory.getUrlGenerator(
+        request, getConfiguration().getProtocolConfiguration())
         .getLoginUrl());
   }
   
