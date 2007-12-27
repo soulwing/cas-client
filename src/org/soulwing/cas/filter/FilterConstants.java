@@ -41,6 +41,7 @@ public interface FilterConstants {
   String GLOBAL_LOGOUT = "globalLogout";
   String REDIRECT_URL = "redirectUrl";
   String BYPASS_REDIRECT_URL = "bypassRedirectUrl";
+  String POST_VALIDATION_REDIRECT_PARAMETER = "postValidationRedirectParameter";
   
   String ATTRIBUTE_PREFIX = "org.soulwing.cas.";
   

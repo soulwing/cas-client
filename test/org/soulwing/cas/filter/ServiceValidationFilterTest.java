@@ -20,6 +20,7 @@ import junit.framework.TestCase;
 
 import org.soulwing.cas.client.ProtocolConfigurationImpl;
 import org.soulwing.cas.client.ProtocolConfigurationHolder;
+import org.soulwing.cas.client.ProtocolConstants;
 import org.soulwing.cas.client.StringProtocolSource;
 import org.soulwing.servlet.MockFilterChain;
 import org.soulwing.servlet.MockFilterConfig;
@@ -29,6 +30,8 @@ import org.soulwing.servlet.http.MockHttpServletResponse;
 
 public class ServiceValidationFilterTest extends TestCase {
 
+  private static final String POST_VALIDATION_PATH_NAME = "destinationPath";
+  private static final String POST_VALIDATION_PATH_VALUE = "/destination.action";
   private static final String SERVER_URL = "https://localhost/cas";
   private static final String SERVICE_URL = "https://localhost/apps";
   private static final String URL = "https://localhost/apps/myapp.htm";
@@ -80,7 +83,7 @@ public class ServiceValidationFilterTest extends TestCase {
 
   public void testValidationFailureError() throws Exception {
     request.setRequestURL(URL);
-    request.setParameter("ticket", TICKET);
+    request.setParameter(ProtocolConstants.TICKET_PARAM, TICKET);
     source.setText(getFailureText());
     filter.doFilter(request, response, filterChain);
     assertEquals(false, filterChain.isChainInvoked());
@@ -93,7 +96,7 @@ public class ServiceValidationFilterTest extends TestCase {
     source = (StringProtocolSource)
         filter.getConfiguration().getProtocolSource();
     request.setRequestURL(URL);
-    request.setParameter("ticket", TICKET);
+    request.setParameter(ProtocolConstants.TICKET_PARAM, TICKET);
     source.setText(getFailureText());
     filter.doFilter(request, response, filterChain);
     assertEquals(false, filterChain.isChainInvoked());
@@ -114,7 +117,7 @@ public class ServiceValidationFilterTest extends TestCase {
   
   public void testValidationSuccess() throws Exception {
     request.setRequestURL(URL);
-    request.setParameter("ticket", TICKET);
+    request.setParameter(ProtocolConstants.TICKET_PARAM, TICKET);
     source.setText(getSuccessText());
     filter.doFilter(request, response, filterChain);
     assertEquals(true, filterChain.isChainInvoked());
@@ -125,6 +128,28 @@ public class ServiceValidationFilterTest extends TestCase {
     assertEquals(request.getRequestURL().toString(), 
         chainedRequest.getRequestURL().toString());
     assertEquals(request.getQueryString(), chainedRequest.getQueryString());
+  }
+
+  public void testPostValidationRedirectWhenParameterSpecified() throws Exception {
+    filter.getConfiguration().setPostValidationRedirectParameter(
+        POST_VALIDATION_PATH_NAME);
+    request.setRequestURL(URL);
+    request.setParameter(ProtocolConstants.TICKET_PARAM, TICKET);
+    request.setParameter(POST_VALIDATION_PATH_NAME, POST_VALIDATION_PATH_VALUE);
+    source.setText(getSuccessText());
+    filter.doFilter(request, response, filterChain);
+    assertFalse(filterChain.isChainInvoked());
+    assertTrue(response.getRedirect().endsWith(POST_VALIDATION_PATH_VALUE));
+  }
+
+  public void testPostValidationNoRedirectWhenParameterOmitted() throws Exception {
+    filter.getConfiguration().setPostValidationRedirectParameter(
+        POST_VALIDATION_PATH_NAME);
+    request.setRequestURL(URL);
+    request.setParameter(ProtocolConstants.TICKET_PARAM, TICKET);
+    source.setText(getSuccessText());
+    filter.doFilter(request, response, filterChain);
+    assertTrue(filterChain.isChainInvoked());
   }
 
   private String getSuccessText() {

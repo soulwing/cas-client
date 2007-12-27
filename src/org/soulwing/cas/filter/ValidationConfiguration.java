@@ -44,6 +44,7 @@ public class ValidationConfiguration {
   private boolean redirectToLogin = REDIRECT_TO_LOGIN_DEFAULT;
   private String authFailedUrl;
   private String trustedProxies;
+  private String postValidationRedirectParameter;
   private ProtocolSource protocolSource;
   private ProtocolConfiguration protocolConfiguration;
   
@@ -221,6 +222,23 @@ public class ValidationConfiguration {
    */
   public void setTrustedProxies(String trustedProxies) {
     this.trustedProxies = trustedProxies;
+  }
+
+  /**
+   * Gets the name of a parameter that, if included in a request, 
+   * will be used as a redirect URL after a successful validation.
+   */
+  public String getPostValidationRedirectParameter() {
+    return postValidationRedirectParameter;
+  }
+
+  /**
+   * Sets the name of a parameter that, if included in a request, 
+   * will be used as a redirect URL after a successful validation.
+   */
+  public void setPostValidationRedirectParameter(
+      String postValidationRedirectParameter) {
+    this.postValidationRedirectParameter = postValidationRedirectParameter;
   }
 
 }

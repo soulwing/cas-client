@@ -91,6 +91,8 @@ public abstract class AbstractValidationFilter implements Filter {
     config.setProtocolSourceClass(
         fc.getClassFromParameter(FilterConstants.SOURCE_CLASS_NAME,
         ValidationConfiguration.SOURCE_CLASS_DEFAULT));
+    config.setPostValidationRedirectParameter(
+        fc.getParameter(FilterConstants.POST_VALIDATION_REDIRECT_PARAMETER));
     try {
       config.init();
       setConfiguration(config);
@@ -272,8 +274,13 @@ public abstract class AbstractValidationFilter implements Filter {
         new ValidationResponseWrapper(getAuthenticator().authenticate(request)); 
     if (validationResponse.success()) {
       setSessionValidation(request, validationResponse.getWrappedResponse());
-      wrapAndPassToFilterChain(request, response, filterChain, 
-          validationResponse);
+      if (hasPostValidationRedirectPath(request)) {
+        redirectToPostValidationPath(request, response);
+      }
+      else {
+        wrapAndPassToFilterChain(request, response, filterChain, 
+            validationResponse);
+      }
     }
     else {
       log.warn("authentication failed: " + 
@@ -337,6 +344,28 @@ public abstract class AbstractValidationFilter implements Filter {
       log.debug("Sending error to browser");
       response.sendError(HttpServletResponse.SC_FORBIDDEN);
     }
+  }
+  
+  private boolean hasPostValidationRedirectPath(HttpServletRequest request) {
+    String paramName = config.getPostValidationRedirectParameter();
+    String paramValue = null;
+    if (paramName != null) {
+      paramValue = request.getParameter(paramName);
+    }
+    if (paramValue != null) {
+      if (!paramValue.startsWith("/")) {
+        log.error(paramName + " value must be a servlet path starting with /");
+        return false;
+      }
+      return true;
+    }
+    return false;
+  }
+  
+  private void redirectToPostValidationPath(HttpServletRequest request,
+      HttpServletResponse response) throws IOException {
+    response.sendRedirect(request.getContextPath() + "/"
+        + request.getParameter(config.getPostValidationRedirectParameter()));
   }
   
   private HttpServletRequest wrapRequest(HttpServletRequest request,
