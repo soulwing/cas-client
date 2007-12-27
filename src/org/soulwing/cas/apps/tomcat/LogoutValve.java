@@ -75,7 +75,7 @@ public class LogoutValve extends ValveBase implements Lifecycle {
     if (requestUri.equals(logoutUri)) {
       log.trace("request URI " + requestUri + " matches");
       Session session = request.getSessionInternal();
-      if (session != null) {
+      if (session != null && session.isValid()) {
         session.removeNote(FilterConstants.VALIDATION_ATTRIBUTE);
       }
       if (isGlobalLogout(request.getParameter(GLOBAL_LOGOUT_PARAM))) {

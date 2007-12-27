@@ -1,5 +1,5 @@
 /*
- * ProxyTicketService.java
+ * ProxyTicketServiceImpl.java
  *
  * Created on Feb 12, 2007
  *
@@ -34,33 +34,33 @@ import org.soulwing.cas.client.SimpleUrlGenerator;
  *
  * @author Carl Harris
  */
-public class ProxyTicketService {
+public class ProxyTicketServiceImpl implements ProxyTicketService {
   
-  private static final Log log = LogFactory.getLog(ProxyTicketService.class);
+  private static final Log log = LogFactory.getLog(ProxyTicketServiceImpl.class);
 
   private ProtocolConfiguration configuration;
   private Proxy proxy;
 
   /**
-   * Gets the CAS protocol configuration for this ProxyTicketService.
+   * Gets the CAS protocol configuration for this ProxyTicketServiceImpl.
    * @return <code>ProtocolConfigurationImpl</code> instance configured for
-   *    this ProxyTicketService.
+   *    this ProxyTicketServiceImpl.
    */
   public ProtocolConfiguration getConfiguration() {
     return configuration;
   }
   
   /**
-   * Sets the CAS protocol configuration to use with this ProxyTicketService.
+   * Sets the CAS protocol configuration to use with this ProxyTicketServiceImpl.
    * @param configuration <code>ProtocolConfigurationImpl</code> instance
-   *    configured for this ProxyTicketService.
+   *    configured for this ProxyTicketServiceImpl.
    */
   public void setConfiguration(ProtocolConfiguration configuration) {
     this.configuration = configuration;
   }
   
   /**
-   * Initializes this ProxyTicketService instance.  Must be called before
+   * Initializes this ProxyTicketServiceImpl instance.  Must be called before
    * the service can be used to obtain proxy tickets.
    */
   public void init() {
@@ -70,13 +70,8 @@ public class ProxyTicketService {
     proxy = ProxyFactory.getProxy(new SimpleUrlGenerator(configuration));
   }
   
-  /**
-   * Gets a proxy authentication ticket for a target service.
-   * @param targetService URL of the service to which the authentication
-   *    ticket will be presented 
-   * @return <code>String</code> CAS proxy authentication ticket
-   * @throws ProxyTicketException if any exception occurs in obtaining
-   *    the ticket.
+  /* (non-Javadoc)
+   * @see org.soulwing.cas.support.ProxyTicketService#getTicket(java.lang.String)
    */
   public String getTicket(String targetService) {
     log.debug("Requesting ticket for target " + targetService);
