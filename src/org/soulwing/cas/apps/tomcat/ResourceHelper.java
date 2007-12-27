@@ -41,9 +41,8 @@ public class ResourceHelper {
   /**
    * Sets the <code>authenticator</code> property.
    */
-  public void setAuthenticator(
-      FilterAuthenticator authenticationStrategy) {
-    this.authenticator = authenticationStrategy;
+  public void setAuthenticator(FilterAuthenticator authenticator) {
+    this.authenticator = authenticator;
   }
 
   /**
