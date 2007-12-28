@@ -84,11 +84,9 @@ public class ConfluenceCasAuthenticator extends ConfluenceAuthenticator {
   public boolean logout(HttpServletRequest request,
       HttpServletResponse response) throws AuthenticatorException {
     super.logout(request, response);
-    // Possible fix for SCC-12
-    request.getSession().invalidate();
-//    // TODO: the superclass probably does the same thing we're doing here
-//    request.getSession().setAttribute(LOGGED_IN_KEY, null);
-//    request.getSession().setAttribute(LOGGED_OUT_KEY, new Boolean(true));
+    // TODO: the superclass probably does the same thing we're doing here
+    request.getSession().setAttribute(LOGGED_IN_KEY, null);
+    request.getSession().setAttribute(LOGGED_OUT_KEY, new Boolean(true));
     return true;
   }
  
