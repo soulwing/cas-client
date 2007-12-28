@@ -35,18 +35,18 @@ public abstract class AbstractValidationResponseMappingStrategy
   
   /*
    * (non-Javadoc)
-   * @see org.soulwing.cas.client.ProtocolMappingStrategy#mapResponse(org.jdom.Element)
+   * @see org.soulwing.cas.client.ProtocolMappingStrategy#mapResponse(java.lang.Object)
    */
-  public ValidationResponse mapResponse(Element element) {
+  public ValidationResponse mapResponse(Object response) {
     Element responseElement = JdomUtil.getChild(
-        element, ProtocolConstants.AUTHENTICATION_SUCCESS);
+        (Element) response, ProtocolConstants.AUTHENTICATION_SUCCESS);
     if (responseElement != null) {
       log.debug("authentication success");
       return mapSuccessResponse(responseElement);
     }
     
     responseElement = JdomUtil.getChild(
-        element, ProtocolConstants.AUTHENTICATION_FAILURE);
+        (Element) response, ProtocolConstants.AUTHENTICATION_FAILURE);
     if (responseElement != null) {
       log.debug("authentication failure");
       return mapFailureResponse(responseElement);

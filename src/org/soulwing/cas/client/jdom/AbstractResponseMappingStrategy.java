@@ -30,8 +30,8 @@ import org.soulwing.cas.client.ProtocolMappingStrategy;
  *
  * @author Carl Harris
  */
-public abstract class AbstractResponseMappingStrategy implements
-    ProtocolMappingStrategy {
+abstract class AbstractResponseMappingStrategy 
+    implements ProtocolMappingStrategy {
 
   protected Log log = LogFactory.getLog(AbstractResponseMappingStrategy.class);
   

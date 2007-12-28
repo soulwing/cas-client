@@ -47,8 +47,8 @@ import org.soulwing.cas.client.ServiceValidationResponse;
  *
  * @author Carl Harris
  */
-public class ProxyValidateMappingStrategy extends
-    AbstractValidationResponseMappingStrategy {
+public class ProxyValidateMappingStrategy 
+    extends AbstractValidationResponseMappingStrategy {
 
   private ProtocolMappingStrategy serviceValidateMappingStrategy =
       new ServiceValidateMappingStrategy();

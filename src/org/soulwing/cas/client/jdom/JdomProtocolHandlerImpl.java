@@ -57,7 +57,7 @@ public class JdomProtocolHandlerImpl implements ProtocolHandler {
   /**
    * Gets the response element from an <code>InputSource</code>.
    * @param result the response from the CAS server
-   * @returnroot element of the response as a JDOM <code>Element</code>
+   * @return root element of the response as a JDOM <code>Element</code>
    * @throws ServiceAccessException if an I/O error occurs while 
    *    accessing <code>result</code>
    * @throws ProtocolViolationException if the root element of 

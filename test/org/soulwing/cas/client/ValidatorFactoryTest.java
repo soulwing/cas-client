@@ -15,7 +15,6 @@ package org.soulwing.cas.client;
 
 import junit.framework.TestCase;
 
-import org.jdom.Element;
 import org.soulwing.cas.client.jdom.ProxyValidateMappingStrategy;
 import org.soulwing.cas.client.jdom.ServiceValidateMappingStrategy;
 
@@ -42,7 +41,7 @@ public class ValidatorFactoryTest extends TestCase {
   private static class MockProtocolMappingStrategy
       implements ProtocolMappingStrategy {
 
-    public ValidationResponse mapResponse(Element element) {
+    public ValidationResponse mapResponse(Object response) {
       throw new UnsupportedOperationException();
     }
     

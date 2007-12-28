@@ -20,12 +20,11 @@ package org.soulwing.cas.client;
 import org.soulwing.cas.client.jdom.JdomProtocolHandlerImpl;
 import org.soulwing.cas.client.jdom.ProxyMappingStrategy;
 
-
 /**
- * A factory for generating Proxy instances.  The default configuration
- * of this factory uses org.soulwing.cas.jdom.ProxyHandler for the
- * protocolHandler property.
- *
+ * A factory for generating Proxy instances. The default configuration of this
+ * factory uses org.soulwing.cas.jdom.ProxyHandler for the protocolHandler
+ * property.
+ * 
  * @author Carl Harris
  */
 public class ProxyFactory {
@@ -34,28 +33,29 @@ public class ProxyFactory {
       new UrlProtocolSource();
 
   private static ProtocolHandler protocolHandler = 
-    new JdomProtocolHandlerImpl();
+      new JdomProtocolHandlerImpl();
 
-private static ProtocolMappingStrategy proxyMappingStrategy =
-    new ProxyMappingStrategy();
+  private static ProtocolMappingStrategy proxyMappingStrategy = 
+      new ProxyMappingStrategy();
 
   /**
-   * Obtains an instance of Proxy from the factory.  The Proxy is configured
-   * with a ProxyHandler and ProtocolSource as configured for the factory.
+   * Obtains an instance of Proxy from the factory. The Proxy is configured with
+   * a ProxyHandler and ProtocolSource as configured for the factory.
    * @param urlGenerator <code>UrlGenerator</code> to use in the returned
-   *    Proxy.
+   *          Proxy.
    * @return a <code>Proxy</code> configured with the specified UrlGenerator,
-   *    and a ProxyHandler and ProtocolSource as configured for the factory.
+   *         and a ProxyHandler and ProtocolSource as configured for the
+   *         factory.
    */
   public static final Proxy getProxy(UrlGenerator urlGenerator) {
-    DefaultProxyImpl proxy = new DefaultProxyImpl(); 
+    DefaultProxyImpl proxy = new DefaultProxyImpl();
     proxy.setProtocolSource(protocolSource);
     proxy.setProtocolHandler(protocolHandler);
     proxy.setProxyMappingStrategy(proxyMappingStrategy);
     proxy.setUrlGenerator(urlGenerator);
     return proxy;
   }
-  
+
   /**
    * Gets the handler for the CAS <code>/proxy</code> function.
    */
@@ -72,16 +72,16 @@ private static ProtocolMappingStrategy proxyMappingStrategy =
   }
 
   /**
-   * Gets the ProtocolSource that will be used by Validator instances
-   * created by this factory.
+   * Gets the ProtocolSource that will be used by Validator instances created by
+   * this factory.
    */
   public static ProtocolSource getProtocolSource() {
     return protocolSource;
   }
 
   /**
-   * Sets the ProtocolSource that will be used by Validator instances
-   * created by this factory.
+   * Sets the ProtocolSource that will be used by Validator instances created by
+   * this factory.
    */
   public static synchronized void setProtocolSource(
       ProtocolSource protocolSource) {

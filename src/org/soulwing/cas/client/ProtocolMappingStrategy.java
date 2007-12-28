@@ -17,7 +17,6 @@
  */
 package org.soulwing.cas.client;
 
-import org.jdom.Element;
 
 /**
  * A strategy for mapping the XML response from the CAS server to a 
@@ -29,11 +28,10 @@ public interface ProtocolMappingStrategy {
 
   /**
    * Gets a <code>ValidationResponse</code> that corresponds to the content of a 
-   * JDOM <code>Element</code> representing the the response
-   * from the CAS server. 
-   * @param element the subject CAS response <code>Element</code>
+   * an Object representing the XML response from the CAS server. 
+   * @param response the subject response object
    * @return an appropriate subclass of <code>ValidationResponse</code>
    */
-  ValidationResponse mapResponse(Element element);
+  ValidationResponse mapResponse(Object response);
   
 }

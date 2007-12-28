@@ -30,18 +30,18 @@ import org.soulwing.cas.client.ValidationResponse;
 public class ProxyMappingStrategy extends AbstractResponseMappingStrategy {
 
   /* (non-Javadoc)
-   * @see org.soulwing.cas.client.jdom.AbstractResponseMappingStrategy#mapSuccessResponse(org.jdom.Element)
+   * @see org.soulwing.cas.client.jdom.AbstractResponseMappingStrategy#mapSuccessResponse(java.lang.Object)
    */
-  public ValidationResponse mapResponse(Element element) {
+  public ValidationResponse mapResponse(Object response) {
     Element responseElement = JdomUtil.getChild(
-        element, ProtocolConstants.PROXY_SUCCESS);
+        (Element) response, ProtocolConstants.PROXY_SUCCESS);
     if (responseElement != null) {
       log.debug("proxy success");
       return mapSuccessResponse(responseElement);
     }
     
     responseElement = JdomUtil.getChild(
-        element, ProtocolConstants.PROXY_FAILURE);
+        (Element) response, ProtocolConstants.PROXY_FAILURE);
     if (responseElement != null) {
       log.debug("proxy failure");
       return mapFailureResponse(responseElement);
