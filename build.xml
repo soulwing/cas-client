@@ -138,17 +138,5 @@
       <bottom><![CDATA[<i>${javadoc.footer}</i>]]></bottom>
     </javadoc>
   </target>
-
-	<target name="install-tomcat-ext" depends="product-jar"
-      description="installs the Tomcat CAS extension">
-		<fail unless="catalina.home">Must set catalina.home property</fail>
-	  <copy todir="${catalina.home}/server/lib">
-	    <fileset dir="${dist}" includes="${product.jar}"/>
-	    <fileset dir="${vendor.lib}">
-	      <include name="jdom*.jar"/>
-	      <include name="jakarta-oro-*.jar"/>
-	    </fileset>
-	  </copy>
-	</target>
   
 </project>
