@@ -276,6 +276,7 @@ public class LogoutFilter implements Filter {
       throws IOException, ServletException {
     if (request.getServletPath().equals(logoutPath)) {
       if (isApplicationLogout()) {
+        request.setAttribute(FilterConstants.LOGOUT_ATTRIBUTE, new Boolean(true));
         filterChain.doFilter(request, response);
       }
       boolean sessionBypassed = 

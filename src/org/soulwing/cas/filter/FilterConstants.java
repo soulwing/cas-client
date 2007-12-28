@@ -55,6 +55,6 @@ public interface FilterConstants {
 
   String BYPASS_ATTRIBUTE = ATTRIBUTE_PREFIX + "bypass";
   
-  
+  String LOGOUT_ATTRIBUTE = ATTRIBUTE_PREFIX + "logout";
 
 }

@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.soulwing.cas.client.ServiceValidationResponse;
+import org.soulwing.cas.filter.FilterConstants;
 import org.soulwing.cas.support.ValidationUtils;
 
 import com.atlassian.confluence.user.ConfluenceAuthenticator;
@@ -66,10 +67,21 @@ public class ConfluenceCasAuthenticator extends ConfluenceAuthenticator {
     ServiceValidationResponse validation =
         ValidationUtils.getServiceValidationResponse(request);
     if (validation == null) {
-      log.debug("no CAS validation");
+      if (log.isDebugEnabled()) {
+        log.debug("no CAS validation");
+      }
       return super.getUser(request, response);
     }
-    log.debug("CAS validation for user " + validation.getUserName());
+    // SCC-25: avoid reasserting "user is logged in" state during logout
+    else if (request.getAttribute(FilterConstants.LOGOUT_ATTRIBUTE) != null) {
+      if (log.isDebugEnabled()) {
+        log.debug("ignoring CAS validation -- log out requested");
+      }
+      return super.getUser(request, response);
+    }
+    if (log.isDebugEnabled()) {
+      log.debug("CAS validation for user " + validation.getUserName());
+    }
     Principal user = super.getUser(validation.getUserName());
     request.getSession().setAttribute(LOGGED_IN_KEY, user);
     request.getSession().setAttribute(LOGGED_OUT_KEY, null);
@@ -83,6 +95,10 @@ public class ConfluenceCasAuthenticator extends ConfluenceAuthenticator {
    */
   public boolean logout(HttpServletRequest request,
       HttpServletResponse response) throws AuthenticatorException {
+    if (log.isDebugEnabled()) {
+      log.debug("logging out user " 
+          + request.getSession().getAttribute(LOGGED_IN_KEY));
+    }
     super.logout(request, response);
     // TODO: the superclass probably does the same thing we're doing here
     request.getSession().setAttribute(LOGGED_IN_KEY, null);
