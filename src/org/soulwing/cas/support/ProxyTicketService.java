@@ -17,16 +17,35 @@
  */
 package org.soulwing.cas.support;
 
+/**
+ * A service for obtaining proxy authentication tickets for target
+ * back-end services.
+ *
+ * @author Carl Harris
+ */
 public interface ProxyTicketService {
 
   /**
-   * Gets a proxy authentication ticket for a target service.
+   * Gets a proxy authentication ticket for a target service using the PGT
+   * held for the current thread in <code>ProxyGrantingTicketHolder</code>.
    * @param targetService URL of the service to which the authentication
-   *    ticket will be presented 
+   *    ticket will be presented
    * @return <code>String</code> CAS proxy authentication ticket
    * @throws ProxyTicketException if any exception occurs in obtaining
    *    the ticket.
    */
   String getTicket(String targetService);
+  
+  /**
+   * Gets a proxy authentication ticket for a target service.
+   * @param targetService URL of the service to which the authentication
+   *    ticket will be presented
+   * @param proxyGrantingTicket the PGT for the user who will authenticate
+   *    to the target service
+   * @return <code>String</code> CAS proxy authentication ticket
+   * @throws ProxyTicketException if any exception occurs in obtaining
+   *    the ticket.
+   */
+  String getTicket(String targetService, String proxyGrantingTicket);
 
 }

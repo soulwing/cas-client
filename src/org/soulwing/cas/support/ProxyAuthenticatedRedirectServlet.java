@@ -102,10 +102,18 @@ public class ProxyAuthenticatedRedirectServlet extends HttpServlet {
       throw new ServletException(URL_PARAM + " request parameter is required");
     }
     response.sendRedirect(
-        constructProxyUrl(url, getProxyTicketService().getTicket(url)));
+        constructTargetUrl(url, getProxyTicketService().getTicket(url)));
   }
 
-  private String constructProxyUrl(String url, String ticket) 
+  /**
+   * Constructs the target URL for the redirect, including the CAS proxy
+   * authentication ticket as a parameter.
+   * @param url base target URL
+   * @param ticket proxy authentication ticket
+   * @return target URL
+   * @throws ServletException if <code>url</code> is malformed
+   */
+  private String constructTargetUrl(String url, String ticket) 
       throws ServletException {
     try {
       StringBuilder sb = new StringBuilder();

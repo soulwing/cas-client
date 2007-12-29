@@ -137,6 +137,10 @@ public class ProxyAuthenticatedRedirectServletTest extends TestCase {
     public String getTicket(String targetService) {
       return ticket;
     }
+
+    public String getTicket(String targetService, String proxyGrantingTicket) {
+      return ticket;
+    }
     
     public void setTicket(String ticket) {
       this.ticket = ticket;

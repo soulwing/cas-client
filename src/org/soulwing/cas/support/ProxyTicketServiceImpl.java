@@ -74,9 +74,20 @@ public class ProxyTicketServiceImpl implements ProxyTicketService {
    * @see org.soulwing.cas.support.ProxyTicketService#getTicket(java.lang.String)
    */
   public String getTicket(String targetService) {
+    String pgt = ProxyGrantingTicketHolder.getTicket();
+    if (pgt == null) {
+      throw new IllegalStateException("proxy granting ticket is not available");
+    }
+    return getTicket(targetService, pgt);
+  }
+
+  /* (non-Javadoc)
+   * @see org.soulwing.cas.support.ProxyTicketService#getTicket(java.lang.String, java.lang.String)
+   */
+  public String getTicket(String targetService, String proxyGrantingTicket) {
     log.debug("Requesting ticket for target " + targetService);
     ProxyResponse response = proxy.proxy(
-        new SimpleProxyRequest(getProxyGrantingTicket(), targetService));
+        new SimpleProxyRequest(proxyGrantingTicket, targetService));
     if (!response.isSuccessful()) {
       throw new ProxyTicketException(response);
     }
@@ -85,11 +96,4 @@ public class ProxyTicketServiceImpl implements ProxyTicketService {
     return response.getProxyTicket();
   }
   
-  private String getProxyGrantingTicket() {
-    String proxyGrantingTicket = ProxyGrantingTicketHolder.getTicket();
-    if (proxyGrantingTicket == null) {
-      throw new IllegalStateException("Proxy granting ticket not available");
-    }
-    return proxyGrantingTicket;
-  }
 }

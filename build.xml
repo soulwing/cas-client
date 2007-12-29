@@ -87,7 +87,7 @@
     <delete dir="${dist}"/>
   </target>
 
-  <target name="product-zip" depends="product-jar, product-javadoc"
+  <target name="product-zip" depends="product-jar, tomcat-jar, product-javadoc"
       description="generates the product distribution zip archive">
     <zip destfile="${dist}/${product.zip}">
       <zipfileset dir="${basedir}" prefix="${product}">
@@ -95,6 +95,7 @@
         <include name="README.dependencies.txt" />
       </zipfileset>
       <zipfileset dir="${dist}" includes="${product.jar}" prefix="${product}"/>
+      <zipfileset dir="${dist}" includes="${tomcat.jar}" prefix="${product}"/>
       <zipfileset dir="${src}" prefix="${product}/src"/>
       <zipfileset dir="${test}" prefix="${product}/test"/>
       <zipfileset dir="${javadoc}" prefix="${product}/doc/api"/>
@@ -110,14 +111,25 @@
   <target name="product-jar" depends="build, product-prepare"
       description="generates the jar containing product classes">
     <jar destfile="${dist}/${product.jar}">
-      <fileset dir="${build.classes}"/>
+      <fileset dir="${build.classes}">
+      	<exclude name="${tomcat.ext.dir}/**/*.class"/>
+      </fileset>
       <fileset dir="${build.test.classes}">
         <include name="**/*.class" if="product.jar.includes.tests.flag"/>
       </fileset>
     </jar>
   </target>
 
-  <target name="product-doc" depends="product-prepare, product-javadoc"
+	<target name="tomcat-jar" depends="build, product-prepare"
+	    description="generates the jar containing the Tomcat extension">
+    <jar destfile="${dist}/${tomcat.jar}">
+      <fileset dir="${build.classes}">
+        <include name="${tomcat.ext.dir}/**/*.class"/>
+      </fileset>
+    </jar>
+	</target>
+
+	<target name="product-doc" depends="product-prepare, product-javadoc"
       description="generates a WAR containing product documentation">
     <war destfile="${dist}/${product.doc.war}" webxml="${doc.web.xml}">
       <zipfileset dir="${javadoc}" prefix="api"/> 
