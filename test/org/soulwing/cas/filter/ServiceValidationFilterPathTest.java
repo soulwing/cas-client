@@ -69,10 +69,21 @@ public class ServiceValidationFilterPathTest extends TestCase {
     response = new MockHttpServletResponse();
   }
   
-  public void testValidationFailureError() throws Exception {
+  public void testRedirectOnFirstValidationFailure() throws Exception {
     request.setRequestURL(URL);
     request.setParameter(ProtocolConstants.TICKET_PARAM, TICKET);
     source.setText(getFailureText());
+    filter.doFilter(request, response, filterChain);
+    assertEquals(false, filterChain.isChainInvoked());
+    assertNotNull(response.getRedirect());
+  }
+
+  public void testFailOnSecondValidationFailure() throws Exception {
+    request.setRequestURL(URL);
+    request.setParameter(ProtocolConstants.TICKET_PARAM, TICKET);
+    source.setText(getFailureText());
+    filter.doFilter(request, response, filterChain);
+    assertEquals(false, filterChain.isChainInvoked());
     filter.doFilter(request, response, filterChain);
     assertEquals(false, filterChain.isChainInvoked());
     assertEquals(HttpServletResponse.SC_FORBIDDEN, response.getStatus());
@@ -111,6 +122,7 @@ public class ServiceValidationFilterPathTest extends TestCase {
     request.setRequestURL(URL);
     request.setParameter(ProtocolConstants.TICKET_PARAM, TICKET);
     source.setText(getFailureText());
+    filter.doFilter(request, response, filterChain);
     filter.doFilter(request, response, filterChain);
     assertEquals(false, filterChain.isChainInvoked());
     assertEquals(AUTH_FAILED_URL, response.getRedirect());

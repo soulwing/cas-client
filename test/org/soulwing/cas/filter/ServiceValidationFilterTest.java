@@ -86,6 +86,7 @@ public class ServiceValidationFilterTest extends TestCase {
     request.setParameter(ProtocolConstants.TICKET_PARAM, TICKET);
     source.setText(getFailureText());
     filter.doFilter(request, response, filterChain);
+    filter.doFilter(request, response, filterChain);
     assertEquals(false, filterChain.isChainInvoked());
     assertEquals(HttpServletResponse.SC_FORBIDDEN, response.getStatus());
   }
@@ -98,6 +99,7 @@ public class ServiceValidationFilterTest extends TestCase {
     request.setRequestURL(URL);
     request.setParameter(ProtocolConstants.TICKET_PARAM, TICKET);
     source.setText(getFailureText());
+    filter.doFilter(request, response, filterChain);
     filter.doFilter(request, response, filterChain);
     assertEquals(false, filterChain.isChainInvoked());
     assertEquals(AUTH_FAILED_URL, response.getRedirect());

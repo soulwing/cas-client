@@ -228,15 +228,6 @@ public abstract class AbstractValidationFilter implements Filter {
     }
   }
 
-  private void redirectOnNoTicket(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    if (getConfiguration().isRedirectToLogin()) {
-      redirectToLogin(request, response);
-    }
-    else {
-      redirectToAuthFailed(response);
-    }
-  }
-  
   private void bypassValidation(HttpServletRequest request, 
       HttpServletResponse response, FilterChain filterChain) 
       throws IOException, ServletException {
@@ -283,12 +274,26 @@ public abstract class AbstractValidationFilter implements Filter {
       }
     }
     else {
-      log.warn("authentication failed: " + 
-          validationResponse.getWrappedResponse().getResultMessage());
-      redirectToAuthFailed(response);
+      if (previouslyRedirectedToLogin(request)) {
+        log.warn("authentication failed: " + 
+            validationResponse.getWrappedResponse().getResultMessage());
+        redirectToAuthFailed(response);
+      }
+      else {
+        redirectOnNoTicket(request, response);
+      }
     }
   }
 
+  private void redirectOnNoTicket(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    if (getConfiguration().isRedirectToLogin()) {
+      redirectToLogin(request, response);
+    }
+    else {
+      redirectToAuthFailed(response);
+    }
+  }
+  
   private void wrapAndPassToFilterChain(HttpServletRequest request, 
       HttpServletResponse response, FilterChain filterChain, 
       ValidationResponseWrapper validationResponse) 
@@ -326,12 +331,25 @@ public abstract class AbstractValidationFilter implements Filter {
     }
   }
   
+  private boolean previouslyRedirectedToLogin(HttpServletRequest request) {
+    String loginUrl = (String)
+        request.getSession().getAttribute(FilterConstants.LOGIN_ATTRIBUTE);
+    return loginUrl != null && loginUrl.equals(getLoginUrl(request));
+  }
+
   private void redirectToLogin(HttpServletRequest request,
       HttpServletResponse response) throws IOException {
     log.debug("Redirecting request to CAS login");
-    response.sendRedirect(UrlGeneratorFactory.getUrlGenerator(
+    String loginUrl = getLoginUrl(request);
+    response.sendRedirect(loginUrl);
+    request.getSession().setAttribute(FilterConstants.LOGIN_ATTRIBUTE,
+        loginUrl);
+  }
+
+  private String getLoginUrl(HttpServletRequest request) {
+    return UrlGeneratorFactory.getUrlGenerator(
         request, getConfiguration().getProtocolConfiguration())
-        .getLoginUrl());
+        .getLoginUrl();
   }
   
   private void redirectToAuthFailed(HttpServletResponse response) 

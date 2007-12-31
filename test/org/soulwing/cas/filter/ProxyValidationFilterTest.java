@@ -87,6 +87,7 @@ public class ProxyValidationFilterTest extends TestCase {
     request.setParameter("ticket", TICKET);
     source.setText(getFailureText());
     filter.doFilter(request, response, filterChain);
+    filter.doFilter(request, response, filterChain);
     assertEquals(false, filterChain.isChainInvoked());
     assertEquals(HttpServletResponse.SC_FORBIDDEN, response.getStatus());
   }
@@ -132,6 +133,7 @@ public class ProxyValidationFilterTest extends TestCase {
     request.setParameter("ticket", TICKET);
     List proxies = Arrays.asList(new String[]{ OTHER_PROXY });
     source.setText(getSuccessText(proxies));
+    filter.doFilter(request, response, filterChain);
     filter.doFilter(request, response, filterChain);
     assertEquals(false, filterChain.isChainInvoked());
     assertEquals(HttpServletResponse.SC_FORBIDDEN, response.getStatus());

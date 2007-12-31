@@ -57,4 +57,6 @@ public interface FilterConstants {
   
   String LOGOUT_ATTRIBUTE = ATTRIBUTE_PREFIX + "logout";
 
+  String LOGIN_ATTRIBUTE = ATTRIBUTE_PREFIX + "login";
+
 }

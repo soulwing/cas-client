@@ -77,14 +77,39 @@ public class CasAuthenticator extends AuthenticatorBase {
         return knownUser;
       }
       else {
+        if (previouslyRedirectedToLogin(request, helper)) {
+          response.sendError(Response.SC_UNAUTHORIZED);
+        }
+        else {
+          redirectToLogin(request, response, helper);
+        }
         return false;
       }
     }
     catch (NoTicketException ex) {
-      response.sendRedirect(UrlGeneratorFactory.getUrlGenerator(request, 
-          helper.getProtocolConfiguration()).getLoginUrl());
+      redirectToLogin(request, response, helper);
       return false;
     }
+  }
+
+  private void redirectToLogin(Request request, Response response,
+      ResourceHelper helper) throws IOException {
+    String loginUrl = getLoginUrl(request, helper);
+    response.sendRedirect(loginUrl);
+    request.getSessionInternal().setNote(FilterConstants.LOGIN_ATTRIBUTE, 
+        loginUrl);
+  }
+
+  private boolean previouslyRedirectedToLogin(Request request, 
+      ResourceHelper helper) {
+    String loginUrl = (String)
+        request.getSessionInternal().getNote(FilterConstants.LOGIN_ATTRIBUTE);
+    return loginUrl != null && loginUrl.equals(getLoginUrl(request, helper));
+  }
+
+  private String getLoginUrl(Request request, ResourceHelper helper) {
+    return UrlGeneratorFactory.getUrlGenerator(request, 
+            helper.getProtocolConfiguration()).getLoginUrl();
   }
 
   private boolean isKnownUser(Request request, Response response,

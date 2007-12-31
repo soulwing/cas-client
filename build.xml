@@ -135,7 +135,7 @@
       <zipfileset dir="${javadoc}" prefix="api"/> 
     </war> 
   </target>
-  
+	
   <path id="source.path">
     <pathelement location="${src}"/>
     <pathelement location="${test}"/>
@@ -151,4 +151,20 @@
     </javadoc>
   </target>
   
+	<target name="install-tomcat-ext" depends="product-jar, tomcat-jar">
+		<fail unless="catalina.home">
+	    Must set catalina.home property
+	  </fail>
+	  <copy todir="${catalina.home}/${tomcat.common.lib}">
+	  	<fileset dir="${dist}">
+	  		<include name="${product.jar}"/>
+	  	</fileset>
+	  </copy>
+		<copy todir="${catalina.home}/${tomcat.server.lib}">
+      <fileset dir="${dist}">
+        <include name="${tomcat.jar}"/>
+      </fileset>
+		</copy>
+	</target>
+		
 </project>
