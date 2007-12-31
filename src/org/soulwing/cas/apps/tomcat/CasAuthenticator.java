@@ -20,8 +20,9 @@ package org.soulwing.cas.apps.tomcat;
 import java.io.IOException;
 import java.security.Principal;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.catalina.LifecycleException;
-import org.apache.catalina.Session;
 import org.apache.catalina.authenticator.AuthenticatorBase;
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
@@ -97,17 +98,19 @@ public class CasAuthenticator extends AuthenticatorBase {
       return false;
     }
     request.setUserPrincipal(principal);
-    request.getSessionInternal(true).setNote(
+    log.debug("setting " + FilterConstants.VALIDATION_ATTRIBUTE + " to " +
+        validationResponse);
+    request.getSession(true).setAttribute(
         FilterConstants.VALIDATION_ATTRIBUTE, validationResponse);
     return true;
   }
 
   private ServiceValidationResponse getSessionValidationResponse(
       Request request) {
-    Session session = request.getSessionInternal(false);
+    HttpSession session = request.getSession(false);
     if (session == null) return null;
     ServiceValidationResponse validationResponse = (ServiceValidationResponse)
-        session.getNote(FilterConstants.VALIDATION_ATTRIBUTE);
+        session.getAttribute(FilterConstants.VALIDATION_ATTRIBUTE);
     if (validationResponse == null) return null;
     log.debug("principal " + validationResponse.getUserName()
         + " authenticated via session state");
