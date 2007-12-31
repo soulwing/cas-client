@@ -43,6 +43,7 @@ public class ServiceValidateMappingStrategy
         JdomUtil.getChild(element,ProtocolConstants.USER)));
     response.setProxyGrantingTicketIou(getProxyGrantingTicketIou(
         JdomUtil.getChild(element, ProtocolConstants.PROXY_GRANTING_TICKET)));
+    log.debug("authentication success");
     return response;
   }
 

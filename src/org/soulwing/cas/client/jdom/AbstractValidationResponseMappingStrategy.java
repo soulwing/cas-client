@@ -41,7 +41,6 @@ public abstract class AbstractValidationResponseMappingStrategy
     Element responseElement = JdomUtil.getChild(
         (Element) response, ProtocolConstants.AUTHENTICATION_SUCCESS);
     if (responseElement != null) {
-      log.debug("authentication success");
       return mapSuccessResponse(responseElement);
     }
     
