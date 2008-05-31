@@ -52,6 +52,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
   private Map attributes = new LinkedHashMap();
   private final String contextPath;
   private String servletPath;
+  private String pathInfo;
   private String scheme;
   private String serverName;
   private int serverPort;
@@ -256,7 +257,15 @@ public class MockHttpServletRequest implements HttpServletRequest {
     this.requestDispatcher = requestDispatcher;
     
   }
-  
+
+  public String getPathInfo() {
+    return pathInfo;
+  }
+
+  public void setPathInfo(String pathInfo) {
+    this.pathInfo = pathInfo;
+  }
+
   public Enumeration getAttributeNames() {
     throw new UnsupportedOperationException();
   }
@@ -290,10 +299,6 @@ public class MockHttpServletRequest implements HttpServletRequest {
   }
 
   public String getMethod() {
-    throw new UnsupportedOperationException();
-  }
-
-  public String getPathInfo() {
     throw new UnsupportedOperationException();
   }
 
