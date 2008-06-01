@@ -76,6 +76,10 @@ public class UrlGeneratorFactory {
       sb.append(super.getServiceUrl());
       // SCC-20, SCC-21
       sb.append(request.getRequestURI());
+      // SCC-38
+      if (request.getPathInfo() != null) {
+        sb.append(request.getPathInfo());
+      }
       if (request.getQueryString() != null 
           && request.getQueryString().length() > 0) {
         sb.append('?');

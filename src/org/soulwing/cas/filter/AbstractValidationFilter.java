@@ -231,7 +231,9 @@ public abstract class AbstractValidationFilter implements Filter {
   private void bypassValidation(HttpServletRequest request, 
       HttpServletResponse response, FilterChain filterChain) 
       throws IOException, ServletException {
-    log.info("Bypassing CAS validation for " + request.getServletPath());
+  	if (log.isInfoEnabled()) {
+  		log.info("Bypassing CAS validation for " + request.getServletPath());
+  	}
     filterChain.doFilter(request, response);
   }
 
@@ -306,8 +308,10 @@ public abstract class AbstractValidationFilter implements Filter {
   private void passToFilterChain(HttpServletRequest request, 
       HttpServletResponse response, FilterChain filterChain) 
       throws IOException, ServletException {
-    log.debug("User " + request.getUserPrincipal().getName()
-        + " is authentic");
+  	if (log.isDebugEnabled()) {
+  		log.debug("User " + request.getUserPrincipal().getName()
+  				+ " is authentic");
+  	}
     filterChain.doFilter(request, response);
   }
 
@@ -341,9 +345,9 @@ public abstract class AbstractValidationFilter implements Filter {
       HttpServletResponse response) throws IOException {
     log.debug("Redirecting request to CAS login");
     String loginUrl = getLoginUrl(request);
-    response.sendRedirect(loginUrl);
     request.getSession().setAttribute(FilterConstants.LOGIN_ATTRIBUTE,
         loginUrl);
+    response.sendRedirect(loginUrl);
   }
 
   private String getLoginUrl(HttpServletRequest request) {
@@ -382,7 +386,7 @@ public abstract class AbstractValidationFilter implements Filter {
   
   private void redirectToPostValidationPath(HttpServletRequest request,
       HttpServletResponse response) throws IOException {
-    response.sendRedirect(request.getContextPath() + "/"
+    response.sendRedirect(request.getContextPath()
         + request.getParameter(config.getPostValidationRedirectParameter()));
   }
   
