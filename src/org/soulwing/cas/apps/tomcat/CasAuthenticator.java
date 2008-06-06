@@ -95,9 +95,9 @@ public class CasAuthenticator extends AuthenticatorBase {
   private void redirectToLogin(Request request, Response response,
       ResourceHelper helper) throws IOException {
     String loginUrl = getLoginUrl(request, helper);
-    response.sendRedirect(loginUrl);
     request.getSessionInternal().setNote(FilterConstants.LOGIN_ATTRIBUTE, 
         loginUrl);
+    response.sendRedirect(loginUrl);
   }
 
   private boolean previouslyRedirectedToLogin(Request request, 

@@ -1,5 +1,5 @@
 /*
- * ProtocolConfigurationImpl.java
+ * ProtocolConfiguration.java
  *
  * Created on Feb 11, 2007
  *

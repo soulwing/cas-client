@@ -17,6 +17,9 @@
  */
 package org.soulwing.cas.client;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 
 /**
  * Default implementation of the Validator interface.
@@ -24,6 +27,9 @@ package org.soulwing.cas.client;
  */
 public class DefaultValidatorImpl implements Validator {
 
+  private static final Log logger = 
+      LogFactory.getLog(DefaultValidatorImpl.class);
+  
   private ProtocolHandler protocolHandler;
   private ProtocolMappingStrategy serviceValidateMappingStrategy;
   private ProtocolMappingStrategy proxyValidateMappingStrategy;
@@ -39,11 +45,18 @@ public class DefaultValidatorImpl implements Validator {
     if (ticket == null) {
       throw new NoTicketException();
     }
-    return (ServiceValidationResponse) 
-        this.protocolHandler.processResult(
-            getProtocolSource().getSource(
-                getUrlGenerator().getServiceValidateUrl(ticket)),
-                serviceValidateMappingStrategy);
+    try {
+      return (ServiceValidationResponse) 
+          this.protocolHandler.processResult(
+              getProtocolSource().getSource(
+                  getUrlGenerator().getServiceValidateUrl(ticket)),
+                  serviceValidateMappingStrategy);
+    }
+    catch (ServiceAccessException ex) {
+      logger.error("error in accessing CAS service: ", ex);
+      logger.error("assuming that ticket " + ticket + " is stale");
+      throw new NoTicketException();
+    }
   }
 
   /**
@@ -55,11 +68,18 @@ public class DefaultValidatorImpl implements Validator {
     if (ticket == null) {
       throw new NoTicketException();
     }
-    return (ProxyValidationResponse) 
-        this.protocolHandler.processResult(
-            getProtocolSource().getSource(
-                getUrlGenerator().getProxyValidateUrl(ticket)),
-                proxyValidateMappingStrategy);
+    try {
+      return (ProxyValidationResponse) 
+          this.protocolHandler.processResult(
+              getProtocolSource().getSource(
+                  getUrlGenerator().getProxyValidateUrl(ticket)),
+                  proxyValidateMappingStrategy);
+    }
+    catch (ServiceAccessException ex) {
+      logger.error("error in accessing CAS service: ", ex);
+      logger.error("assuming that ticket " + ticket + " is stale");
+      throw new NoTicketException();
+    }
   }
 
   /**
