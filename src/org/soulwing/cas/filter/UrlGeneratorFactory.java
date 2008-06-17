@@ -77,7 +77,9 @@ public class UrlGeneratorFactory {
       // SCC-20, SCC-21
       sb.append(request.getRequestURI());
       // SCC-38
-      if (request.getPathInfo() != null) {
+      if (request.getPathInfo() != null
+          // SCC-48 -- websphere returns a empty string rather than null
+          && request.getPathInfo().length() > 0) {
         sb.append(request.getPathInfo());
       }
       if (request.getQueryString() != null 
