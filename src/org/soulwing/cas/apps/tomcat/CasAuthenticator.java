@@ -114,11 +114,24 @@ public class CasAuthenticator extends AuthenticatorBase {
 
   private boolean isKnownUser(Request request, Response response,
       ServiceValidationResponse validationResponse) throws IOException {
-    Principal principal = realm.getPrincipal(
-        validationResponse.getUserName());
+    String userName = validationResponse.getUserName();
+    /*
+     *  SCC-47: thanks to Ralf Lorenz
+     *  We now use AuthenticatorBase.register to reduce the number of 
+     *  realm (database lookups) after a user has been authenticated
+     */
+    Principal principal = request.getUserPrincipal();
     if (principal == null) {
-      log.warn("unknown CAS user " + validationResponse.getUserName()
-          + " for " + request.getRequestURI());
+      // principal not already known; look it up via the configured realm
+      principal = realm.getPrincipal(userName);
+      if (principal != null) {
+        // register it so that Tomcat can reuse it without another realm lookup
+        register(request, response, principal, "CAS", userName, null);
+      }
+    }
+    if (principal == null) {
+      log.warn("unknown CAS user " + userName + " for " 
+          + request.getRequestURI());
       response.sendError(Response.SC_UNAUTHORIZED);
       return false;
     }
