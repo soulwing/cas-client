@@ -76,12 +76,13 @@ public class UrlGeneratorFactory {
       sb.append(super.getServiceUrl());
       // SCC-20, SCC-21
       sb.append(request.getRequestURI());
-      // SCC-38: some applications use extra path info which isn't passed in service URL
-      // SCC-53: Websphere seems to return a single "/" when there is no extra path info.
-      String pathInfo = request.getPathInfo();
-      if (pathInfo != null && pathInfo.length() > 0 && !pathInfo.equals("/")) {
-        sb.append(pathInfo);
-      }
+//      SCC-54: remove this code since getRequestURI already does what's needed. Duh.
+//      // SCC-38: some applications use extra path info which isn't passed in service URL
+//      // SCC-53: Websphere seems to return a single "/" when there is no extra path info.
+//      String pathInfo = request.getPathInfo();
+//      if (pathInfo != null && pathInfo.length() > 0 && !pathInfo.equals("/")) {
+//        sb.append(pathInfo);
+//      }
       if (request.getQueryString() != null 
           && request.getQueryString().length() > 0) {
         sb.append('?');
