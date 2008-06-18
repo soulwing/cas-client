@@ -17,17 +17,21 @@
  */
 package org.soulwing.cas.filter;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Enumeration;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponseWrapper;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
@@ -275,9 +279,11 @@ public class LogoutFilter implements Filter {
       HttpServletResponse response, FilterChain filterChain) 
       throws IOException, ServletException {
     if (request.getServletPath().equals(logoutPath)) {
+      BufferedHttpServletResponse bufferedResponse = null; 
       if (isApplicationLogout()) {
+        bufferedResponse = new BufferedHttpServletResponse(response);
         request.setAttribute(FilterConstants.LOGOUT_ATTRIBUTE, new Boolean(true));
-        filterChain.doFilter(request, response);
+        filterChain.doFilter(request, bufferedResponse);
       }
       boolean sessionBypassed = 
           ValidationUtils.isValidationBypassedForSession(request);
@@ -292,6 +298,12 @@ public class LogoutFilter implements Filter {
       }
       else if (getRedirectUrl() != null) {
         doLogoutRedirect(response, getRedirectUrl());
+      }
+      else {
+        // send any output buffered from the application logout
+        if (bufferedResponse != null) {
+          bufferedResponse.flushAll();
+        }
       }
     }
     else {
@@ -340,4 +352,65 @@ public class LogoutFilter implements Filter {
     }
   }
   
+  private class BufferedHttpServletResponse extends HttpServletResponseWrapper {
+
+    private BufferedServletOutputStream bufferedOutputStream;
+    
+    public BufferedHttpServletResponse(HttpServletResponse response) {
+      super(response);
+    }
+
+    /* (non-Javadoc)
+     * @see javax.servlet.ServletResponseWrapper#getOutputStream()
+     */
+    public ServletOutputStream getOutputStream() throws IOException {
+      if (bufferedOutputStream == null) {
+        bufferedOutputStream = new BufferedServletOutputStream();
+      }
+      return bufferedOutputStream;
+    }
+
+    /* (non-Javadoc)
+     * @see javax.servlet.ServletResponseWrapper#getWriter()
+     */
+    public PrintWriter getWriter() throws IOException {
+      return new PrintWriter(getOutputStream());
+    }
+    
+    public void flushAll() throws IOException {
+      ServletOutputStream os = getResponse().getOutputStream();
+      os.write(bufferedOutputStream.getOutput());
+      os.flush();
+    }
+    
+  }
+  
+  private class BufferedServletOutputStream extends ServletOutputStream {
+
+    private final ByteArrayOutputStream os = new ByteArrayOutputStream(8192);
+    
+    public void write(int b) throws IOException {
+      os.write(b);
+    }
+
+    public byte[] getOutput() {
+      return os.toByteArray();
+    }
+
+    /* (non-Javadoc)
+     * @see java.io.OutputStream#close()
+     */
+    public void close() throws IOException {
+      os.close();
+      super.close();
+    }
+    
+    /* (non-Javadoc)
+     * @see java.io.OutputStream#flush()
+     */
+    public void flush() throws IOException {
+      // ignore it
+    }
+    
+  }
 }
