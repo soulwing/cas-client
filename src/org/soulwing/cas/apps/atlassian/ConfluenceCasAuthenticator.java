@@ -51,7 +51,8 @@ import com.atlassian.seraph.auth.AuthenticatorException;
 public class ConfluenceCasAuthenticator extends ConfluenceAuthenticator {
 
   private static final long serialVersionUID = 1L;
-  private static final Log log = 
+  
+  protected static final Log logger = 
       LogFactory.getLog(ConfluenceCasAuthenticator.class);
 
   /**
@@ -67,20 +68,20 @@ public class ConfluenceCasAuthenticator extends ConfluenceAuthenticator {
     ServiceValidationResponse validation =
         ValidationUtils.getServiceValidationResponse(request);
     if (validation == null) {
-      if (log.isDebugEnabled()) {
-        log.debug("no CAS validation");
+      if (logger.isDebugEnabled()) {
+        logger.debug("no CAS validation");
       }
       return super.getUser(request, response);
     }
     // SCC-25: avoid reasserting "user is logged in" state during logout
     else if (request.getAttribute(FilterConstants.LOGOUT_ATTRIBUTE) != null) {
-      if (log.isDebugEnabled()) {
-        log.debug("ignoring CAS validation -- log out requested");
+      if (logger.isDebugEnabled()) {
+        logger.debug("ignoring CAS validation -- log out requested");
       }
       return super.getUser(request, response);
     }
-    if (log.isDebugEnabled()) {
-      log.debug("CAS validation for user " + validation.getUserName());
+    if (logger.isDebugEnabled()) {
+      logger.debug("CAS validation for user " + validation.getUserName());
     }
     Principal user = super.getUser(validation.getUserName());
     request.getSession().setAttribute(LOGGED_IN_KEY, user);
@@ -95,8 +96,8 @@ public class ConfluenceCasAuthenticator extends ConfluenceAuthenticator {
    */
   public boolean logout(HttpServletRequest request,
       HttpServletResponse response) throws AuthenticatorException {
-    if (log.isDebugEnabled()) {
-      log.debug("logging out user " 
+    if (logger.isDebugEnabled()) {
+      logger.debug("logging out user " 
           + request.getSession().getAttribute(LOGGED_IN_KEY));
     }
     super.logout(request, response);
