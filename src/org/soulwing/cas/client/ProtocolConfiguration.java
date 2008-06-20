@@ -31,7 +31,7 @@ public interface ProtocolConfiguration {
   /**
    * Gets the base URL for the CAS server.
    * @return base URL for the CAS server used by this 
-   *    ProtocolConfigurationImpl.
+   *    ProtocolConfiguration
    */
   String getServerUrl();
 
@@ -49,13 +49,13 @@ public interface ProtocolConfiguration {
 
   /**
    * Gets the CAS gateway flag setting.
-   * @return gateway flag setting for this ProtocolConfigurationImpl.
+   * @return gateway flag setting for this ProtocolConfiguration
    */
   boolean getGatewayFlag();
 
   /**
    * Gets the CAS renew flag setting.
-   * @return renew flag setting for this ProtocolConfigurationImpl
+   * @return renew flag setting for this ProtocolConfiguration
    */
   boolean getRenewFlag();
 

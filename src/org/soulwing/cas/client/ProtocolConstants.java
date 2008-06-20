@@ -25,8 +25,6 @@ package org.soulwing.cas.client;
  */
 public interface ProtocolConstants {
 
-  String NAMESPACE_URI = "http://www.yale.edu/tp/cas";
-  String NAMESPACE_PREFIX = "cas";
   String SERVICE_RESPONSE = "serviceResponse";
   String AUTHENTICATION_SUCCESS = "authenticationSuccess";
   String AUTHENTICATION_FAILURE = "authenticationFailure";

@@ -31,7 +31,7 @@ public class SimpleUrlGenerator implements UrlGenerator {
   private final ProtocolConfiguration config;
   
   /**
-   * @param config <code>ProtocolConfigurationImpl</code> that will provide
+   * @param config <code>ProtocolConfiguration</code> that will provide
    *    the configuration for this generator
    */
   public SimpleUrlGenerator(ProtocolConfiguration config) {
@@ -44,7 +44,7 @@ public class SimpleUrlGenerator implements UrlGenerator {
   
   /**
    * Gets the configuration of this SimpleUrlGenerator.
-   * @return <code>ProtocolConfigurationImpl</code> containing configuration
+   * @return <code>ProtocolConfiguration</code> containing configuration
    *    properties for this instance.
    */
   public ProtocolConfiguration getConfiguration() {

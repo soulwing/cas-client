@@ -33,12 +33,25 @@ import org.soulwing.cas.client.ProtocolMappingStrategy;
 abstract class AbstractResponseMappingStrategy 
     implements ProtocolMappingStrategy {
 
-  protected Log log = LogFactory.getLog(AbstractResponseMappingStrategy.class);
+  protected static final Log log = LogFactory.getLog(
+      AbstractResponseMappingStrategy.class);
+
+  /**
+   * Maps a standard protocol name to the corresponding name defined
+   * in ProtocolNames.properties.
+   * @param name the name to map
+   * @return the mapped name
+   * @throws IllegalArgumentException if <code>name</code> is not mapped
+   */
+  protected String mapName(String name) {
+    return JdomUtil.mapName(name);
+  }
   
   protected AbstractResponse mapFailureResponse(Element element) {
     AbstractResponse response = newFailureResponse();
     response.setSuccessful(false);
-    response.setResultCode(element.getAttributeValue(ProtocolConstants.CODE));
+    response.setResultCode(element.getAttributeValue(
+        mapName(ProtocolConstants.CODE)));
     response.setResultMessage(element.getTextTrim());
     log.debug("result code " + response.getResultCode());
     log.debug("result message " + response.getResultMessage());
