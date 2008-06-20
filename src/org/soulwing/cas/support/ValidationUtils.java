@@ -17,9 +17,13 @@
  */
 package org.soulwing.cas.support;
 
+import java.util.Enumeration;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.soulwing.cas.client.ProxyValidationResponse;
 import org.soulwing.cas.client.ServiceValidationResponse;
 import org.soulwing.cas.filter.FilterConstants;
@@ -31,6 +35,8 @@ import org.soulwing.cas.filter.FilterConstants;
  * @author Carl Harris
  */
 public class ValidationUtils {
+
+  private static final Log log = LogFactory.getLog(ValidationUtils.class);
 
   /**
    * Gets the ServiceValidationResponse from an HttpServletRequest.
@@ -122,5 +128,30 @@ public class ValidationUtils {
       HttpSession session) {
     return session.getAttribute(FilterConstants.BYPASS_ATTRIBUTE) != null;
   }
+
+  /**
+   * Removes all CAS-related session state for a given request
+   * @param request the subject <code>HttpServletRequest</code>
+   */
+  public static void removeSessionState(HttpServletRequest request) {
+    HttpSession session = request.getSession(false);
+    if (session == null) {
+      return;
+    }
+    ServiceValidationResponse validation =
+        ValidationUtils.getServiceValidationResponse(request);
+    Enumeration names = session.getAttributeNames();
+    while (names.hasMoreElements()) {
+      String name = (String) names.nextElement();
+      if (name.startsWith(FilterConstants.ATTRIBUTE_PREFIX)) {
+        log.debug("Removing attribute " + name + " from session");
+        session.removeAttribute(name);
+      }
+    }
+    if (validation != null) {
+      log.info("User " + validation.getUserName() + " has logged out");
+    }
+  }
+
 
 }

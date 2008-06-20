@@ -13,17 +13,24 @@
  */
 package org.soulwing.cas.filter;
 
-import javax.servlet.ServletException;
+import java.io.IOException;
 
-import org.soulwing.cas.client.ProtocolConfigurationImpl;
+import javax.servlet.Servlet;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+
+import junit.framework.TestCase;
+
 import org.soulwing.cas.client.ProtocolConfigurationHolder;
+import org.soulwing.cas.client.ProtocolConfigurationImpl;
 import org.soulwing.cas.client.SimpleUrlGenerator;
 import org.soulwing.servlet.MockFilterChain;
 import org.soulwing.servlet.MockFilterConfig;
+import org.soulwing.servlet.http.BufferedServletOutputStream;
 import org.soulwing.servlet.http.MockHttpServletRequest;
 import org.soulwing.servlet.http.MockHttpServletResponse;
-
-import junit.framework.TestCase;
 
 public class LogoutFilterTest extends TestCase {
 
@@ -69,9 +76,9 @@ public class LogoutFilterTest extends TestCase {
   
   public void testDefaults() throws Exception {
     setRequiredConfig();
-    assertEquals(Boolean.parseBoolean(LogoutFilter.APPLICATION_LOGOUT_DEFAULT),
+    assertEquals(Boolean.parseBoolean(AbstractLogoutFilter.APPLICATION_LOGOUT_DEFAULT),
         filter.isApplicationLogout());
-    assertEquals(Boolean.parseBoolean(LogoutFilter.GLOBAL_LOGOUT_DEFAULT),
+    assertEquals(Boolean.parseBoolean(AbstractLogoutFilter.GLOBAL_LOGOUT_DEFAULT),
         filter.isGlobalLogout());
     assertNull(filter.getRedirectUrl());
   }
@@ -162,4 +169,44 @@ public class LogoutFilterTest extends TestCase {
     assertEquals(filter.getRedirectUrl(), response.getRedirect());
   }
 
+  public void testApplicationLogoutWithNoRedirects() throws Exception {
+    filterConfig.setInitParameter(FilterConstants.APPLICATION_LOGOUT, "true");
+    filterConfig.setInitParameter(FilterConstants.GLOBAL_LOGOUT, "false");
+    filterConfig.setInitParameter(FilterConstants.LOGOUT_PATH, LOGOUT_PATH);
+    filter.init(filterConfig);
+    request.setRequestURL(LOGOUT_URL);
+    filterChain.setServlet(new MockServlet());
+    filter.doFilter(request, response, filterChain);
+    BufferedServletOutputStream os = (BufferedServletOutputStream)
+      response.getOutputStream();
+    assertEquals("test", new String(os.toByteArray()));
+  }
+  
+  private static class MockServlet implements Servlet {
+
+    private ServletConfig servletConfig;
+    
+    public void destroy() {
+      // TODO Auto-generated method stub
+    }
+
+    public ServletConfig getServletConfig() {
+      return servletConfig;
+    }
+
+    public String getServletInfo() {
+      return "MockServlet";
+    }
+
+    public void init(ServletConfig servletConfig) throws ServletException {
+      this.servletConfig = servletConfig;
+    }
+
+    public void service(ServletRequest request, ServletResponse response)
+        throws ServletException, IOException {
+      response.getWriter().print("test");
+      response.getWriter().flush();
+    }
+    
+  }
 }

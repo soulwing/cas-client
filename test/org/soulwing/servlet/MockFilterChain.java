@@ -20,6 +20,7 @@ package org.soulwing.servlet;
 import java.io.IOException;
 
 import javax.servlet.FilterChain;
+import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -30,7 +31,16 @@ public class MockFilterChain implements FilterChain {
   private boolean chainInvoked;
   private ServletRequest request;
   private ServletResponse response;
+  private Servlet servlet;
   
+  public Servlet getServlet() {
+    return servlet;
+  }
+
+  public void setServlet(Servlet servlet) {
+    this.servlet = servlet;
+  }
+
   public boolean isChainInvoked() {
     return chainInvoked;
   }
@@ -48,6 +58,9 @@ public class MockFilterChain implements FilterChain {
     this.chainInvoked = true;
     this.request = request;
     this.response = response;
+    if (servlet != null) {
+      servlet.service(request, response);
+    }
   }
 
 }

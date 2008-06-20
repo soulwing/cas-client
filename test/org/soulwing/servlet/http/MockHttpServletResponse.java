@@ -38,6 +38,8 @@ public class MockHttpServletResponse implements HttpServletResponse {
   private String message;
   private String redirectUrl;
   private boolean committed;
+  private ServletOutputStream outputStream;
+  private PrintWriter writer;
   
   public void addCookie(Cookie arg0) {
     throw new UnsupportedOperationException();
@@ -136,13 +138,27 @@ public class MockHttpServletResponse implements HttpServletResponse {
   }
 
   public ServletOutputStream getOutputStream() throws IOException {
-    throw new UnsupportedOperationException();
+    if (outputStream == null) {
+      setOutputStream(new BufferedServletOutputStream());
+    }
+    return outputStream;
   }
 
+  public void setOutputStream(ServletOutputStream outputStream) {
+    this.outputStream = outputStream;
+  }
+  
   public PrintWriter getWriter() throws IOException {
-    throw new UnsupportedOperationException();
+    if (writer == null) {
+      setWriter(new PrintWriter(getOutputStream()));
+    }
+    return writer;
   }
 
+  public void setWriter(PrintWriter writer) {
+    this.writer = writer;
+  }
+  
   public void setCharacterEncoding(String arg0) {
     throw new UnsupportedOperationException();
   }

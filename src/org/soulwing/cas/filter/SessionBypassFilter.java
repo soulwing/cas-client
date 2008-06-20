@@ -17,18 +17,12 @@
  */
 package org.soulwing.cas.filter;
 
-import java.io.IOException;
-
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.soulwing.cas.support.ValidationUtils;
 
 
 /**
@@ -56,67 +50,39 @@ public class SessionBypassFilter extends LogoutFilter {
    *    or a string containing glob wildcards.
    */
   public void setBypassPaths(String bypassPaths) {
+    if (bypassPaths == null) return;
     pathMatcher = new ServletPathMatcher(bypassPaths.split("\\s*,\\s*"));
   }
 
-  /**
-   * Initializes this filter.  When this filter is being used as a bean in
-   * a dependency injection framework (e.g. Spring), this method should be 
-   * invoked after all dependencies have been set.
-   * @throws Exception
-   */
   public void init() throws Exception {
-    if (pathMatcher == null) {
-      throw new IllegalStateException("must set bypassPaths property");
-    }
     super.init();
+    if (pathMatcher == null) {
+      throw new IllegalArgumentException("must configure " 
+          + FilterConstants.BYPASS_PATHS);
+    }
   }
 
   /*
-   * @see javax.servlet.Filter#init(javax.servlet.FilterConfig)
+   * @see org.soulwing.cas.filter.AbstractLogoutFilter#onInit(org.soulwing.cas.filter.Configurator)
    */
-  public void init(FilterConfig filterConfig) throws ServletException {
-    setBypassPaths(new Configurator(filterConfig)
-        .getRequiredParameter(FilterConstants.BYPASS_PATHS));
-    super.init(filterConfig);
+  public void onInit(Configurator configurator) throws ServletException {
+    super.onInit(configurator);
+    setBypassPaths(configurator.getParameter(FilterConstants.BYPASS_PATHS));
   }
-
-  /* 
-   * @see javax.servlet.Filter#destroy()
+  
+  /* (non-Javadoc)
+   * @see org.soulwing.cas.filter.LogoutFilter#isLogoutRequest(javax.servlet.http.HttpServletRequest)
    */
-  public void destroy() {
-    super.destroy();
-  }
-
-  /* 
-   * @see javax.servlet.Filter#doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse, javax.servlet.FilterChain)
-   */
-  public void doFilter(ServletRequest request, ServletResponse response,
-      FilterChain filterChain) throws IOException, ServletException {
-    try {
-      doHttpFilter(
-          (HttpServletRequest) request, 
-          (HttpServletResponse) response,
-          filterChain);
-    }
-    catch (ClassCastException ex) {
-      log.debug("Filter supports HTTP only");
-      filterChain.doFilter(request, response);
-    }
-  }
-
-  protected void doHttpFilter(HttpServletRequest request, 
-      HttpServletResponse response, FilterChain filterChain) 
-      throws IOException, ServletException { 
-
-    if (pathMatcher.matches(request.getServletPath())) {
+  protected boolean isLogoutRequest(HttpServletRequest request) {
+    boolean bypassedPath = pathMatcher.matches(request.getServletPath());
+    if (bypassedPath) {
       log.debug("servlet path " + request.getServletPath() 
           + " marked for bypass");
-      removeSessionState(request);
+      ValidationUtils.removeSessionState(request);
       request.getSession(true).setAttribute(FilterConstants.BYPASS_ATTRIBUTE,
           Boolean.valueOf(true));
     }
-    super.doHttpFilter(request, response, filterChain);
+    return super.isLogoutRequest(request);
   }
 
 }
