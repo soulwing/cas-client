@@ -36,6 +36,9 @@
   <target name="prepare">
     <mkdir dir="${build.classes}"/>
     <mkdir dir="${build.test.classes}"/>
+    <copy todir="${build.classes}">
+      <fileset dir="${src}" includes="**/*.properties"/>
+    </copy>
   </target>
 
   <target name="clean"

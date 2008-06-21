@@ -17,6 +17,7 @@
  */
 package org.soulwing.cas.client.jdom;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -76,11 +77,14 @@ public class JdomUtil {
     InputStream inputStream = null;
     try {
       inputStream = JdomUtil.class.getResourceAsStream(PROTOCOL_NAMES_PROPERTIES);
+      if (inputStream == null) {
+        throw new FileNotFoundException(PROTOCOL_NAMES_PROPERTIES);
+      }
       nameMap.load(inputStream);
       log.info(PROTOCOL_NAMES_PROPERTIES);
     }
     finally {
-      if (inputStream == null) {
+      if (inputStream != null) {
         try {
           inputStream.close();
         }
