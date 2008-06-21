@@ -85,7 +85,7 @@ public class ProxyValidateMappingStrategy
             serviceValidateMappingStrategy.mapResponse(
                element.getParentElement()));
     response.setProxies(getProxies(
-        JdomUtil.getChild(element, mapName(ProtocolConstants.PROXIES))));
+        JdomUtil.getChild(element, ProtocolConstants.PROXIES)));
     return response;
   }
 
@@ -108,7 +108,7 @@ public class ProxyValidateMappingStrategy
     List proxies = new ArrayList();
     if (element != null) {
       List proxyElementList = JdomUtil.getChildren(element, 
-          mapName(ProtocolConstants.PROXY));
+          ProtocolConstants.PROXY);
       if (proxyElementList.size() == 0) {
         throw new ProtocolViolationException("Expected at least one proxy");
       }

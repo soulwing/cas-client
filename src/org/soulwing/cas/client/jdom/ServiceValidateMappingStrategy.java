@@ -40,9 +40,9 @@ public class ServiceValidateMappingStrategy
     ServiceValidationSuccessResponse response = new ServiceValidationSuccessResponse();
     response.setSuccessful(true);
     response.setUserName(getUserName(
-        JdomUtil.getChild(element, mapName(ProtocolConstants.USER))));
+        JdomUtil.getChild(element, ProtocolConstants.USER)));
     response.setProxyGrantingTicketIou(getProxyGrantingTicketIou(
-        JdomUtil.getChild(element, mapName(ProtocolConstants.PROXY_GRANTING_TICKET))));
+        JdomUtil.getChild(element, ProtocolConstants.PROXY_GRANTING_TICKET)));
     log.debug("authentication success");
     return response;
   }

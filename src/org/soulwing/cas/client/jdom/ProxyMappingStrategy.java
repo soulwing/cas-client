@@ -34,14 +34,14 @@ public class ProxyMappingStrategy extends AbstractResponseMappingStrategy {
    */
   public ValidationResponse mapResponse(Object response) {
     Element responseElement = JdomUtil.getChild(
-        (Element) response, mapName(ProtocolConstants.PROXY_SUCCESS));
+        (Element) response, ProtocolConstants.PROXY_SUCCESS);
     if (responseElement != null) {
       log.debug("proxy success");
       return mapSuccessResponse(responseElement);
     }
     
     responseElement = JdomUtil.getChild(
-        (Element) response, mapName(ProtocolConstants.PROXY_FAILURE));
+        (Element) response, ProtocolConstants.PROXY_FAILURE);
     if (responseElement != null) {
       log.debug("proxy failure");
       return mapFailureResponse(responseElement);

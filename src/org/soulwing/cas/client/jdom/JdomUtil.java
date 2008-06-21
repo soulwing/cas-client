@@ -29,6 +29,21 @@ import org.jdom.Namespace;
 
 /**
  * Static utility methods for JDOM and the CAS namespace.
+ * 
+ * String used in XML elements and attributes for the CAS protocol are loaded
+ * by this class from the <code>ProtocolNames.properties</code> resource when
+ * the class is loaded.  In the standard distribution, the file contains the
+ * official names defined by the CAS 2 protocol.  Some institutions use a
+ * modified version of the protocol which renames some of the protocol's 
+ * XML elements and attributes.  In such cases the <code>ProtocolNames.properties</code> 
+ * file and be overridden by placing a customized version on the classpath
+ * ahead of the copy of the file stored in the JAR file with this class.
+ * When the client is being used in a standard web application, a customized
+ * version of <code>ProtocolNames.properties</code> can be placed in a
+ * <code>WEB-INF/classes</code> in a subdirectory that corresponds to the 
+ * package name of this class (as specified above).  When the client is integrated
+ * with Tomcat, the file should be placed in a package-appropriate subdirectory
+ * under <code>$CATALINA_BASE/common/classes</code>.
  *
  * @author Carl Harris
  */
@@ -84,7 +99,7 @@ public class JdomUtil {
    * @return the mapped name
    * @throws IllegalArgumentException if <code>name</code> is not mapped
    */
-  protected static String mapName(String name) {
+  private static String mapName(String name) {
     String mappedName = nameMap.getProperty(name);
     if (mappedName == null) {
       throw new IllegalArgumentException("undefined protocol name: " + name);
@@ -93,11 +108,14 @@ public class JdomUtil {
   }
   
   public static final Element getChild(Element element, String name) {
-    return element.getChild(name, CAS_NAMESPACE);
+    return element.getChild(mapName(name), CAS_NAMESPACE);
   }
 
   public static final List getChildren(Element element, String name) {
-    return element.getChildren(name, CAS_NAMESPACE);
+    return element.getChildren(mapName(name), CAS_NAMESPACE);
   }
 
+  public static final String getAttributeValue(Element element, String name) {
+    return element.getAttributeValue(mapName(name));
+  }
 }
