@@ -34,7 +34,7 @@ public class ConfluenceCasGroupJoiningAuthenticator
 
   private static final long serialVersionUID = 1L;
 
-  private GroupManager groupManager;
+  private transient GroupManager groupManager;
 
   
   /* (non-Javadoc)

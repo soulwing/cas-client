@@ -42,8 +42,8 @@ public class ProxyAuthenticatedRedirectServlet extends HttpServlet {
 
   private static final long serialVersionUID = 1837103005783071131L;
   
-  private ProtocolConfiguration configuration;
-  private ProxyTicketService proxyTicketService;
+  private transient ProtocolConfiguration configuration;
+  private transient ProxyTicketService proxyTicketService;
 
   /**
    * Gets the <code>configuration</code> property.
