@@ -26,10 +26,11 @@ package org.soulwing.cas.support;
  */
 public class ProxyGrantingTicketHolder {
 
-  private static final ThreadLocal ticketHolder = new ThreadLocal();
+  private static final ThreadLocal<String> ticketHolder = 
+      new ThreadLocal<String>();
   
   public static synchronized String getTicket() {
-    return (String) ticketHolder.get();
+    return ticketHolder.get();
   }
   
   public static synchronized void setTicket(String ticket) {
