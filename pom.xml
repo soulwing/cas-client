@@ -4,7 +4,7 @@
 	<groupId>org.soulwing</groupId>
 	<artifactId>cas-client</artifactId>
 	<packaging>pom</packaging>
-	<name>${project.artifactId}</name>
+	<name>CAS Client</name>
 	<version>0.7.0-SNAPSHOT</version>
 	<description>A CAS 2.0 client implementation with support for integration into Tomcat.</description>
 	<properties>
@@ -32,6 +32,37 @@
           </includes>
         </configuration>
       </plugin>
+      <plugin>
+        <artifactId>maven-source-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>jar-no-fork</goal>
+              <goal>test-jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <links>
+            <link>http://docs.oracle.com/javase/6/docs/api</link>
+          </links>
+        </configuration>
+        <executions>
+          <execution>
+            <id>attach-javdocs</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>jar</goal>
+              <goal>test-jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>      
     </plugins>
   </build>
   <modules>
