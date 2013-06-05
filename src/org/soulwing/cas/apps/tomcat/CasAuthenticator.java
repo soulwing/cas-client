@@ -27,8 +27,6 @@ import org.apache.catalina.authenticator.AuthenticatorBase;
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
 import org.apache.catalina.deploy.LoginConfig;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.soulwing.cas.client.NoTicketException;
 import org.soulwing.cas.client.ServiceValidationResponse;
 import org.soulwing.cas.filter.FilterConstants;
@@ -42,8 +40,6 @@ import org.soulwing.cas.filter.UrlGeneratorFactory;
  */
 public class CasAuthenticator extends AuthenticatorBase {
 
-  private static final Log log = LogFactory.getLog(CasAuthenticator.class);
-  
   private RealmWrapper realm;
  
   /* (non-Javadoc)
@@ -130,13 +126,13 @@ public class CasAuthenticator extends AuthenticatorBase {
       }
     }
     if (principal == null) {
-      log.warn("unknown CAS user " + userName + " for " 
+      containerLog.warn("unknown CAS user " + userName + " for " 
           + request.getRequestURI());
       response.sendError(Response.SC_UNAUTHORIZED);
       return false;
     }
     request.setUserPrincipal(principal);
-    log.debug("setting " + FilterConstants.VALIDATION_ATTRIBUTE + " to " +
+    containerLog.debug("setting " + FilterConstants.VALIDATION_ATTRIBUTE + " to " +
         validationResponse);
     request.getSession(true).setAttribute(
         FilterConstants.VALIDATION_ATTRIBUTE, validationResponse);
@@ -150,7 +146,7 @@ public class CasAuthenticator extends AuthenticatorBase {
     ServiceValidationResponse validationResponse = (ServiceValidationResponse)
         session.getAttribute(FilterConstants.VALIDATION_ATTRIBUTE);
     if (validationResponse == null) return null;
-    log.debug("principal " + validationResponse.getUserName()
+    containerLog.debug("principal " + validationResponse.getUserName()
         + " authenticated via session state");
     return validationResponse;
   }
@@ -187,7 +183,7 @@ public class CasAuthenticator extends AuthenticatorBase {
       realm = new RealmWrapper(getContainer().getRealm());
     }
     catch (IllegalArgumentException ex){
-      log.error("CAS authenticator requires a Realm that extends from "
+      containerLog.error("CAS authenticator requires a Realm that extends from "
          + "Catalina's RealmBase");
       throw new LifecycleException(ex);
     }

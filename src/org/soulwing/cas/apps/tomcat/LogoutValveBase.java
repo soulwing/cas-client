@@ -12,14 +12,11 @@ import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
 import org.apache.catalina.util.LifecycleSupport;
 import org.apache.catalina.valves.ValveBase;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.soulwing.cas.client.SimpleUrlGenerator;
 import org.soulwing.cas.filter.FilterConstants;
 
 public abstract class LogoutValveBase extends ValveBase implements Lifecycle {
 
-  private static final Log log = LogFactory.getLog(LogoutValve.class);
   private final LifecycleSupport lifecycleSupport =
       new LifecycleSupport(this);
 
@@ -30,14 +27,14 @@ public abstract class LogoutValveBase extends ValveBase implements Lifecycle {
     
     // short-circuit if not a logout request
     if (!logoutStatus.isLogout()) {
-      if (log.isTraceEnabled()) {
-        log.trace("URI " + request.getRequestURI() + " is not a logout request");
+      if (containerLog.isTraceEnabled()) {
+        containerLog.trace("URI " + request.getRequestURI() + " is not a logout request");
       }
       getNext().invoke(request, response);
       return;
     }
     
-    log.debug("URI " + request.getRequestURI() + " is a logout request");
+    containerLog.debug("URI " + request.getRequestURI() + " is a logout request");
     Session session = request.getSessionInternal();
     if (session != null && session.isValid()) {
       session.removeNote(FilterConstants.VALIDATION_ATTRIBUTE);
@@ -54,7 +51,7 @@ public abstract class LogoutValveBase extends ValveBase implements Lifecycle {
       response.sendRedirect(logoutStatus.getRedirectUrl());
     }
     else {
-      log.warn("no post-logout redirect URL available");
+      containerLog.warn("no post-logout redirect URL available");
     }
 
   }

@@ -12,8 +12,6 @@ import java.util.regex.PatternSyntaxException;
 
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.connector.Request;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * A <code>Valve</code> that listens for requests that match a configured
@@ -26,9 +24,6 @@ import org.apache.commons.logging.LogFactory;
  */
 public class PatternMatchingLogoutValve extends LogoutValveBase {
 
-  private static final Log log =
-      LogFactory.getLog(PatternMatchingLogoutValve.class);
-  
   private String urlRegex;
   private Pattern urlPattern;
   private String redirectUrl;
@@ -80,7 +75,7 @@ public class PatternMatchingLogoutValve extends LogoutValveBase {
       urlPattern = Pattern.compile(this.urlRegex);
     }
     catch (PatternSyntaxException psException) {
-      log.error(
+      containerLog.error(
           "'" + this.urlRegex + "' is not a valid regular expression",
           psException);
       throw new LifecycleException(psException);

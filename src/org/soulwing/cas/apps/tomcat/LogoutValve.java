@@ -21,8 +21,6 @@ package org.soulwing.cas.apps.tomcat;
 
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.connector.Request;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * A <code>Valve</code> that listens for CAS logout requests that match a
@@ -35,8 +33,6 @@ import org.apache.commons.logging.LogFactory;
 public class LogoutValve extends LogoutValveBase {
 
   public static final String GLOBAL_LOGOUT_PARAM = "global";
-  
-  private static final Log log = LogFactory.getLog(LogoutValve.class);
   
   private String logoutUri;
   private String redirectUrl;
@@ -85,7 +81,7 @@ public class LogoutValve extends LogoutValveBase {
       throw new LifecycleException(new IllegalArgumentException(
           "logoutUri must be a valid URI starting with a forward slash (/)"));
     }
-    log.info("listening for " + logoutUri);
+    containerLog.info("listening for " + logoutUri);
   }
 
 }

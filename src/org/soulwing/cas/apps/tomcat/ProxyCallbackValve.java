@@ -16,7 +16,6 @@
  * License for more details.
  */
 package org.soulwing.cas.apps.tomcat;
-
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -28,8 +27,6 @@ import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
 import org.apache.catalina.util.LifecycleSupport;
 import org.apache.catalina.valves.ValveBase;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.soulwing.cas.client.ProtocolConstants;
 
 
@@ -41,8 +38,6 @@ import org.soulwing.cas.client.ProtocolConstants;
  */
 public class ProxyCallbackValve extends ValveBase implements Lifecycle {
 
-  private static final Log log = LogFactory.getLog(ProxyCallbackValve.class);
-  
   private final LifecycleSupport lifecycleSupport = new LifecycleSupport(this);
   
   private String proxyCallbackUri;
@@ -62,20 +57,20 @@ public class ProxyCallbackValve extends ValveBase implements Lifecycle {
     ProxyGrantingTicketRegistry ticketRegistry =
         helper.getTicketRegistry();
     if (request.getRequestURI().equals(proxyCallbackUri)) {
-      log.trace("request URI " + request.getRequestURI() + " matches");
+      containerLog.trace("request URI " + request.getRequestURI() + " matches");
       String pgt = request.getParameter(
           ProtocolConstants.PROXY_TICKET_PARAM);
       String pgtIou = request.getParameter(
           ProtocolConstants.PROXY_TICKET_IOU_PARAM);
       if (pgt == null || pgtIou == null) {
-        log.trace("parameters incomplete: PGT=" + pgt + " IOU=" + pgtIou);
+        containerLog.trace("parameters incomplete: PGT=" + pgt + " IOU=" + pgtIou);
         return;
       }
-      log.debug("callback for IOU " + pgtIou + " with PGT " + pgt);
+      containerLog.debug("callback for IOU " + pgtIou + " with PGT " + pgt);
       ticketRegistry.registerTicket(pgtIou, pgt);
     }
     else {
-      log.trace("request URI " + request.getRequestURI() + " does not match");
+      containerLog.trace("request URI " + request.getRequestURI() + " does not match");
       getNext().invoke(request, response);
     }
   }
@@ -85,7 +80,7 @@ public class ProxyCallbackValve extends ValveBase implements Lifecycle {
    * @see org.apache.catalina.Lifecycle#start()
    */
   public synchronized void start() throws LifecycleException {
-    log.debug("listening for URI " + proxyCallbackUri);
+    containerLog.debug("listening for URI " + proxyCallbackUri);
   }
   
   /*
