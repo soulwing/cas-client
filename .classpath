@@ -6,8 +6,6 @@
 	<classpathentry kind="lib" path="vendor/lib/atlassian-seraph-0.31.jar"/>
 	<classpathentry kind="lib" path="vendor/lib/atlassian-spring-0.7.jar"/>
 	<classpathentry kind="lib" path="vendor/lib/atlassian-user-1.24.jar"/>
-	<classpathentry kind="lib" path="vendor/lib/catalina-5.5.53.jar"/>
-	<classpathentry kind="lib" path="vendor/lib/commons-logging.jar"/>
 	<classpathentry kind="lib" path="vendor/lib/confluence-user-2.7.3.jar"/>
 	<classpathentry kind="lib" path="vendor/lib/hibernate3.2.5.jar"/>
 	<classpathentry kind="lib" path="vendor/lib/jakarta-oro-2.0.8.jar"/>
