@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="test"/>
+	<classpathentry kind="lib" path="vendor/lib/atlassian-bucket-0.20.3.jar"/>
+	<classpathentry kind="lib" path="vendor/lib/atlassian-seraph-0.31.jar"/>
+	<classpathentry kind="lib" path="vendor/lib/atlassian-spring-0.7.jar"/>
+	<classpathentry kind="lib" path="vendor/lib/atlassian-user-1.24.jar"/>
+	<classpathentry kind="lib" path="vendor/lib/catalina-5.5.53.jar"/>
+	<classpathentry kind="lib" path="vendor/lib/commons-logging.jar"/>
+	<classpathentry kind="lib" path="vendor/lib/confluence-user-2.7.3.jar"/>
+	<classpathentry kind="lib" path="vendor/lib/hibernate3.2.5.jar"/>
+	<classpathentry kind="lib" path="vendor/lib/jakarta-oro-2.0.8.jar"/>
+	<classpathentry kind="lib" path="vendor/lib/jdom.jar"/>
+	<classpathentry kind="lib" path="vendor/lib/servlet-api.jar"/>
+	<classpathentry kind="lib" path="vendor/lib/spring-beans-2.5.3.jar"/>
+	<classpathentry kind="lib" path="vendor/lib/spring-context-2.5.3.jar"/>
+	<classpathentry kind="lib" path="vendor/lib/spring-core-2.5.3.jar"/>
+	<classpathentry kind="lib" path="vendor/lib/spring-orm-2.5.3.jar"/>
+	<classpathentry kind="lib" path="vendor/lib/spring-tx-2.5.3.jar"/>
+	<classpathentry kind="lib" path="vendor/lib/spring-web-2.5.3.jar"/>
+	<classpathentry kind="lib" path="vendor/test-lib/junit-4.1.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="build/test-classes"/>
+</classpath>
