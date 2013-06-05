@@ -62,10 +62,10 @@ public class PatternMatchingLogoutValve extends LogoutValveBase {
   }
 
   /* (non-Javadoc)
-   * @see org.soulwing.cas.apps.tomcat.LogoutValveBase#start()
+   * @see org.soulwing.cas.apps.tomcat.LogoutValveBase#startInternal()
    */
-  public void start() throws LifecycleException {
-    super.start();
+  protected void startInternal() throws LifecycleException {
+    super.startInternal();
     if (this.urlRegex == null || this.urlRegex.length() == 0) {
       throw new LifecycleException(
           new IllegalArgumentException(
