@@ -19,6 +19,7 @@ package org.soulwing.servlet.http;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Collection;
 import java.util.Locale;
 
 import javax.servlet.ServletOutputStream;
@@ -196,6 +197,21 @@ public class MockHttpServletResponse implements HttpServletResponse {
   }
 
   public Locale getLocale() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public String getHeader(String arg0) {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public Collection<String> getHeaderNames() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public Collection<String> getHeaders(String arg0) {
     throw new UnsupportedOperationException();
   }
 

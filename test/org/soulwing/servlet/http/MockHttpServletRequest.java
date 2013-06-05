@@ -24,6 +24,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -31,11 +32,19 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.servlet.AsyncContext;
+import javax.servlet.DispatcherType;
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.servlet.ServletInputStream;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 import org.soulwing.servlet.MockRequestDispatcher;
 
@@ -48,8 +57,12 @@ import org.soulwing.servlet.MockRequestDispatcher;
  */
 public class MockHttpServletRequest implements HttpServletRequest {
 
-  private Map parameters = new LinkedHashMap();
-  private Map attributes = new LinkedHashMap();
+  private final Map<String, List<String>> parameters = 
+      new LinkedHashMap<String, List<String>>();
+  
+  private final Map<String, Object> attributes = 
+      new LinkedHashMap<String, Object>();
+  
   private final String contextPath;
   private String servletPath;
   private String pathInfo;
@@ -154,7 +167,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
   }
   
   public void setQueryString(String queryString) {
-    setParameterMap(new LinkedHashMap());
+    setParameterMap(new LinkedHashMap<String, List<String>>());
     if (queryString == null) {
       return;
     }
@@ -177,28 +190,31 @@ public class MockHttpServletRequest implements HttpServletRequest {
     }
   }
 
-  public Map getParameterMap() {
-    return this.parameters;
+  public Map<String, String[]> getParameterMap() {
+    Map<String, String[]> parameterMap = new LinkedHashMap<String, String[]>();
+    for (String key : this.parameters.keySet()) {
+      parameterMap.put(key, this.parameters.get(key).toArray(new String[0]));
+    }
+    return parameterMap;
   }
 
-  @SuppressWarnings("unchecked")
   public void setParameter(String name, String value) {
     if (!this.parameters.containsKey(name)) {
-      this.parameters.put(name, new ArrayList());
+      this.parameters.put(name, new ArrayList<String>());
     }
-    List values = (List) this.parameters.get(name);
+    List<String> values = this.parameters.get(name);
     values.add(value);
   }
   
-  public void setParameterMap(Map parameters) {
-    this.parameters = parameters;
+  public void setParameterMap(Map<String, List<String>> parameters) {
+    this.parameters.clear();
+    this.parameters.putAll(parameters);
   }
   
   public Object getAttribute(String name) {
     return attributes.get(name);
   }
 
-  @SuppressWarnings("unchecked")
   public void setAttribute(String name, Object value) {
     attributes.put(name, value);
   }
@@ -268,7 +284,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
     this.pathInfo = pathInfo;
   }
 
-  public Enumeration getAttributeNames() {
+  public Enumeration<String> getAttributeNames() {
     throw new UnsupportedOperationException();
   }
 
@@ -288,11 +304,11 @@ public class MockHttpServletRequest implements HttpServletRequest {
     throw new UnsupportedOperationException();
   }
 
-  public Enumeration getHeaders(String arg0) {
+  public Enumeration<String> getHeaders(String arg0) {
     throw new UnsupportedOperationException();
   }
 
-  public Enumeration getHeaderNames() {
+  public Enumeration<String> getHeaderNames() {
     throw new UnsupportedOperationException();
   }
 
@@ -360,7 +376,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
     throw new UnsupportedOperationException();
   }
 
-  public Enumeration getParameterNames() {
+  public Enumeration<String> getParameterNames() {
     throw new UnsupportedOperationException();
   }
 
@@ -392,7 +408,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
     throw new UnsupportedOperationException();
   }
 
-  public Enumeration getLocales() {
+  public Enumeration<Locale> getLocales() {
     throw new UnsupportedOperationException();
   }
 
@@ -413,6 +429,69 @@ public class MockHttpServletRequest implements HttpServletRequest {
   }
 
   public int getLocalPort() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public AsyncContext getAsyncContext() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public DispatcherType getDispatcherType() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public ServletContext getServletContext() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public boolean isAsyncStarted() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public boolean isAsyncSupported() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public AsyncContext startAsync() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public AsyncContext startAsync(ServletRequest arg0, ServletResponse arg1) {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public boolean authenticate(HttpServletResponse arg0) throws IOException,
+      ServletException {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public Part getPart(String arg0) throws IOException, IllegalStateException,
+      ServletException {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public Collection<Part> getParts() throws IOException,
+      IllegalStateException, ServletException {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public void login(String arg0, String arg1) throws ServletException {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public void logout() throws ServletException {
     throw new UnsupportedOperationException();
   }
   
