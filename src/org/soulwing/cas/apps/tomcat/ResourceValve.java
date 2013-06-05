@@ -95,7 +95,8 @@ public class ResourceValve extends ValveBase implements Lifecycle {
     lifecycleSupport.removeLifecycleListener(listener);
   }
 
-  public void start() throws LifecycleException {
+  protected void startInternal() throws LifecycleException {
+    super.startInternal();
     try {
       helper.setProtocolConfiguration((ProtocolConfiguration)
           getResource(getConfig()));
