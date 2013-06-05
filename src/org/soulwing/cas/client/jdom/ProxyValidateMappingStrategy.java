@@ -24,8 +24,8 @@ import org.soulwing.cas.client.AbstractResponse;
 import org.soulwing.cas.client.ProtocolConstants;
 import org.soulwing.cas.client.ProtocolMappingStrategy;
 import org.soulwing.cas.client.ProtocolViolationException;
-import org.soulwing.cas.client.ValidationResponse;
 import org.soulwing.cas.client.ServiceValidationResponse;
+import org.soulwing.cas.client.ValidationResponse;
 
 /**
  * A <code>ProtocolMappingStrategy</code> that maps to an instance
@@ -104,6 +104,7 @@ public class ProxyValidateMappingStrategy
    * @throws ProtocolViolationException if <code>element</code> does
    *    not contain the proxies element.
    */
+  @SuppressWarnings("unchecked")
   private List getProxies(Element element) {
     List proxies = new ArrayList();
     if (element != null) {
