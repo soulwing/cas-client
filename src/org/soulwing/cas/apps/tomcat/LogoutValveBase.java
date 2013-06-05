@@ -5,7 +5,6 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 
 import org.apache.catalina.Lifecycle;
-import org.apache.catalina.LifecycleException;
 import org.apache.catalina.LifecycleListener;
 import org.apache.catalina.Session;
 import org.apache.catalina.connector.Request;
@@ -58,12 +57,6 @@ public abstract class LogoutValveBase extends ValveBase implements Lifecycle {
 
   public abstract LogoutStatus getLogoutStatus(Request request);
   
-  public void start() throws LifecycleException {
-  }
-
-  public void stop() throws LifecycleException {
-  }
-
   public void addLifecycleListener(LifecycleListener lifecycleListener) {
     lifecycleSupport.addLifecycleListener(lifecycleListener);
   }
