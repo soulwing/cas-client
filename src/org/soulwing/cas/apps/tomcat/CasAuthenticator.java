@@ -175,10 +175,10 @@ public class CasAuthenticator extends AuthenticatorBase {
 
   /*
    * (non-Javadoc)
-   * @see org.apache.catalina.authenticator.AuthenticatorBase#start()
+   * @see org.apache.catalina.authenticator.AuthenticatorBase#startInternal()
    */
-  public void start() throws LifecycleException {
-    super.start();
+  public void startInternal() throws LifecycleException {
+    super.startInternal();
     try {
       realm = new RealmWrapper(getContainer().getRealm());
     }
