@@ -154,6 +154,7 @@ public class ProxyCallbackFilter implements Filter {
     return matches;
   }
 
+  @SuppressWarnings("unchecked")
   private void processCallback(HttpServletRequest request) {
     String pgtId = request.getParameter(
         ProtocolConstants.PROXY_TICKET_PARAM);
