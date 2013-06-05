@@ -17,8 +17,6 @@
  */
 package org.soulwing.cas.apps.tomcat;
 
-
-
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.connector.Request;
 
@@ -69,9 +67,9 @@ public class LogoutValve extends LogoutValveBase {
   }
 
   /* (non-Javadoc)
-   * @see org.soulwing.cas.apps.tomcat.LogoutValveBase#start()
+   * @see org.soulwing.cas.apps.tomcat.LogoutValveBase#startInternal()
    */
-  public void start() throws LifecycleException {
+  protected void startInternal() throws LifecycleException {
     super.start();
     if (logoutUri == null || logoutUri.length() == 0) {
       throw new LifecycleException(new IllegalArgumentException(
