@@ -77,17 +77,10 @@ public class ProxyCallbackValve extends ValveBase implements Lifecycle {
 
   /*
    * (non-Javadoc)
-   * @see org.apache.catalina.Lifecycle#start()
+   * @see org.apache.catalina.Lifecycle#startInternal()
    */
-  public synchronized void start() throws LifecycleException {
+  protected void startInternal() throws LifecycleException {
     containerLog.debug("listening for URI " + proxyCallbackUri);
-  }
-  
-  /*
-   * (non-Javadoc)
-   * @see org.apache.catalina.Lifecycle#stop()
-   */
-  public synchronized void stop() throws LifecycleException {
   }
   
   /*
