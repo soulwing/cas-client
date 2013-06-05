@@ -21,7 +21,6 @@ import junit.framework.TestCase;
 import org.soulwing.cas.client.ProtocolConfigurationImpl;
 import org.soulwing.cas.client.ProtocolConfigurationHolder;
 import org.soulwing.cas.client.ProtocolConstants;
-import org.soulwing.cas.client.StringProtocolSource;
 import org.soulwing.cas.http.AuthenticatorConstants;
 import org.soulwing.servlet.MockFilterChain;
 import org.soulwing.servlet.MockFilterConfig;
@@ -44,7 +43,7 @@ public class ServiceValidationFilterTest extends TestCase {
   private static final String PROXY_CALLBACK_URL = 
       "https://localhost/apps/pgtCallback";
   private static final String SOURCE_CLASS_NAME = 
-      "org.soulwing.cas.client.StringProtocolSource";
+      StringProtocolSource.class.getName();
   
   private ServiceValidationFilter filter;
   private MockFilterConfig config;

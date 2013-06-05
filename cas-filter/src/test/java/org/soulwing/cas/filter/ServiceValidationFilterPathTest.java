@@ -21,7 +21,6 @@ import junit.framework.TestCase;
 import org.soulwing.cas.client.ProtocolConfigurationImpl;
 import org.soulwing.cas.client.ProtocolConfigurationHolder;
 import org.soulwing.cas.client.ProtocolConstants;
-import org.soulwing.cas.client.StringProtocolSource;
 import org.soulwing.cas.http.AuthenticatorConstants;
 import org.soulwing.cas.http.UrlGeneratorFactory;
 import org.soulwing.servlet.MockFilterChain;
@@ -42,7 +41,7 @@ public class ServiceValidationFilterPathTest extends TestCase {
   private static final String URL = 
       "https://localhost" + FILTER_PATH;
   private static final String SOURCE_CLASS_NAME = 
-      "org.soulwing.cas.client.StringProtocolSource";
+      StringProtocolSource.class.getName();
   private static final String AUTH_FAILED_URL = "mock_redirect_url";
 
   private ServiceValidationFilter filter;

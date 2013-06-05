@@ -15,10 +15,11 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  */
-package org.soulwing.cas.client;
+package org.soulwing.cas.filter;
 
 import java.io.StringReader;
 
+import org.soulwing.cas.client.ProtocolSource;
 import org.xml.sax.InputSource;
 
 

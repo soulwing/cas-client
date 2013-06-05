@@ -24,7 +24,6 @@ import junit.framework.TestCase;
 
 import org.soulwing.cas.client.ProtocolConfigurationImpl;
 import org.soulwing.cas.client.ProtocolConfigurationHolder;
-import org.soulwing.cas.client.StringProtocolSource;
 import org.soulwing.cas.http.AuthenticatorConstants;
 import org.soulwing.servlet.MockFilterChain;
 import org.soulwing.servlet.MockFilterConfig;
@@ -34,7 +33,7 @@ import org.soulwing.servlet.http.MockHttpServletResponse;
 
 public class ProxyValidationFilterTest extends TestCase {
 
-  private static final String SOURCE_CLASS_NAME = "org.soulwing.cas.client.StringProtocolSource";
+  private static final String SOURCE_CLASS_NAME = StringProtocolSource.class.getName();
   private static final String SERVICE_URL = "https://localhost/myapp";
   private static final String SERVER_URL = "https://localhost/cas";
   private static final String URL = "https://localhost/myapp/myapp.htm";
