@@ -48,6 +48,7 @@ public class MockFilterConfig implements FilterConfig {
     this.servletContext = servletContext;
   }
   
+  @SuppressWarnings("unchecked")
   public void setInitParameter(String paramName, String paramValue) {
     initParams.put(paramName, paramValue);
   }
@@ -56,6 +57,7 @@ public class MockFilterConfig implements FilterConfig {
     return (String) initParams.get(paramName);
   }
 
+  @SuppressWarnings("unchecked")
   public Enumeration getInitParameterNames() {
     return new Vector(initParams.keySet()).elements();
   }

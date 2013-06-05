@@ -33,6 +33,7 @@ import javax.servlet.http.HttpSessionContext;
  * @author Carl Harris
  * 
  */
+@SuppressWarnings("deprecation")
 public class MockHttpSession implements HttpSession {
 
   private String id;
@@ -77,6 +78,7 @@ public class MockHttpSession implements HttpSession {
     throw new UnsupportedOperationException();
   }
 
+  @SuppressWarnings("unchecked")
   public Enumeration getAttributeNames() {
     return new Vector(attributes.keySet()).elements();
   }
@@ -85,6 +87,7 @@ public class MockHttpSession implements HttpSession {
     throw new UnsupportedOperationException();
   }
 
+  @SuppressWarnings("unchecked")
   public void setAttribute(String name, Object value) {
     attributes.put(name, value);
   }

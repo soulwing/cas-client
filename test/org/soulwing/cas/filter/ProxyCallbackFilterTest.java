@@ -89,6 +89,7 @@ public class ProxyCallbackFilterTest extends TestCase {
     assertTrue(filter.getTicketMap().keySet().isEmpty());
   }
 
+  @SuppressWarnings("unchecked")
   public void testValidatedRequestMatchingTicket() throws Exception {
     initFilter();
     MockServiceValidationResponse validation = new MockServiceValidationResponse();
@@ -103,6 +104,7 @@ public class ProxyCallbackFilterTest extends TestCase {
         FilterConstants.PROXY_GRANTING_TICKET_ATTRIBUTE));
   }
   
+  @SuppressWarnings("unchecked")
   public void testValidatedRequestDifferentTicket() throws Exception {
     initFilter();
     MockServiceValidationResponse validation = new MockServiceValidationResponse();

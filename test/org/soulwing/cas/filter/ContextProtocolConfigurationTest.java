@@ -108,6 +108,7 @@ public class ContextProtocolConfigurationTest extends TestCase {
             .get(ProtocolConstants.SERVICE_PARAM), "UTF-8"));
   }
   
+  @SuppressWarnings("unchecked")
   public Map getQueryParameterMap(String queryString) {
     if (queryString == null) {
       return new HashMap();

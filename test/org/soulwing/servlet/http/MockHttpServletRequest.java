@@ -181,6 +181,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
     return this.parameters;
   }
 
+  @SuppressWarnings("unchecked")
   public void setParameter(String name, String value) {
     if (!this.parameters.containsKey(name)) {
       this.parameters.put(name, new ArrayList());
@@ -197,6 +198,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
     return attributes.get(name);
   }
 
+  @SuppressWarnings("unchecked")
   public void setAttribute(String name, Object value) {
     attributes.put(name, value);
   }
