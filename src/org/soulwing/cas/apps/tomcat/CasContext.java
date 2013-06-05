@@ -28,13 +28,9 @@ import org.apache.catalina.deploy.LoginConfig;
  */
 public class CasContext extends StandardContext {
 
-  private static final long serialVersionUID = 2295536636488213569L;
-
-  private static final String CAS_AUTH_METHOD = "CAS";
-
   public LoginConfig getLoginConfig() {
     LoginConfig config = super.getLoginConfig();
-    config.setAuthMethod(CAS_AUTH_METHOD);
+    config.setAuthMethod(CasAuthenticator.CAS_AUTH);
     return config;
   }
   
