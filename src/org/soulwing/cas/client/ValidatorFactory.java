@@ -140,6 +140,7 @@ public class ValidatorFactory {
    * <code>proxyValidateMappingStrategy</code> if a setter method exists
    * for doing so.
    */
+  @SuppressWarnings("unchecked")
   private static void configureProxyValidateMappingStrategy() {
     try {
       Class strategyClass = proxyValidateMappingStrategy.getClass();
