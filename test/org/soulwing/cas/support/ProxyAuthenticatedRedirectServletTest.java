@@ -142,9 +142,6 @@ public class ProxyAuthenticatedRedirectServletTest extends TestCase {
       return ticket;
     }
     
-    public void setTicket(String ticket) {
-      this.ticket = ticket;
-    }
   }
   
 }
