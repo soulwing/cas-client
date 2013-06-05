@@ -23,13 +23,15 @@ import javax.naming.Context;
 import javax.naming.NamingException;
 import javax.servlet.ServletException;
 
+import org.apache.catalina.Container;
+import org.apache.catalina.Engine;
 import org.apache.catalina.Lifecycle;
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.LifecycleListener;
-import org.apache.catalina.ServerFactory;
+import org.apache.catalina.Server;
+import org.apache.catalina.Service;
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
-import org.apache.catalina.core.StandardServer;
 import org.apache.catalina.util.LifecycleSupport;
 import org.apache.catalina.valves.ValveBase;
 import org.soulwing.cas.client.ProtocolConfiguration;
@@ -110,15 +112,18 @@ public class ResourceValve extends ValveBase implements Lifecycle {
     }
   }
 
-  public void stop() throws LifecycleException {
-    // TODO Auto-generated method stub
-
-  }
-
   private Object getResource(String resourceName)
       throws NamingException {
     try {
-      StandardServer server = (StandardServer) ServerFactory.getServer();
+      Container container = getContainer();
+      while (container != null && !(container instanceof Engine)) {
+        container = container.getParent();
+      }
+      if (!(container instanceof Engine)) {
+        throw new IllegalStateException("can't find Engine");
+      }
+      Service service = ((Engine) container).getService();
+      Server server = service.getServer();
       Context context = server.getGlobalNamingContext();
       return context.lookup(resourceName);
     }
