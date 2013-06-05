@@ -182,11 +182,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
   }
 
   public Map getParameterMap() {
-    Map<String, String[]> parameterMap = new LinkedHashMap<String, String[]>();
-    for (String key : this.parameters.keySet()) {
-      parameterMap.put(key, this.parameters.get(key).toArray(new String[0]));
-    }
-    return parameterMap;
+    return this.parameters;
   }
 
   public void setParameter(String name, String value) {
