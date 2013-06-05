@@ -1,0 +1,55 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.soulwing</groupId>
+    <artifactId>cas-client</artifactId>
+    <version>0.7.0-SNAPSHOT</version>
+  </parent>
+  <artifactId>cas-confluence</artifactId>
+  <name>Confluence Authenticator</name>
+  <description>Provides an authenticator that allows Confluence to utilize CAS authentication.</description>
+  <dependencies>
+    <dependency>
+      <groupId>com.atlassian.confluence</groupId>
+      <artifactId>confluence-user</artifactId>
+      <version>2.7.3</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/lib/confluence-user-2.7.3.jar</systemPath>
+    </dependency>
+    <dependency>
+    	<groupId>com.atlassian.user</groupId>
+    	<artifactId>atlassian-user</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.atlassian.seraph</groupId>
+      <artifactId>atlassian-seraph</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>javax.activation</groupId>
+      <artifactId>activation</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>javax.mail</groupId>
+      <artifactId>mail</artifactId>
+    </dependency>
+    <dependency>
+    	<groupId>com.atlassian.bucket</groupId>
+    	<artifactId>atlassian-bucket</artifactId>
+    </dependency>
+    <dependency>
+    	<groupId>org.soulwing</groupId>
+    	<artifactId>cas-protocol</artifactId>
+    	<version>${project.version}</version>
+    </dependency>
+    <dependency>
+    	<groupId>org.soulwing</groupId>
+    	<artifactId>cas-filter</artifactId>
+    	<version>${project.version}</version>
+    </dependency>
+    <dependency>
+    	<groupId>net.sf.hibernate</groupId>
+    	<artifactId>hibernate</artifactId>
+    	<version>2.1.8</version>
+    </dependency>
+  </dependencies>
+</project>

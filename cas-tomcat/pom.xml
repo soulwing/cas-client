@@ -1,0 +1,37 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.soulwing</groupId>
+    <artifactId>cas-client</artifactId>
+    <version>0.7.0-SNAPSHOT</version>
+  </parent>
+  <artifactId>cas-tomcat</artifactId>
+  <name>Tomcat Authenticator</name>
+  <description>Provides support for using CAS as an authentication mechanism in Java Web Applications.</description>
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.tomcat</groupId>
+      <artifactId>tomcat-catalina</artifactId>
+      <version>${tomcat.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tomcat</groupId>
+      <artifactId>tomcat-coyote</artifactId>
+      <version>${tomcat.version}</version>
+    </dependency>
+    <dependency>
+    	<groupId>commons-logging</groupId>
+    	<artifactId>commons-logging-api</artifactId>
+    </dependency>
+    <dependency>
+    	<groupId>org.soulwing</groupId>
+    	<artifactId>cas-protocol</artifactId>
+    	<version>${project.version}</version>
+    </dependency>
+    <dependency>
+    	<groupId>org.soulwing</groupId>
+    	<artifactId>cas-filter</artifactId>
+    	<version>${project.version}</version>
+    </dependency>
+  </dependencies>
+</project>

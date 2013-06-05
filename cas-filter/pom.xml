@@ -1,0 +1,33 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.soulwing</groupId>
+    <artifactId>cas-client</artifactId>
+    <version>0.7.0-SNAPSHOT</version>
+  </parent>
+  <artifactId>cas-filter</artifactId>
+  <name>Servlet Filter</name>
+  <description>Provides support for using servlet filters to perform CAS authentication.</description>
+  <dependencies>
+  	<dependency>
+  		<groupId>org.soulwing</groupId>
+  		<artifactId>cas-protocol</artifactId>
+  		<version>${project.version}</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>javax.servlet</groupId>
+  		<artifactId>servlet-api</artifactId>
+  		<version>2.4</version>
+  		<scope>provided</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>junit</groupId>
+  		<artifactId>junit</artifactId>
+  	</dependency>
+  	<dependency>
+  		<groupId>oro</groupId>
+  		<artifactId>oro</artifactId>
+  		<version>2.0.8</version>
+  	</dependency>
+  </dependencies>
+</project>
