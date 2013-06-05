@@ -20,6 +20,7 @@ package org.soulwing.cas.apps.tomcat;
 import java.io.IOException;
 import java.security.Principal;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.catalina.LifecycleException;
@@ -40,12 +41,19 @@ import org.soulwing.cas.filter.UrlGeneratorFactory;
  */
 public class CasAuthenticator extends AuthenticatorBase {
 
+  public static final String CAS_AUTH = "CAS";
+  
   private RealmWrapper realm;
  
-  /* (non-Javadoc)
-   * @see org.apache.catalina.authenticator.AuthenticatorBase#authenticate(org.apache.catalina.connector.Request, org.apache.catalina.connector.Response, org.apache.catalina.deploy.LoginConfig)
+  @Override
+  protected String getAuthMethod() {
+    return CAS_AUTH;
+  }
+
+  /**
+   * {@inheritDoc}
    */
-  protected boolean authenticate(Request request, Response response, 
+  public boolean authenticate(Request request, HttpServletResponse response, 
       LoginConfig loginConfig)
       throws IOException {
     
@@ -59,7 +67,7 @@ public class CasAuthenticator extends AuthenticatorBase {
     }
   }
 
-  private boolean isAuthentic(Request request, Response response)
+  private boolean isAuthentic(Request request, HttpServletResponse response)
       throws IOException {
     ResourceHelper helper = getResourceHelper(request);
     try {
@@ -88,7 +96,7 @@ public class CasAuthenticator extends AuthenticatorBase {
     }
   }
 
-  private void redirectToLogin(Request request, Response response,
+  private void redirectToLogin(Request request, HttpServletResponse response,
       ResourceHelper helper) throws IOException {
     String loginUrl = getLoginUrl(request, helper);
     request.getSessionInternal().setNote(FilterConstants.LOGIN_ATTRIBUTE, 
@@ -108,7 +116,7 @@ public class CasAuthenticator extends AuthenticatorBase {
             helper.getProtocolConfiguration()).getLoginUrl();
   }
 
-  private boolean isKnownUser(Request request, Response response,
+  private boolean isKnownUser(Request request, HttpServletResponse response,
       ServiceValidationResponse validationResponse) throws IOException {
     String userName = validationResponse.getUserName();
     /*
