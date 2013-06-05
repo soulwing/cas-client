@@ -70,7 +70,7 @@ public class LogoutValve extends LogoutValveBase {
    * @see org.soulwing.cas.apps.tomcat.LogoutValveBase#startInternal()
    */
   protected void startInternal() throws LifecycleException {
-    super.start();
+    super.startInternal();
     if (logoutUri == null || logoutUri.length() == 0) {
       throw new LifecycleException(new IllegalArgumentException(
           "must configure logoutUri"));

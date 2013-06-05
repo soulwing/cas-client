@@ -20,7 +20,6 @@ import java.io.IOException;
 
 import javax.servlet.ServletException;
 
-import org.apache.catalina.Lifecycle;
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.LifecycleListener;
 import org.apache.catalina.connector.Request;
@@ -36,7 +35,7 @@ import org.soulwing.cas.client.ProtocolConstants;
  *
  * @author Carl Harris
  */
-public class ProxyCallbackValve extends ValveBase implements Lifecycle {
+public class ProxyCallbackValve extends ValveBase {
 
   private final LifecycleSupport lifecycleSupport = new LifecycleSupport(this);
   
@@ -80,7 +79,8 @@ public class ProxyCallbackValve extends ValveBase implements Lifecycle {
    * @see org.apache.catalina.Lifecycle#startInternal()
    */
   protected void startInternal() throws LifecycleException {
-    containerLog.debug("listening for URI " + proxyCallbackUri);
+    super.startInternal();
+    containerLog.info("listening for URI " + proxyCallbackUri);
   }
   
   /*
