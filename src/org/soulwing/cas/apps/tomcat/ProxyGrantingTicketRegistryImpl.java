@@ -81,6 +81,7 @@ public class ProxyGrantingTicketRegistryImpl
     }
   }
 
+  @SuppressWarnings("unchecked")
   private synchronized void putIouToPgtMapping(String pgtIou, String pgt) {
     iouToPgtMap.put(pgtIou, pgt);
     log.debug("IOU " + pgtIou + " mapped to PGT " + pgt);
@@ -97,6 +98,7 @@ public class ProxyGrantingTicketRegistryImpl
     }
   }
   
+  @SuppressWarnings("unchecked")
   private synchronized void putIouToSessionMapping(String pgtIou,
       HttpSession session) {
     iouToSessionMap.put(pgtIou, session);
