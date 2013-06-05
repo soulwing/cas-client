@@ -22,6 +22,7 @@ import org.soulwing.cas.client.ProtocolConfigurationImpl;
 import org.soulwing.cas.client.ProtocolConfigurationHolder;
 import org.soulwing.cas.client.ProtocolConstants;
 import org.soulwing.cas.client.StringProtocolSource;
+import org.soulwing.cas.http.AuthenticatorConstants;
 import org.soulwing.servlet.MockFilterChain;
 import org.soulwing.servlet.MockFilterConfig;
 import org.soulwing.servlet.http.MockHttpServletRequest;
@@ -59,7 +60,7 @@ public class ServiceValidationFilterTest extends TestCase {
     protocolConfig.setProxyCallbackUrl(PROXY_CALLBACK_URL);
     ProtocolConfigurationHolder.setConfiguration(protocolConfig);
     config = new MockFilterConfig();
-    config.setInitParameter(FilterConstants.SOURCE_CLASS_NAME,
+    config.setInitParameter(AuthenticatorConstants.SOURCE_CLASS_NAME,
         SOURCE_CLASS_NAME);
     filter = new ServiceValidationFilter();
     filter.init(config);
@@ -92,7 +93,7 @@ public class ServiceValidationFilterTest extends TestCase {
   }
 
   public void testValidationFailureRedirect() throws Exception {
-    config.setInitParameter(FilterConstants.AUTH_FAILED_URL, AUTH_FAILED_URL);
+    config.setInitParameter(AuthenticatorConstants.AUTH_FAILED_URL, AUTH_FAILED_URL);
     filter.init(config);
     source = (StringProtocolSource)
         filter.getConfiguration().getProtocolSource();
@@ -175,7 +176,7 @@ public class ServiceValidationFilterTest extends TestCase {
   
   public void testBypassOnBypassAttribute() throws Exception {
     request.setRequestURL(URL);
-    request.getSession().setAttribute(FilterConstants.BYPASS_ATTRIBUTE, 
+    request.getSession().setAttribute(AuthenticatorConstants.BYPASS_ATTRIBUTE, 
         new Boolean(true));
     filter.doFilter(request, response, filterChain);
     assertTrue(filterChain.isChainInvoked());

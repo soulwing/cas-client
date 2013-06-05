@@ -20,6 +20,8 @@ package org.soulwing.cas.filter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
+import org.soulwing.cas.http.AuthenticatorConstants;
+
 
 /**
  * A subclass of <code>AbstractLogoutFilter</code> that monitors incoming
@@ -72,7 +74,7 @@ public class LogoutFilter extends AbstractLogoutFilter {
   protected void onInit(Configurator configurator)
       throws ServletException {
     super.onInit(configurator);
-    setLogoutPath(configurator.getParameter(FilterConstants.LOGOUT_PATH));
+    setLogoutPath(configurator.getParameter(AuthenticatorConstants.LOGOUT_PATH));
   }
 
   /* (non-Javadoc)

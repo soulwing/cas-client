@@ -22,6 +22,7 @@ import javax.servlet.ServletContextListener;
 
 import org.soulwing.cas.client.ProtocolConfigurationImpl;
 import org.soulwing.cas.client.ProtocolConfigurationHolder;
+import org.soulwing.cas.http.AuthenticatorConstants;
 
 /**
  * A ServletContextListener that uses context init parameters to set the
@@ -43,17 +44,17 @@ public class ProtocolConfigurationListener implements ServletContextListener {
     ProtocolConfigurationImpl config = new ProtocolConfigurationImpl();
     try {
       config.setServerUrl(
-          configurator.getRequiredParameter(FilterConstants.SERVER_URL));
+          configurator.getRequiredParameter(AuthenticatorConstants.SERVER_URL));
       config.setServiceUrl(
-          configurator.getRequiredParameter(FilterConstants.SERVICE_URL));
+          configurator.getRequiredParameter(AuthenticatorConstants.SERVICE_URL));
       config.setGatewayFlag(
-          Boolean.valueOf(configurator.getParameter(FilterConstants.GATEWAY, 
+          Boolean.valueOf(configurator.getParameter(AuthenticatorConstants.GATEWAY, 
               Boolean.toString(GATEWAY_DEFAULT))).booleanValue());
       config.setRenewFlag(
-          Boolean.valueOf(configurator.getParameter(FilterConstants.RENEW, 
+          Boolean.valueOf(configurator.getParameter(AuthenticatorConstants.RENEW, 
               Boolean.toString(RENEW_DEFAULT))).booleanValue()); 
       config.setProxyCallbackUrl(
-          configurator.getParameter(FilterConstants.PROXY_CALLBACK_URL));
+          configurator.getParameter(AuthenticatorConstants.PROXY_CALLBACK_URL));
       ProtocolConfigurationHolder.setConfiguration(config);
     }
     catch (FilterParameterException ex) {

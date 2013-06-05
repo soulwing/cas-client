@@ -15,7 +15,7 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  */
-package org.soulwing.cas.filter;
+package org.soulwing.cas.http;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -32,14 +32,14 @@ import org.soulwing.cas.client.ValidatorFactory;
  *
  * @author Carl Harris
  */
-public class ServiceValidationAuthenticator implements FilterAuthenticator {
+public class ServiceValidationAuthenticator implements Authenticator {
   
   private ProtocolConfiguration protocolConfiguration;
   
   public ServiceValidationAuthenticator() {
   }
   
-  ServiceValidationAuthenticator(ProtocolConfiguration protocolConfiguration) {
+  public ServiceValidationAuthenticator(ProtocolConfiguration protocolConfiguration) {
     setProtocolConfiguration(protocolConfiguration);
   }
   

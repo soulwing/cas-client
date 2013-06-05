@@ -15,6 +15,7 @@ package org.soulwing.cas.filter;
 
 import javax.servlet.ServletException;
 
+import org.soulwing.cas.http.AuthenticatorConstants;
 import org.soulwing.servlet.MockFilterChain;
 import org.soulwing.servlet.MockFilterConfig;
 import org.soulwing.servlet.http.MockHttpServletRequest;
@@ -62,7 +63,7 @@ public class SimpleBypassFilterTest extends TestCase {
     request.setRequestURL(BYPASS_URL);
     filter.doFilter(request, response, filterChain);
     assertTrue(filterChain.isChainInvoked());
-    assertNotNull(request.getAttribute(FilterConstants.BYPASS_ATTRIBUTE));
+    assertNotNull(request.getAttribute(AuthenticatorConstants.BYPASS_ATTRIBUTE));
   }
 
   public void testRequestForOtherPath() throws Exception {
@@ -71,7 +72,7 @@ public class SimpleBypassFilterTest extends TestCase {
     request.setRequestURL(OTHER_URL);
     filter.doFilter(request, response, filterChain);
     assertTrue(filterChain.isChainInvoked());
-    assertNull(request.getAttribute(FilterConstants.BYPASS_ATTRIBUTE));
+    assertNull(request.getAttribute(AuthenticatorConstants.BYPASS_ATTRIBUTE));
   }
 
 }

@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.soulwing.cas.client.ServiceValidationResponse;
-import org.soulwing.cas.filter.FilterConstants;
+import org.soulwing.cas.http.AuthenticatorConstants;
 import org.soulwing.cas.support.ValidationUtils;
 
 import com.atlassian.confluence.user.ConfluenceAuthenticator;
@@ -74,7 +74,7 @@ public class ConfluenceCasAuthenticator extends ConfluenceAuthenticator {
       return super.getUser(request, response);
     }
     // SCC-25: avoid reasserting "user is logged in" state during logout
-    else if (request.getAttribute(FilterConstants.LOGOUT_ATTRIBUTE) != null) {
+    else if (request.getAttribute(AuthenticatorConstants.LOGOUT_ATTRIBUTE) != null) {
       if (logger.isDebugEnabled()) {
         logger.debug("ignoring CAS validation -- log out requested");
       }

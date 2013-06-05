@@ -25,6 +25,7 @@ import junit.framework.TestCase;
 import org.soulwing.cas.client.ProtocolConfigurationImpl;
 import org.soulwing.cas.client.ProtocolConfigurationHolder;
 import org.soulwing.cas.client.StringProtocolSource;
+import org.soulwing.cas.http.AuthenticatorConstants;
 import org.soulwing.servlet.MockFilterChain;
 import org.soulwing.servlet.MockFilterConfig;
 import org.soulwing.servlet.http.MockHttpServletRequest;
@@ -59,8 +60,8 @@ public class ProxyValidationFilterTest extends TestCase {
     protocolConfig.setServiceUrl(SERVICE_URL);
     ProtocolConfigurationHolder.setConfiguration(protocolConfig);
     MockFilterConfig config = new MockFilterConfig();
-    config.setInitParameter(FilterConstants.TRUSTED_PROXIES, TRUSTED_PROXIES);
-    config.setInitParameter(FilterConstants.SOURCE_CLASS_NAME,
+    config.setInitParameter(AuthenticatorConstants.TRUSTED_PROXIES, TRUSTED_PROXIES);
+    config.setInitParameter(AuthenticatorConstants.SOURCE_CLASS_NAME,
         SOURCE_CLASS_NAME);
     this.filter = new ProxyValidationFilter();
     filter.init(config);

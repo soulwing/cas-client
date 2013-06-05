@@ -35,8 +35,8 @@ import org.apache.catalina.connector.Response;
 import org.apache.catalina.util.LifecycleSupport;
 import org.apache.catalina.valves.ValveBase;
 import org.soulwing.cas.client.ProtocolConfiguration;
-import org.soulwing.cas.filter.FilterAuthenticator;
-import org.soulwing.cas.filter.ServiceValidationAuthenticator;
+import org.soulwing.cas.http.Authenticator;
+import org.soulwing.cas.http.ServiceValidationAuthenticator;
 
 /**
  * A <code>Valve</code> that attaches some CAS resource references to the
@@ -102,7 +102,7 @@ public class ResourceValve extends ValveBase implements Lifecycle {
     try {
       helper.setProtocolConfiguration((ProtocolConfiguration)
           getResource(getConfig()));
-      FilterAuthenticator authenticator = newAuthenticator();
+      Authenticator authenticator = newAuthenticator();
       authenticator.setProtocolConfiguration(helper.getProtocolConfiguration());
       helper.setAuthenticator(authenticator);
       helper.setTicketRegistry(new ProxyGrantingTicketRegistryImpl());
@@ -135,9 +135,9 @@ public class ResourceValve extends ValveBase implements Lifecycle {
     }
   }
 
-  private FilterAuthenticator newAuthenticator() throws Exception {
+  private Authenticator newAuthenticator() throws Exception {
     Class authenticatorClass = Class.forName(getAuthenticatorClass());
-    FilterAuthenticator authenticator = (FilterAuthenticator)
+    Authenticator authenticator = (Authenticator)
         authenticatorClass.newInstance();
     return authenticator;
   }

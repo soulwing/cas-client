@@ -15,7 +15,7 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  */
-package org.soulwing.cas.filter;
+package org.soulwing.cas.http;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -32,7 +32,7 @@ import org.soulwing.cas.client.ServiceValidationResponse;
  * @author Carl Harris
  * 
  */
-public interface FilterAuthenticator {
+public interface Authenticator {
 
   /**
    * Performs the action of the filter.

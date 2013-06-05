@@ -23,6 +23,7 @@ import org.soulwing.cas.client.NoTicketException;
 import org.soulwing.cas.client.ProtocolConfiguration;
 import org.soulwing.cas.client.ServiceValidationResponse;
 import org.soulwing.cas.client.Validator;
+import org.soulwing.cas.http.Authenticator;
 
 
 /**
@@ -31,7 +32,7 @@ import org.soulwing.cas.client.Validator;
  * @author Carl Harris
  * 
  */
-public class MockFilterCallback implements FilterAuthenticator {
+public class MockFilterCallback implements Authenticator {
 
   private boolean filterFlag;
   private ServiceValidationResponse response;

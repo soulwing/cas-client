@@ -15,7 +15,7 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  */
-package org.soulwing.cas.filter;
+package org.soulwing.cas.http;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,7 +42,7 @@ import org.soulwing.cas.client.ValidatorFactory;
  *
  * @author Carl Harris
  */
-public class ProxyValidationAuthenticator implements FilterAuthenticator {
+public class ProxyValidationAuthenticator implements Authenticator {
 
   private final Log log = LogFactory.getLog(ProxyValidationAuthenticator.class); 
   private ProtocolConfiguration protocolConfiguration;
@@ -51,7 +51,7 @@ public class ProxyValidationAuthenticator implements FilterAuthenticator {
   public ProxyValidationAuthenticator() {
   }
   
-  ProxyValidationAuthenticator(ProtocolConfiguration protocolConfiguration,
+  public ProxyValidationAuthenticator(ProtocolConfiguration protocolConfiguration,
       String trustedProxies) {
     setProtocolConfiguration(protocolConfiguration);
     setTrustedProxies(trustedProxies);

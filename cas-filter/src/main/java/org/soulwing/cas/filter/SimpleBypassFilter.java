@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.soulwing.cas.http.AuthenticatorConstants;
 
 
 /**
@@ -76,7 +77,7 @@ public class SimpleBypassFilter implements Filter {
    */
   public void init(FilterConfig filterConfig) throws ServletException {
     setBypassPaths(new Configurator(filterConfig)
-        .getRequiredParameter(FilterConstants.BYPASS_PATHS));
+        .getRequiredParameter(AuthenticatorConstants.BYPASS_PATHS));
   }
 
   /* 
@@ -110,7 +111,7 @@ public class SimpleBypassFilter implements Filter {
     if (pathMatcher.matches(request.getServletPath())) {
       log.debug("servlet path " + request.getServletPath() 
           + " marked for bypass");
-      request.setAttribute(FilterConstants.BYPASS_ATTRIBUTE,
+      request.setAttribute(AuthenticatorConstants.BYPASS_ATTRIBUTE,
           Boolean.valueOf(true));
     }
     filterChain.doFilter(request, response);

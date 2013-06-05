@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.soulwing.cas.http.AuthenticatorConstants;
 
 
 /**
@@ -48,7 +49,7 @@ public class SimpleAuthorizationFilter implements Filter {
   
   public void init(FilterConfig config) throws ServletException {
     String users = new Configurator(config).getRequiredParameter(
-        FilterConstants.AUTHORIZED_USERS);
+        AuthenticatorConstants.AUTHORIZED_USERS);
     setAuthorizedUsers(users.split("\\s*,\\s*"));
     try {
       init();

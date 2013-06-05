@@ -17,6 +17,9 @@
  */
 package org.soulwing.cas.filter;
 
+import org.soulwing.cas.http.Authenticator;
+import org.soulwing.cas.http.ProxyValidationAuthenticator;
+
 
 /**
  * An subclass of AbstractValidationFilter that uses CAS's 
@@ -26,7 +29,7 @@ package org.soulwing.cas.filter;
  */
 public class ProxyValidationFilter extends AbstractValidationFilter { 
   
-  protected FilterAuthenticator getAuthenticator() {
+  protected Authenticator getAuthenticator() {
     return new ProxyValidationAuthenticator(
         getConfiguration().getProtocolConfiguration(),
         getConfiguration().getTrustedProxies());

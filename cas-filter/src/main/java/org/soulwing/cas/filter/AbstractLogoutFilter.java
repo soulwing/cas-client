@@ -37,6 +37,7 @@ import org.apache.commons.logging.LogFactory;
 import org.soulwing.cas.client.ProtocolConfiguration;
 import org.soulwing.cas.client.ProtocolConfigurationHolder;
 import org.soulwing.cas.client.SimpleUrlGenerator;
+import org.soulwing.cas.http.AuthenticatorConstants;
 import org.soulwing.cas.support.ValidationUtils;
 
 /**
@@ -233,13 +234,13 @@ public abstract class AbstractLogoutFilter implements Filter {
     Configurator fc = new Configurator(filterConfig);
     // extract our properties from the configurator
     setApplicationLogout(Boolean.parseBoolean(fc.getParameter(
-        FilterConstants.APPLICATION_LOGOUT, APPLICATION_LOGOUT_DEFAULT)));
+        AuthenticatorConstants.APPLICATION_LOGOUT, APPLICATION_LOGOUT_DEFAULT)));
     setGlobalLogout(Boolean.parseBoolean(fc.getParameter(
-        FilterConstants.GLOBAL_LOGOUT, GLOBAL_LOGOUT_DEFAULT)));
+        AuthenticatorConstants.GLOBAL_LOGOUT, GLOBAL_LOGOUT_DEFAULT)));
     setRedirectUrl(new Configurator(filterConfig)
-        .getParameter(FilterConstants.REDIRECT_URL));
+        .getParameter(AuthenticatorConstants.REDIRECT_URL));
     setBypassRedirectUrl(new Configurator(filterConfig)
-        .getParameter(FilterConstants.BYPASS_REDIRECT_URL));
+        .getParameter(AuthenticatorConstants.BYPASS_REDIRECT_URL));
     // Now give the subclass a chance
     onInit(fc);
     // Validate property settings and translate exceptions
@@ -317,7 +318,7 @@ public abstract class AbstractLogoutFilter implements Filter {
     
     if (isApplicationLogout()) {
       bufferedResponse = new BufferedHttpServletResponse(response);
-      request.setAttribute(FilterConstants.LOGOUT_ATTRIBUTE,
+      request.setAttribute(AuthenticatorConstants.LOGOUT_ATTRIBUTE,
           new Boolean(true));
       filterChain.doFilter(request, bufferedResponse);
     }

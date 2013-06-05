@@ -21,6 +21,7 @@ import java.util.Map;
 import org.soulwing.cas.client.ProtocolConstants;
 import org.soulwing.cas.client.ProtocolConfigurationImpl;
 import org.soulwing.cas.client.SimpleUrlGenerator;
+import org.soulwing.cas.http.UrlGeneratorFactory;
 import org.soulwing.servlet.http.MockHttpServletRequest;
 
 import junit.framework.TestCase;

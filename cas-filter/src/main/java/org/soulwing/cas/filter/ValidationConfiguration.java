@@ -23,6 +23,7 @@ import org.soulwing.cas.client.ProtocolConfiguration;
 import org.soulwing.cas.client.ProtocolConfigurationHolder;
 import org.soulwing.cas.client.ProtocolSource;
 import org.soulwing.cas.client.UrlProtocolSource;
+import org.soulwing.cas.http.AuthenticatorConstants;
 
 
 /**
@@ -131,11 +132,11 @@ public class ValidationConfiguration {
   public void setProtocolConfiguration(
       ProtocolConfiguration protocolConfiguration) {
     if (protocolConfiguration.getServerUrl() == null) {
-      throw new IllegalArgumentException(FilterConstants.SERVER_URL
+      throw new IllegalArgumentException(AuthenticatorConstants.SERVER_URL
           + " property is required");
     }
     if (protocolConfiguration.getServiceUrl() == null) {
-      throw new IllegalArgumentException(FilterConstants.SERVICE_URL
+      throw new IllegalArgumentException(AuthenticatorConstants.SERVICE_URL
           + " property is required");
     }
     this.protocolConfiguration = protocolConfiguration;

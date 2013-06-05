@@ -26,6 +26,7 @@ import junit.framework.TestCase;
 import org.soulwing.cas.client.ProtocolConfigurationHolder;
 import org.soulwing.cas.client.ProtocolConfigurationImpl;
 import org.soulwing.cas.client.SimpleUrlGenerator;
+import org.soulwing.cas.http.AuthenticatorConstants;
 import org.soulwing.servlet.MockFilterChain;
 import org.soulwing.servlet.MockFilterConfig;
 import org.soulwing.servlet.http.BufferedServletOutputStream;
@@ -61,7 +62,7 @@ public class LogoutFilterTest extends TestCase {
   }
 
   private void setRequiredConfig() {
-    filterConfig.setInitParameter(FilterConstants.LOGOUT_PATH, LOGOUT_PATH);
+    filterConfig.setInitParameter(AuthenticatorConstants.LOGOUT_PATH, LOGOUT_PATH);
   }
   
   public void testInitNoLogoutPath() throws Exception {
@@ -88,24 +89,24 @@ public class LogoutFilterTest extends TestCase {
     filter.init(filterConfig);
     request.setRequestURL(LOGOUT_URL);
     request.getSession(true).setAttribute(
-        FilterConstants.VALIDATION_ATTRIBUTE, new Object());
+        AuthenticatorConstants.VALIDATION_ATTRIBUTE, new Object());
     filter.doFilter(request, response, filterChain);
     assertTrue(filterChain.isChainInvoked());
     assertNull(request.getSession().getAttribute(
-        FilterConstants.VALIDATION_ATTRIBUTE));
+        AuthenticatorConstants.VALIDATION_ATTRIBUTE));
   }
 
   public void testRequestForLogoutPathNoApplicationLogout() throws Exception {
     setRequiredConfig();
-    filterConfig.setInitParameter(FilterConstants.APPLICATION_LOGOUT, "false");
+    filterConfig.setInitParameter(AuthenticatorConstants.APPLICATION_LOGOUT, "false");
     filter.init(filterConfig);
     request.setRequestURL(LOGOUT_URL);
     request.getSession(true).setAttribute(
-        FilterConstants.VALIDATION_ATTRIBUTE, new Object());
+        AuthenticatorConstants.VALIDATION_ATTRIBUTE, new Object());
     filter.doFilter(request, response, filterChain);
     assertTrue(!filterChain.isChainInvoked());
     assertNull(request.getSession().getAttribute(
-        FilterConstants.VALIDATION_ATTRIBUTE));
+        AuthenticatorConstants.VALIDATION_ATTRIBUTE));
   }
 
   public void testRequestForOtherPath() throws Exception {
@@ -113,21 +114,21 @@ public class LogoutFilterTest extends TestCase {
     filter.init(filterConfig);
     request.setRequestURL(OTHER_URL);
     request.getSession(true).setAttribute(
-        FilterConstants.VALIDATION_ATTRIBUTE, new Object());
+        AuthenticatorConstants.VALIDATION_ATTRIBUTE, new Object());
     filter.doFilter(request, response, filterChain);
     assertTrue(filterChain.isChainInvoked());
     assertNotNull(request.getSession().getAttribute(
-        FilterConstants.VALIDATION_ATTRIBUTE));
+        AuthenticatorConstants.VALIDATION_ATTRIBUTE));
   }
 
   public void testGlobalLogout() throws Exception {
-    filterConfig.setInitParameter(FilterConstants.GLOBAL_LOGOUT, "true");
+    filterConfig.setInitParameter(AuthenticatorConstants.GLOBAL_LOGOUT, "true");
     doGlobalLogout();
   }
 
   public void testGlobalLogoutWithRedirectUrl() throws Exception {
-    filterConfig.setInitParameter(FilterConstants.GLOBAL_LOGOUT, "true");
-    filterConfig.setInitParameter(FilterConstants.REDIRECT_URL, REDIRECT_URL);
+    filterConfig.setInitParameter(AuthenticatorConstants.GLOBAL_LOGOUT, "true");
+    filterConfig.setInitParameter(AuthenticatorConstants.REDIRECT_URL, REDIRECT_URL);
     doGlobalLogout();
   }
 
@@ -150,10 +151,10 @@ public class LogoutFilterTest extends TestCase {
     ProtocolConfigurationHolder.setConfiguration(config);
     config.setServerUrl(SERVER_URL);
     setRequiredConfig();
-    filterConfig.setInitParameter(FilterConstants.GLOBAL_LOGOUT, "true");
-    filterConfig.setInitParameter(FilterConstants.BYPASS_REDIRECT_URL, 
+    filterConfig.setInitParameter(AuthenticatorConstants.GLOBAL_LOGOUT, "true");
+    filterConfig.setInitParameter(AuthenticatorConstants.BYPASS_REDIRECT_URL, 
         BYPASS_REDIRECT_URL);
-    request.getSession().setAttribute(FilterConstants.BYPASS_ATTRIBUTE, "bypass");
+    request.getSession().setAttribute(AuthenticatorConstants.BYPASS_ATTRIBUTE, "bypass");
     filter.init(filterConfig);
     request.setRequestURL(LOGOUT_URL);
     filter.doFilter(request, response, filterChain);
@@ -161,7 +162,7 @@ public class LogoutFilterTest extends TestCase {
   }
 
   public void testRedirectUrl() throws Exception {
-    filterConfig.setInitParameter(FilterConstants.REDIRECT_URL, REDIRECT_URL);
+    filterConfig.setInitParameter(AuthenticatorConstants.REDIRECT_URL, REDIRECT_URL);
     setRequiredConfig();
     filter.init(filterConfig);
     request.setRequestURL(LOGOUT_URL);
@@ -170,9 +171,9 @@ public class LogoutFilterTest extends TestCase {
   }
 
   public void testApplicationLogoutWithNoRedirects() throws Exception {
-    filterConfig.setInitParameter(FilterConstants.APPLICATION_LOGOUT, "true");
-    filterConfig.setInitParameter(FilterConstants.GLOBAL_LOGOUT, "false");
-    filterConfig.setInitParameter(FilterConstants.LOGOUT_PATH, LOGOUT_PATH);
+    filterConfig.setInitParameter(AuthenticatorConstants.APPLICATION_LOGOUT, "true");
+    filterConfig.setInitParameter(AuthenticatorConstants.GLOBAL_LOGOUT, "false");
+    filterConfig.setInitParameter(AuthenticatorConstants.LOGOUT_PATH, LOGOUT_PATH);
     filter.init(filterConfig);
     request.setRequestURL(LOGOUT_URL);
     filterChain.setServlet(new MockServlet());

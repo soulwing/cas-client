@@ -28,10 +28,5 @@
     	<artifactId>cas-protocol</artifactId>
     	<version>${project.version}</version>
     </dependency>
-    <dependency>
-    	<groupId>org.soulwing</groupId>
-    	<artifactId>cas-filter</artifactId>
-    	<version>${project.version}</version>
-    </dependency>
   </dependencies>
 </project>

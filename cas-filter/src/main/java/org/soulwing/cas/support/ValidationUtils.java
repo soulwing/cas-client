@@ -26,7 +26,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.soulwing.cas.client.ProxyValidationResponse;
 import org.soulwing.cas.client.ServiceValidationResponse;
-import org.soulwing.cas.filter.FilterConstants;
+import org.soulwing.cas.http.AuthenticatorConstants;
 
 /**
  * Utility methods for extracting the CAS validation artifacts from
@@ -49,7 +49,7 @@ public class ValidationUtils {
     
     HttpSession session = request.getSession(false);
     if (session != null) {
-      Object o = session.getAttribute(FilterConstants.VALIDATION_ATTRIBUTE);
+      Object o = session.getAttribute(AuthenticatorConstants.VALIDATION_ATTRIBUTE);
       if (o instanceof ServiceValidationResponse) {
         return (ServiceValidationResponse) o;
       }
@@ -84,7 +84,7 @@ public class ValidationUtils {
     HttpSession session = request.getSession(false);
     if (session != null) {
       Object o = session.getAttribute(
-          FilterConstants.PROXY_GRANTING_TICKET_ATTRIBUTE);
+          AuthenticatorConstants.PROXY_GRANTING_TICKET_ATTRIBUTE);
       if (o instanceof String) {
         return (String) o;
       }
@@ -100,7 +100,7 @@ public class ValidationUtils {
    *    the session is marked for bypass.
    */
   public static boolean isValidationBypassed(HttpServletRequest request) {
-    return request.getAttribute(FilterConstants.BYPASS_ATTRIBUTE) != null
+    return request.getAttribute(AuthenticatorConstants.BYPASS_ATTRIBUTE) != null
         || isValidationBypassedForSession(request);
   }
 
@@ -126,7 +126,7 @@ public class ValidationUtils {
    */
   public static boolean isValidationBypassedForSession(
       HttpSession session) {
-    return session.getAttribute(FilterConstants.BYPASS_ATTRIBUTE) != null;
+    return session.getAttribute(AuthenticatorConstants.BYPASS_ATTRIBUTE) != null;
   }
 
   /**
@@ -143,7 +143,7 @@ public class ValidationUtils {
     Enumeration names = session.getAttributeNames();
     while (names.hasMoreElements()) {
       String name = (String) names.nextElement();
-      if (name.startsWith(FilterConstants.ATTRIBUTE_PREFIX)) {
+      if (name.startsWith(AuthenticatorConstants.ATTRIBUTE_PREFIX)) {
         log.debug("Removing attribute " + name + " from session");
         session.removeAttribute(name);
       }

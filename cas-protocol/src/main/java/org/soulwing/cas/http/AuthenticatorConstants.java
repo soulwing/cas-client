@@ -15,14 +15,14 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  */
-package org.soulwing.cas.filter;
+package org.soulwing.cas.http;
 
 /**
  * Constants used in filters.
  *
  * @author Carl Harris
  */
-public interface FilterConstants {
+public interface AuthenticatorConstants {
 
   String SERVER_URL = "casServerUrl";
   String SERVICE_URL = "casServiceUrl";

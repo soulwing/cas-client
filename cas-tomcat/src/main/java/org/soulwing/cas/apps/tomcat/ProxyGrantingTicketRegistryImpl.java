@@ -24,7 +24,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.soulwing.cas.filter.FilterConstants;
+import org.soulwing.cas.http.AuthenticatorConstants;
 
 /**
  * Default implementation of ProxyGrantingTicketRegistry.
@@ -66,7 +66,7 @@ public class ProxyGrantingTicketRegistryImpl
   }
 
   private synchronized void addPgtToSession(String pgt, HttpSession session) {
-    session.setAttribute(FilterConstants.PROXY_GRANTING_TICKET_ATTRIBUTE, pgt);
+    session.setAttribute(AuthenticatorConstants.PROXY_GRANTING_TICKET_ATTRIBUTE, pgt);
     log.debug("PGT " + pgt + " added to session " + session.getId());
   }
   

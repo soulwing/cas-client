@@ -12,7 +12,7 @@ import org.apache.catalina.connector.Response;
 import org.apache.catalina.util.LifecycleSupport;
 import org.apache.catalina.valves.ValveBase;
 import org.soulwing.cas.client.SimpleUrlGenerator;
-import org.soulwing.cas.filter.FilterConstants;
+import org.soulwing.cas.http.AuthenticatorConstants;
 
 public abstract class LogoutValveBase extends ValveBase implements Lifecycle {
 
@@ -36,7 +36,7 @@ public abstract class LogoutValveBase extends ValveBase implements Lifecycle {
     containerLog.debug("URI " + request.getRequestURI() + " is a logout request");
     Session session = request.getSessionInternal();
     if (session != null && session.isValid()) {
-      session.removeNote(FilterConstants.VALIDATION_ATTRIBUTE);
+      session.removeNote(AuthenticatorConstants.VALIDATION_ATTRIBUTE);
     }
     if (logoutStatus.isGlobal()) {
       ResourceHelper helper =

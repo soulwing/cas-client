@@ -15,7 +15,7 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  */
-package org.soulwing.cas.filter;
+package org.soulwing.cas.http;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -53,7 +53,7 @@ public class UrlGeneratorFactory {
    *
    * @author Carl Harris
    */
-  static class ContextProtocolConfiguration 
+  public static class ContextProtocolConfiguration 
       extends ProtocolConfigurationImpl {
     private final HttpServletRequest request;
     

@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.soulwing.cas.http.AuthenticatorConstants;
 import org.soulwing.cas.support.ValidationUtils;
 
 
@@ -58,7 +59,7 @@ public class SessionBypassFilter extends LogoutFilter {
     super.init();
     if (pathMatcher == null) {
       throw new IllegalArgumentException("must configure " 
-          + FilterConstants.BYPASS_PATHS);
+          + AuthenticatorConstants.BYPASS_PATHS);
     }
   }
 
@@ -67,7 +68,7 @@ public class SessionBypassFilter extends LogoutFilter {
    */
   public void onInit(Configurator configurator) throws ServletException {
     super.onInit(configurator);
-    setBypassPaths(configurator.getParameter(FilterConstants.BYPASS_PATHS));
+    setBypassPaths(configurator.getParameter(AuthenticatorConstants.BYPASS_PATHS));
   }
   
   /* (non-Javadoc)
@@ -79,7 +80,7 @@ public class SessionBypassFilter extends LogoutFilter {
       log.debug("servlet path " + request.getServletPath() 
           + " marked for bypass");
       ValidationUtils.removeSessionState(request);
-      request.getSession(true).setAttribute(FilterConstants.BYPASS_ATTRIBUTE,
+      request.getSession(true).setAttribute(AuthenticatorConstants.BYPASS_ATTRIBUTE,
           Boolean.valueOf(true));
     }
     return super.isLogoutRequest(request);

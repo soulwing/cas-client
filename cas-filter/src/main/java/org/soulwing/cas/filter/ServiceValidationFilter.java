@@ -17,6 +17,9 @@
  */
 package org.soulwing.cas.filter;
 
+import org.soulwing.cas.http.Authenticator;
+import org.soulwing.cas.http.ServiceValidationAuthenticator;
+
 
 /**
  * A AbstractValidationFilter that uses CAS's <code>/serviceValidate</code>
@@ -27,7 +30,7 @@ package org.soulwing.cas.filter;
  */
 public class ServiceValidationFilter extends AbstractValidationFilter {
 
-  protected FilterAuthenticator getAuthenticator() {
+  protected Authenticator getAuthenticator() {
     return new ServiceValidationAuthenticator(
         getConfiguration().getProtocolConfiguration());
   }

@@ -34,6 +34,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.soulwing.cas.client.ProtocolConstants;
 import org.soulwing.cas.client.ServiceValidationResponse;
+import org.soulwing.cas.http.AuthenticatorConstants;
 import org.soulwing.cas.support.ValidationUtils;
 
 /**
@@ -99,7 +100,7 @@ public class ProxyCallbackFilter implements Filter {
    */
   public void init(FilterConfig config) throws ServletException {
     setFilterPath(new Configurator(config)
-        .getRequiredParameter(FilterConstants.FILTER_PATH));
+        .getRequiredParameter(AuthenticatorConstants.FILTER_PATH));
     try {
       init();
     }
@@ -184,7 +185,7 @@ public class ProxyCallbackFilter implements Filter {
       ticketMap.remove(iou);
       log.debug("PGT " + proxyGrantingTicket + " added to session");
       request.getSession().setAttribute(
-          FilterConstants.PROXY_GRANTING_TICKET_ATTRIBUTE, 
+          AuthenticatorConstants.PROXY_GRANTING_TICKET_ATTRIBUTE, 
           proxyGrantingTicket);
     }
   }

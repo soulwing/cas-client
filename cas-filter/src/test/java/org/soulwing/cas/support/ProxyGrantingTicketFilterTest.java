@@ -13,7 +13,7 @@
  */
 package org.soulwing.cas.support;
 
-import org.soulwing.cas.filter.FilterConstants;
+import org.soulwing.cas.http.AuthenticatorConstants;
 import org.soulwing.cas.support.ProxyGrantingTicketFilter;
 import org.soulwing.cas.support.ProxyGrantingTicketHolder;
 import org.soulwing.servlet.MockFilterChain;
@@ -45,7 +45,7 @@ public class ProxyGrantingTicketFilterTest extends TestCase {
 
   public void testSessionHasProxyGrantingTicket() throws Exception {
     request.getSession(true).setAttribute(
-        FilterConstants.PROXY_GRANTING_TICKET_ATTRIBUTE,
+        AuthenticatorConstants.PROXY_GRANTING_TICKET_ATTRIBUTE,
         PROXY_GRANTING_TICKET);
     filter.doFilter(request, response, filterChain);
     assertTrue(filterChain.isChainInvoked());

@@ -18,6 +18,7 @@ import javax.servlet.ServletException;
 import junit.framework.TestCase;
 
 import org.soulwing.cas.client.ProtocolConstants;
+import org.soulwing.cas.http.AuthenticatorConstants;
 import org.soulwing.servlet.MockFilterChain;
 import org.soulwing.servlet.MockFilterConfig;
 import org.soulwing.servlet.http.MockHttpServletRequest;
@@ -47,7 +48,7 @@ public class ProxyCallbackFilterTest extends TestCase {
   }
 
   private void initFilter() throws Exception {
-    filterConfig.setInitParameter(FilterConstants.FILTER_PATH, FILTER_PATH);
+    filterConfig.setInitParameter(AuthenticatorConstants.FILTER_PATH, FILTER_PATH);
     filter.init(filterConfig);   
   }
   
@@ -94,14 +95,14 @@ public class ProxyCallbackFilterTest extends TestCase {
     initFilter();
     MockServiceValidationResponse validation = new MockServiceValidationResponse();
     validation.setProxyGrantingTicketIou(TICKET_IOU);
-    request.getSession().setAttribute(FilterConstants.VALIDATION_ATTRIBUTE, 
+    request.getSession().setAttribute(AuthenticatorConstants.VALIDATION_ATTRIBUTE, 
         validation);
     request.setRequestURL(OTHER_URL);
     filter.getTicketMap().put(TICKET_IOU, TICKET);
     filter.doFilter(request, response, filterChain);
     assertTrue(filterChain.isChainInvoked());
     assertNotNull(request.getSession().getAttribute(
-        FilterConstants.PROXY_GRANTING_TICKET_ATTRIBUTE));
+        AuthenticatorConstants.PROXY_GRANTING_TICKET_ATTRIBUTE));
   }
   
   @SuppressWarnings("unchecked")
@@ -109,14 +110,14 @@ public class ProxyCallbackFilterTest extends TestCase {
     initFilter();
     MockServiceValidationResponse validation = new MockServiceValidationResponse();
     validation.setProxyGrantingTicketIou(OTHER_TICKET_IOU);
-    request.getSession().setAttribute(FilterConstants.VALIDATION_ATTRIBUTE, 
+    request.getSession().setAttribute(AuthenticatorConstants.VALIDATION_ATTRIBUTE, 
         validation);
     request.setRequestURL(OTHER_URL);
     filter.getTicketMap().put(TICKET_IOU, TICKET);
     filter.doFilter(request, response, filterChain);
     assertTrue(filterChain.isChainInvoked());
     assertNull(request.getSession().getAttribute(
-        FilterConstants.PROXY_GRANTING_TICKET_ATTRIBUTE));
+        AuthenticatorConstants.PROXY_GRANTING_TICKET_ATTRIBUTE));
   }
 
   public void testRequestWithSessionNoValidation() throws Exception {
@@ -126,7 +127,7 @@ public class ProxyCallbackFilterTest extends TestCase {
     filter.doFilter(request, response, filterChain);
     assertTrue(filterChain.isChainInvoked());
     assertNull(request.getSession().getAttribute(
-        FilterConstants.PROXY_GRANTING_TICKET_ATTRIBUTE));
+        AuthenticatorConstants.PROXY_GRANTING_TICKET_ATTRIBUTE));
   }
 
   public void testRequestWithoutSession() throws Exception {

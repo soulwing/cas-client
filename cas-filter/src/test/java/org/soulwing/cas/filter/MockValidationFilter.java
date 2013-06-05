@@ -17,6 +17,8 @@
  */
 package org.soulwing.cas.filter;
 
+import org.soulwing.cas.http.Authenticator;
+
 
 /**
  * A mock validation filter implementation for unit testing the 
@@ -26,16 +28,16 @@ package org.soulwing.cas.filter;
  */
 public class MockValidationFilter extends AbstractValidationFilter {
 
-  private final FilterAuthenticator authenticator;
+  private final Authenticator authenticator;
 
-  public MockValidationFilter(FilterAuthenticator authenticator) {
+  public MockValidationFilter(Authenticator authenticator) {
     this.authenticator = authenticator;
   }
 
   /* 
    * @see org.soulwing.cas.filter.AbstractValidationFilter#getAuthenticator()
    */
-  public FilterAuthenticator getAuthenticator() {
+  public Authenticator getAuthenticator() {
     return authenticator;
   }
   

@@ -33,6 +33,9 @@ import org.apache.commons.logging.LogFactory;
 import org.soulwing.cas.client.NoTicketException;
 import org.soulwing.cas.client.ServiceValidationResponse;
 import org.soulwing.cas.client.ValidatorFactory;
+import org.soulwing.cas.http.AuthenticatorConstants;
+import org.soulwing.cas.http.Authenticator;
+import org.soulwing.cas.http.UrlGeneratorFactory;
 import org.soulwing.cas.support.ValidationUtils;
 import org.soulwing.servlet.http.HttpServletRequestWrapper;
 
@@ -70,7 +73,7 @@ public abstract class AbstractValidationFilter implements Filter {
   /**
    * Gets the FilterAuthenticator instance for this AbstractValidationFilter.
    */
-  protected abstract FilterAuthenticator getAuthenticator();
+  protected abstract Authenticator getAuthenticator();
 
   /**
    * Invoked by filter's container to initialize the filter, when the 
@@ -82,17 +85,17 @@ public abstract class AbstractValidationFilter implements Filter {
   public final void init(FilterConfig filterConfig) throws ServletException {
     ValidationConfiguration config = new ValidationConfiguration();
     Configurator fc = new Configurator(filterConfig);
-    config.setFilterPath(fc.getParameter(FilterConstants.FILTER_PATH));
+    config.setFilterPath(fc.getParameter(AuthenticatorConstants.FILTER_PATH));
     config.setRedirectToLogin(Boolean.parseBoolean(
-        fc.getParameter(FilterConstants.REDIRECT_TO_LOGIN, 
+        fc.getParameter(AuthenticatorConstants.REDIRECT_TO_LOGIN, 
             Boolean.toString(ValidationConfiguration.REDIRECT_TO_LOGIN_DEFAULT))));
-    config.setAuthFailedUrl(fc.getParameter(FilterConstants.AUTH_FAILED_URL));
-    config.setTrustedProxies(fc.getParameter(FilterConstants.TRUSTED_PROXIES));
+    config.setAuthFailedUrl(fc.getParameter(AuthenticatorConstants.AUTH_FAILED_URL));
+    config.setTrustedProxies(fc.getParameter(AuthenticatorConstants.TRUSTED_PROXIES));
     config.setProtocolSourceClass(
-        fc.getClassFromParameter(FilterConstants.SOURCE_CLASS_NAME,
+        fc.getClassFromParameter(AuthenticatorConstants.SOURCE_CLASS_NAME,
         ValidationConfiguration.SOURCE_CLASS_DEFAULT));
     config.setPostValidationRedirectParameter(
-        fc.getParameter(FilterConstants.POST_VALIDATION_REDIRECT_PARAMETER));
+        fc.getParameter(AuthenticatorConstants.POST_VALIDATION_REDIRECT_PARAMETER));
     try {
       config.init();
       setConfiguration(config);
@@ -337,7 +340,7 @@ public abstract class AbstractValidationFilter implements Filter {
   
   private boolean previouslyRedirectedToLogin(HttpServletRequest request) {
     String loginUrl = (String)
-        request.getSession().getAttribute(FilterConstants.LOGIN_ATTRIBUTE);
+        request.getSession().getAttribute(AuthenticatorConstants.LOGIN_ATTRIBUTE);
     return loginUrl != null && loginUrl.equals(getLoginUrl(request));
   }
 
@@ -345,7 +348,7 @@ public abstract class AbstractValidationFilter implements Filter {
       HttpServletResponse response) throws IOException {
     log.debug("Redirecting request to CAS login");
     String loginUrl = getLoginUrl(request);
-    request.getSession().setAttribute(FilterConstants.LOGIN_ATTRIBUTE,
+    request.getSession().setAttribute(AuthenticatorConstants.LOGIN_ATTRIBUTE,
         loginUrl);
     response.sendRedirect(loginUrl);
   }
@@ -407,7 +410,7 @@ public abstract class AbstractValidationFilter implements Filter {
   private void setSessionValidation(HttpServletRequest request,
       ServiceValidationResponse response) {
     request.getSession(true).setAttribute(
-        FilterConstants.VALIDATION_ATTRIBUTE, response);
+        AuthenticatorConstants.VALIDATION_ATTRIBUTE, response);
   }
 
 }

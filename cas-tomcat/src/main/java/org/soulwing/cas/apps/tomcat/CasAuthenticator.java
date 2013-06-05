@@ -30,8 +30,8 @@ import org.apache.catalina.connector.Response;
 import org.apache.catalina.deploy.LoginConfig;
 import org.soulwing.cas.client.NoTicketException;
 import org.soulwing.cas.client.ServiceValidationResponse;
-import org.soulwing.cas.filter.FilterConstants;
-import org.soulwing.cas.filter.UrlGeneratorFactory;
+import org.soulwing.cas.http.AuthenticatorConstants;
+import org.soulwing.cas.http.UrlGeneratorFactory;
 
 
 /**
@@ -99,7 +99,7 @@ public class CasAuthenticator extends AuthenticatorBase {
   private void redirectToLogin(Request request, HttpServletResponse response,
       ResourceHelper helper) throws IOException {
     String loginUrl = getLoginUrl(request, helper);
-    request.getSessionInternal().setNote(FilterConstants.LOGIN_ATTRIBUTE, 
+    request.getSessionInternal().setNote(AuthenticatorConstants.LOGIN_ATTRIBUTE, 
         loginUrl);
     response.sendRedirect(loginUrl);
   }
@@ -107,7 +107,7 @@ public class CasAuthenticator extends AuthenticatorBase {
   private boolean previouslyRedirectedToLogin(Request request, 
       ResourceHelper helper) {
     String loginUrl = (String)
-        request.getSessionInternal().getNote(FilterConstants.LOGIN_ATTRIBUTE);
+        request.getSessionInternal().getNote(AuthenticatorConstants.LOGIN_ATTRIBUTE);
     return loginUrl != null && loginUrl.equals(getLoginUrl(request, helper));
   }
 
@@ -140,10 +140,10 @@ public class CasAuthenticator extends AuthenticatorBase {
       return false;
     }
     request.setUserPrincipal(principal);
-    containerLog.debug("setting " + FilterConstants.VALIDATION_ATTRIBUTE + " to " +
+    containerLog.debug("setting " + AuthenticatorConstants.VALIDATION_ATTRIBUTE + " to " +
         validationResponse);
     request.getSession(true).setAttribute(
-        FilterConstants.VALIDATION_ATTRIBUTE, validationResponse);
+        AuthenticatorConstants.VALIDATION_ATTRIBUTE, validationResponse);
     return true;
   }
 
@@ -152,7 +152,7 @@ public class CasAuthenticator extends AuthenticatorBase {
     HttpSession session = request.getSession(false);
     if (session == null) return null;
     ServiceValidationResponse validationResponse = (ServiceValidationResponse)
-        session.getAttribute(FilterConstants.VALIDATION_ATTRIBUTE);
+        session.getAttribute(AuthenticatorConstants.VALIDATION_ATTRIBUTE);
     if (validationResponse == null) return null;
     containerLog.debug("principal " + validationResponse.getUserName()
         + " authenticated via session state");

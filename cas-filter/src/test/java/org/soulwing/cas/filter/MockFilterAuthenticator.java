@@ -22,13 +22,14 @@ import javax.servlet.http.HttpServletRequest;
 import org.soulwing.cas.client.NoTicketException;
 import org.soulwing.cas.client.ProtocolConfiguration;
 import org.soulwing.cas.client.ServiceValidationResponse;
+import org.soulwing.cas.http.Authenticator;
 
 /**
  * A mock FilterAuthenticator for use in unit testing.
  *
  * @author Carl Harris
  */
-public class MockFilterAuthenticator implements FilterAuthenticator {
+public class MockFilterAuthenticator implements Authenticator {
 
   private String userName = "mockUserName";
   private boolean successFlag;

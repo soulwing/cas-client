@@ -22,6 +22,8 @@ import org.soulwing.cas.client.ProtocolConfigurationImpl;
 import org.soulwing.cas.client.ProtocolConfigurationHolder;
 import org.soulwing.cas.client.ProtocolConstants;
 import org.soulwing.cas.client.StringProtocolSource;
+import org.soulwing.cas.http.AuthenticatorConstants;
+import org.soulwing.cas.http.UrlGeneratorFactory;
 import org.soulwing.servlet.MockFilterChain;
 import org.soulwing.servlet.MockFilterConfig;
 import org.soulwing.servlet.http.MockHttpServletRequest;
@@ -57,8 +59,8 @@ public class ServiceValidationFilterPathTest extends TestCase {
     protocolConfig.setServiceUrl(SERVICE_URL);
     ProtocolConfigurationHolder.setConfiguration(protocolConfig);
     config = new MockFilterConfig();
-    config.setInitParameter(FilterConstants.FILTER_PATH, FILTER_PATH);
-    config.setInitParameter(FilterConstants.SOURCE_CLASS_NAME,
+    config.setInitParameter(AuthenticatorConstants.FILTER_PATH, FILTER_PATH);
+    config.setInitParameter(AuthenticatorConstants.SOURCE_CLASS_NAME,
         SOURCE_CLASS_NAME);
     filter = new ServiceValidationFilter();
     filter.init(config);
@@ -90,7 +92,7 @@ public class ServiceValidationFilterPathTest extends TestCase {
   }
 
   public void testNoTicketRedirectToLogin() throws Exception {
-    config.setInitParameter(FilterConstants.AUTH_FAILED_URL, AUTH_FAILED_URL);
+    config.setInitParameter(AuthenticatorConstants.AUTH_FAILED_URL, AUTH_FAILED_URL);
     filter.init(config);
     source = (StringProtocolSource)
         filter.getConfiguration().getProtocolSource();
@@ -102,8 +104,8 @@ public class ServiceValidationFilterPathTest extends TestCase {
   }
 
   public void testNoTicketRedirectToAuthFailed() throws Exception {
-    config.setInitParameter(FilterConstants.AUTH_FAILED_URL, AUTH_FAILED_URL);
-    config.setInitParameter(FilterConstants.REDIRECT_TO_LOGIN, 
+    config.setInitParameter(AuthenticatorConstants.AUTH_FAILED_URL, AUTH_FAILED_URL);
+    config.setInitParameter(AuthenticatorConstants.REDIRECT_TO_LOGIN, 
         Boolean.toString(false));
     filter.init(config);
     source = (StringProtocolSource)
@@ -115,7 +117,7 @@ public class ServiceValidationFilterPathTest extends TestCase {
   }
 
   public void testValidationFailureRedirect() throws Exception {
-    config.setInitParameter(FilterConstants.AUTH_FAILED_URL, AUTH_FAILED_URL);
+    config.setInitParameter(AuthenticatorConstants.AUTH_FAILED_URL, AUTH_FAILED_URL);
     filter.init(config);
     source = (StringProtocolSource)
         filter.getConfiguration().getProtocolSource();
