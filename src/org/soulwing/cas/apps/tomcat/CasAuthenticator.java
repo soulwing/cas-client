@@ -185,7 +185,7 @@ public class CasAuthenticator extends AuthenticatorBase {
    * (non-Javadoc)
    * @see org.apache.catalina.authenticator.AuthenticatorBase#startInternal()
    */
-  public void startInternal() throws LifecycleException {
+  protected void startInternal() throws LifecycleException {
     super.startInternal();
     try {
       realm = new RealmWrapper(getContainer().getRealm());
