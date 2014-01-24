@@ -20,13 +20,13 @@
       <version>${tomcat.version}</version>
     </dependency>
     <dependency>
-    	<groupId>commons-logging</groupId>
-    	<artifactId>commons-logging-api</artifactId>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging-api</artifactId>
     </dependency>
     <dependency>
-    	<groupId>org.soulwing</groupId>
-    	<artifactId>cas-protocol</artifactId>
-    	<version>${project.version}</version>
+      <groupId>org.soulwing</groupId>
+      <artifactId>cas-protocol</artifactId>
+      <version>${project.version}</version>
     </dependency>
   </dependencies>
 </project>

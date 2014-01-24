@@ -1,14 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.soulwing</groupId>
-	<artifactId>cas-client</artifactId>
-	<packaging>pom</packaging>
-	<name>CAS Client</name>
-	<version>0.7.0-SNAPSHOT</version>
-	<description>A CAS 2.0 client implementation with support for integration into Tomcat.</description>
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.soulwing</groupId>
+  <artifactId>cas-client</artifactId>
+  <packaging>pom</packaging>
+  <name>CAS Client</name>
+  <version>0.7.0-SNAPSHOT</version>
+  <description>A CAS 2.0 client implementation with support for integration into Tomcat.</description>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>1.6</java.version>
     <tomcat.version>7.0.40</tomcat.version>
     <springframework.version>2.0.6</springframework.version>
@@ -66,57 +66,57 @@
     </plugins>
   </build>
   <modules>
-  	<module>cas-protocol</module>
-  	<module>cas-tomcat</module>
-  	<module>cas-filter</module>
-  	<module>cas-jira</module>
-  	<module>cas-confluence</module>
-  	<module>cas-spring</module>
+    <module>cas-protocol</module>
+    <module>cas-tomcat</module>
+    <module>cas-filter</module>
+    <module>cas-jira</module>
+    <module>cas-confluence</module>
+    <module>cas-spring</module>
   </modules>
   <dependencyManagement>
-  	<dependencies>
-  		<dependency>
-  			<groupId>commons-logging</groupId>
-  			<artifactId>commons-logging-api</artifactId>
-  			<version>1.1</version>
-  		</dependency>
-  		<dependency>
-  			<groupId>junit</groupId>
-  			<artifactId>junit</artifactId>
-  			<version>4.11</version>
-  			<scope>test</scope>
-  		</dependency>
-	    <dependency>
-	      <groupId>com.atlassian.seraph</groupId>
-	      <artifactId>atlassian-seraph</artifactId>
-	      <version>0.31</version>
-	    </dependency>
-	    <dependency>
-	      <groupId>com.atlassian.bucket</groupId>
-	      <artifactId>atlassian-bucket</artifactId>
-	      <version>0.20.3</version>
-	    </dependency>
-	    <dependency>
-	      <groupId>com.atlassian.user</groupId>
-	      <artifactId>atlassian-user</artifactId>
-	      <version>1.24.1</version>
-	    </dependency>
-	    <dependency>
-	      <groupId>javax.activation</groupId>
-	      <artifactId>activation</artifactId>
-	      <version>1.1.1</version>
-	    </dependency>
-	    <dependency>
-	      <groupId>javax.mail</groupId>
-	      <artifactId>mail</artifactId>
-	      <version>1.4</version>
-	    </dependency>
-	    <dependency>
-	    	<groupId>javax.servlet</groupId>
-	    	<artifactId>servlet-api</artifactId>
-	    	<version>2.4</version>
-	    	<scope>provided</scope>
-	    </dependency>
-  	</dependencies>
+    <dependencies>
+      <dependency>
+        <groupId>commons-logging</groupId>
+        <artifactId>commons-logging-api</artifactId>
+        <version>1.1</version>
+      </dependency>
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.11</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>com.atlassian.seraph</groupId>
+        <artifactId>atlassian-seraph</artifactId>
+        <version>0.31</version>
+      </dependency>
+      <dependency>
+        <groupId>com.atlassian.bucket</groupId>
+        <artifactId>atlassian-bucket</artifactId>
+        <version>0.20.3</version>
+      </dependency>
+      <dependency>
+        <groupId>com.atlassian.user</groupId>
+        <artifactId>atlassian-user</artifactId>
+        <version>1.24.1</version>
+      </dependency>
+      <dependency>
+        <groupId>javax.activation</groupId>
+        <artifactId>activation</artifactId>
+        <version>1.1.1</version>
+      </dependency>
+      <dependency>
+        <groupId>javax.mail</groupId>
+        <artifactId>mail</artifactId>
+        <version>1.4</version>
+      </dependency>
+      <dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>servlet-api</artifactId>
+        <version>2.4</version>
+        <scope>provided</scope>
+      </dependency>
+    </dependencies>
   </dependencyManagement>
 </project>

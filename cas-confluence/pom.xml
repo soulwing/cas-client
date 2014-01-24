@@ -17,8 +17,8 @@
       <systemPath>${project.basedir}/lib/confluence-user-2.7.3.jar</systemPath>
     </dependency>
     <dependency>
-    	<groupId>com.atlassian.user</groupId>
-    	<artifactId>atlassian-user</artifactId>
+      <groupId>com.atlassian.user</groupId>
+      <artifactId>atlassian-user</artifactId>
     </dependency>
     <dependency>
       <groupId>com.atlassian.seraph</groupId>
@@ -33,23 +33,23 @@
       <artifactId>mail</artifactId>
     </dependency>
     <dependency>
-    	<groupId>com.atlassian.bucket</groupId>
-    	<artifactId>atlassian-bucket</artifactId>
+      <groupId>com.atlassian.bucket</groupId>
+      <artifactId>atlassian-bucket</artifactId>
     </dependency>
     <dependency>
-    	<groupId>org.soulwing</groupId>
-    	<artifactId>cas-protocol</artifactId>
-    	<version>${project.version}</version>
+      <groupId>org.soulwing</groupId>
+      <artifactId>cas-protocol</artifactId>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
-    	<groupId>org.soulwing</groupId>
-    	<artifactId>cas-filter</artifactId>
-    	<version>${project.version}</version>
+      <groupId>org.soulwing</groupId>
+      <artifactId>cas-filter</artifactId>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
-    	<groupId>net.sf.hibernate</groupId>
-    	<artifactId>hibernate</artifactId>
-    	<version>2.1.8</version>
+      <groupId>net.sf.hibernate</groupId>
+      <artifactId>hibernate</artifactId>
+      <version>2.1.8</version>
     </dependency>
   </dependencies>
 </project>

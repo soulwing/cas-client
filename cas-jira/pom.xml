@@ -9,31 +9,31 @@
   <name>JIRA Authenticator</name>
   <description>Provides an authenticator that allows JIRA to utilize CAS authentication.</description>
   <dependencies>
-  	<dependency>
-  		<groupId>com.atlassian.seraph</groupId>
-  		<artifactId>atlassian-seraph</artifactId>
-  	</dependency>
-  	<dependency>
-  		<groupId>com.atlassian.bucket</groupId>
-  		<artifactId>atlassian-bucket</artifactId>
-  	</dependency>
-  	<dependency>
-  		<groupId>javax.activation</groupId>
-  		<artifactId>activation</artifactId>
-  	</dependency>
-  	<dependency>
-  		<groupId>javax.mail</groupId>
-  		<artifactId>mail</artifactId>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.soulwing</groupId>
-  		<artifactId>cas-protocol</artifactId>
-  		<version>${project.version}</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.soulwing</groupId>
-  		<artifactId>cas-filter</artifactId>
-  		<version>${project.version}</version>
-  	</dependency>
+    <dependency>
+      <groupId>com.atlassian.seraph</groupId>
+      <artifactId>atlassian-seraph</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.atlassian.bucket</groupId>
+      <artifactId>atlassian-bucket</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>javax.activation</groupId>
+      <artifactId>activation</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>javax.mail</groupId>
+      <artifactId>mail</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.soulwing</groupId>
+      <artifactId>cas-protocol</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.soulwing</groupId>
+      <artifactId>cas-filter</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
 </project>
