@@ -7,6 +7,12 @@
   <name>CAS Client</name>
   <version>0.7.0-SNAPSHOT</version>
   <description>A CAS 2.0 client implementation with support for integration into Tomcat.</description>
+  <scm>
+    <connection>scm:git:git@github.com:soulwing/cas-client.git</connection>
+    <developerConnection>${project.scm.connection}</developerConnection>
+    <url>https://github.com/soulwing/cas-client</url>
+    <tag>HEAD</tag>
+  </scm>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>1.6</java.version>
@@ -64,6 +70,23 @@
         </executions>
       </plugin>      
     </plugins>
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-webdav-jackrabbit</artifactId>
+        <version>1.0-beta-7</version>
+      </extension>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-ssh</artifactId>
+        <version>2.4</version>
+      </extension>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-ssh-external</artifactId>
+        <version>2.4</version>
+      </extension>
+    </extensions>
   </build>
   <modules>
     <module>cas-protocol</module>
