@@ -141,4 +141,21 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+  <distributionManagement>
+    <site>
+      <id>developer</id>
+      <url>${site.deploy.baseUrl}</url>
+    </site>
+    <repository>
+      <id>releases</id>
+      <name>Open Source Releases</name>
+      <url>https://nexus.cns.vt.edu/nexus/content/repositories/oss-releases</url>
+    </repository>
+    <snapshotRepository>
+      <id>snapshots</id>
+      <name>Open Source Snapshots</name>
+      <url>https://nexus.cns.vt.edu/nexus/content/repositories/oss-snapshots</url>
+      <uniqueVersion>true</uniqueVersion>
+    </snapshotRepository>
+  </distributionManagement>
 </project>
