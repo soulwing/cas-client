@@ -4,7 +4,7 @@
   <artifactId>cas-client</artifactId>
   <packaging>pom</packaging>
   <name>CAS Client</name>
-  <version>0.7.2-SNAPSHOT</version>
+  <version>0.8.0-SNAPSHOT</version>
   <description>A CAS 2.0 client implementation with support for integration into Tomcat.</description>
   <scm>
     <connection>scm:git:git@github.com:soulwing/cas-client.git</connection>
@@ -15,7 +15,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>1.6</java.version>
-    <tomcat.version>7.0.40</tomcat.version>
+    <tomcat.version>8.0.0-RC10</tomcat.version>
     <springframework.version>2.0.6</springframework.version>
   </properties>
   <build>

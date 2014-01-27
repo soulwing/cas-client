@@ -27,7 +27,6 @@ import org.apache.catalina.LifecycleException;
 import org.apache.catalina.authenticator.AuthenticatorBase;
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
-import org.apache.catalina.deploy.LoginConfig;
 import org.soulwing.cas.client.NoTicketException;
 import org.soulwing.cas.client.ServiceValidationResponse;
 import org.soulwing.cas.http.AuthenticatorConstants;
@@ -53,8 +52,7 @@ public class CasAuthenticator extends AuthenticatorBase {
   /**
    * {@inheritDoc}
    */
-  public boolean authenticate(Request request, HttpServletResponse response, 
-      LoginConfig loginConfig)
+  public boolean authenticate(Request request, HttpServletResponse response)
       throws IOException {
     
     ServiceValidationResponse validationResponse = 

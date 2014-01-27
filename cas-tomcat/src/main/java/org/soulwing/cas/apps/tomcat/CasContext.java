@@ -18,7 +18,7 @@
 package org.soulwing.cas.apps.tomcat;
 
 import org.apache.catalina.core.StandardContext;
-import org.apache.catalina.deploy.LoginConfig;
+import org.apache.tomcat.util.descriptor.web.LoginConfig;
 
 /**
  * A {@link StandardContext} that uses overrides the {@code <login-config>} 

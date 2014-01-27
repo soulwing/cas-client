@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.soulwing</groupId>
     <artifactId>cas-client</artifactId>
-    <version>0.7.2-SNAPSHOT</version>
+    <version>0.8.0-SNAPSHOT</version>
   </parent>
   <artifactId>cas-spring</artifactId>
   <name>Spring Filter Proxy</name>
