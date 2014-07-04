@@ -178,7 +178,8 @@ public class SimpleUrlGenerator implements UrlGenerator {
   private void appendProxyGrantingTicket(StringBuilder sb,
       String proxyGrantingTicket) {
     sb.append('?');
-    appendParameter(sb, ProtocolConstants.PGT_PARAM, proxyGrantingTicket);
+    appendParameter(sb, ProtocolConstants.PGT_PARAM, 
+	URLEncoder.encode(proxyGrantingTicket));
   }
 
   private void appendTargetService(StringBuilder sb, String targetService) {
@@ -195,7 +196,8 @@ public class SimpleUrlGenerator implements UrlGenerator {
 
   private void appendTicket(StringBuilder sb, String ticket) {
     sb.append('&');
-    appendParameter(sb, ProtocolConstants.TICKET_PARAM, ticket);
+    appendParameter(sb, ProtocolConstants.TICKET_PARAM, 
+        URLEncoder.encode(ticket));
   }
 
   private void appendProxyCallbackUrl(StringBuilder sb, 
@@ -211,7 +213,7 @@ public class SimpleUrlGenerator implements UrlGenerator {
     if (config.getRenewFlag() == true) {
       sb.append('&');
       appendParameter(sb, ProtocolConstants.RENEW_PARAM, 
-          Boolean.toString(true));
+          URLEncoder.encode(Boolean.toString(true)));
     }
   }
 
