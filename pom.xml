@@ -4,13 +4,13 @@
   <artifactId>cas-client</artifactId>
   <packaging>pom</packaging>
   <name>CAS Client</name>
-  <version>0.7.3</version>
+  <version>0.7.4-SNAPSHOT</version>
   <description>A CAS 2.0 client implementation with support for integration into Tomcat.</description>
   <scm>
     <connection>scm:git:git@github.com:soulwing/cas-client.git</connection>
     <developerConnection>${project.scm.connection}</developerConnection>
     <url>https://github.com/soulwing/cas-client</url>
-    <tag>REL-0.7.3</tag>
+    <tag>REL-0.7.1</tag>
   </scm>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
