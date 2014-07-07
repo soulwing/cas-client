@@ -195,7 +195,8 @@ public class SimpleUrlGenerator implements UrlGenerator {
 
   private void appendTicket(StringBuilder sb, String ticket) {
     sb.append('&');
-    appendParameter(sb, ProtocolConstants.TICKET_PARAM, ticket);
+    appendParameter(sb, ProtocolConstants.TICKET_PARAM, 
+        URLEncoder.encode(ticket));
   }
 
   private void appendProxyCallbackUrl(StringBuilder sb, 
@@ -211,7 +212,7 @@ public class SimpleUrlGenerator implements UrlGenerator {
     if (config.getRenewFlag() == true) {
       sb.append('&');
       appendParameter(sb, ProtocolConstants.RENEW_PARAM, 
-          Boolean.toString(true));
+          URLEncoder.encode(Boolean.toString(true)));
     }
   }
 
@@ -219,7 +220,7 @@ public class SimpleUrlGenerator implements UrlGenerator {
     if (config.getGatewayFlag() == true) {
       sb.append('&');
       appendParameter(sb, ProtocolConstants.GATEWAY_PARAM, 
-          Boolean.toString(true));
+          URLEncoder.encode(Boolean.toString(true)));
     }
   }
 
