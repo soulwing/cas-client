@@ -22,19 +22,49 @@ import io.undertow.security.idm.IdentityManager;
 import io.undertow.servlet.ServletExtension;
 import io.undertow.servlet.api.DeploymentInfo;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import javax.servlet.ServletContext;
+
+import org.soulwing.cas.client.ProtocolConfiguration;
+import org.soulwing.cas.client.SimpleUrlGenerator;
+import org.soulwing.cas.client.UrlGenerator;
+import org.soulwing.cas.client.Validator;
+import org.soulwing.cas.client.ValidatorFactory;
 
 public class CasServletExtension implements ServletExtension {
 
   @Override
   public void handleDeployment(DeploymentInfo deploymentInfo, 
       ServletContext servletContext) {
-    CasConfiguration config = new CasConfigurationBean();
-    CasAuthenticationMechanism authnMechanism = new CasAuthenticationMechanism(config);
-    IdentityManager identityManager = new CasIdentityManager(config); 
+    
+    UrlGenerator generator = new SimpleUrlGenerator(protocolConfiguration());
+    Validator validator = ValidatorFactory.getValidator(generator);
+    
+    CasAuthenticationMechanism authnMechanism = 
+        new CasAuthenticationMechanism(generator);
+    
+    IdentityManager identityManager = new CasIdentityManager(validator); 
     deploymentInfo.clearLoginMethods();
     deploymentInfo.addFirstAuthenticationMechanism("CAS", authnMechanism);
     deploymentInfo.setIdentityManager(identityManager);
+  }
+
+  private ProtocolConfiguration protocolConfiguration() {
+    try {
+      PropertiesProtocolConfiguration config = 
+          new PropertiesProtocolConfiguration();
+      config.load(new URL("file:/tmp/cas.properties"));
+      return config;
+    }
+    catch (MalformedURLException ex) {
+      throw new IllegalArgumentException(ex);
+    }
+    catch (IOException ex) {
+      throw new RuntimeException(ex);
+    }
   }
 
 }

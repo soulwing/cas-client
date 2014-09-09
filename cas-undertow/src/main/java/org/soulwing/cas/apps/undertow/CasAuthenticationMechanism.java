@@ -26,6 +26,8 @@ import io.undertow.util.HttpString;
 
 import java.util.Deque;
 
+import org.soulwing.cas.client.UrlGenerator;
+
 /**
  * An {@link AuthenticationMechanism} that uses the CAS protocol.
  * 
@@ -33,10 +35,10 @@ import java.util.Deque;
  */
 public class CasAuthenticationMechanism implements AuthenticationMechanism {
 
-  private final CasConfiguration casConfig;
+  private final UrlGenerator generator;
 
-  public CasAuthenticationMechanism(CasConfiguration casConfig) {
-    this.casConfig = casConfig;
+  public CasAuthenticationMechanism(UrlGenerator generator) {
+    this.generator = generator;
   }
 
   /**
@@ -70,7 +72,7 @@ public class CasAuthenticationMechanism implements AuthenticationMechanism {
   public ChallengeResult sendChallenge(HttpServerExchange exchange,
       SecurityContext context) {
     exchange.getResponseHeaders().put(HttpString.tryFromString("Location"),
-        casConfig.getServerUrl() + "/login");
+        generator.getLoginUrl());
     return new ChallengeResult(true, 302);
   }
 
