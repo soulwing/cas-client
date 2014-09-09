@@ -23,7 +23,7 @@ import io.undertow.security.idm.Credential;
 import io.undertow.security.idm.IdentityManager;
 
 import org.soulwing.cas.client.NoTicketException;
-import org.soulwing.cas.client.ProxyValidationResponse;
+import org.soulwing.cas.client.ServiceValidationResponse;
 import org.soulwing.cas.client.SimpleValidationRequest;
 import org.soulwing.cas.client.Validator;
 
@@ -59,8 +59,8 @@ public class CasIdentityManager implements IdentityManager {
 
     String ticket = ((CasTicketCredential) credential).getTicket();
     try {
-      ProxyValidationResponse response = 
-          validator.proxyValidate(new SimpleValidationRequest(ticket));
+      ServiceValidationResponse response = 
+          validator.serviceValidate(new SimpleValidationRequest(ticket));
       return response.isSuccessful() ? 
           new CasAccount(new CasPrincipal(response.getUserName())) : null;
     }
