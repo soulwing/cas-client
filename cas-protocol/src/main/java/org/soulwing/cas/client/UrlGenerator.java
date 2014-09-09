@@ -30,6 +30,15 @@ public interface UrlGenerator {
    * @return <code>String</code> CAS login URL.
    */
   String getLoginUrl();
+  
+  /**
+   * Gets the CAS login URL for the configured server URL and service URL,
+   * with the given service URI and query appended to the service URL.
+   * @param serviceUri service URI 
+   * @param serviceQuery service query string
+   * @return login URL
+   */
+  String getLoginUrl(String serviceUri, String serviceQuery);
 
   /**
    * Gets the CAS logout URL.  

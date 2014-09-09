@@ -72,7 +72,7 @@ public class CasAuthenticationMechanism implements AuthenticationMechanism {
   public ChallengeResult sendChallenge(HttpServerExchange exchange,
       SecurityContext context) {
     exchange.getResponseHeaders().put(HttpString.tryFromString("Location"),
-        generator.getLoginUrl());
+        generator.getLoginUrl(exchange.getRequestPath(), exchange.getQueryString()));
     return new ChallengeResult(true, 302);
   }
 

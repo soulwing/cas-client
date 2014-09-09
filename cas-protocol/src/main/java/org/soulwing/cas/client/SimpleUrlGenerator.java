@@ -64,7 +64,22 @@ public class SimpleUrlGenerator implements UrlGenerator {
     appendRenew(sb);
     return sb.toString();
   }
+
+  /**
+   * Gets the CAS login URL for the configured server URL and service URL.
+   * Includes the gateway and/or renew flags if set.
+   * @return <code>String</code> CAS login URL.
+   */
+  public String getLoginUrl(String serviceUri, String serviceQuery) {
+    StringBuilder sb = new StringBuilder(100);
+    appendLoginUrl(sb);
+    appendService(sb, serviceUri, serviceQuery);
+    appendGateway(sb);
+    appendRenew(sb);
+    return sb.toString();
+  }
   
+
   /**
    * Gets the CAS logout URL.  
    * @return <code>String</code> CAS logout URL.
@@ -187,13 +202,29 @@ public class SimpleUrlGenerator implements UrlGenerator {
     appendParameter(sb, ProtocolConstants.TARGET_SERVICE_PARAM, 
         URLEncoder.encode(targetService));
   }
-  
+
   private void appendService(StringBuilder sb) {
+    appendService(sb, null, null);
+  }
+  
+  private void appendService(StringBuilder sb, String serviceUri, 
+      String serviceQuery) {
     sb.append('?');
     appendParameter(sb, ProtocolConstants.SERVICE_PARAM, 
-        URLEncoder.encode(config.getServiceUrl()));
+        URLEncoder.encode(createServiceUrl(serviceUri, serviceQuery)));
   }
 
+  private String createServiceUrl(String serviceUri, String serviceQuery) {
+    StringBuilder sb = new StringBuilder();
+    sb.append(config.getServiceUrl());
+    if (serviceUri != null && !serviceUri.isEmpty()) {
+      sb.append(serviceUri);      
+    }
+    if (serviceQuery != null && !serviceQuery.isEmpty()) {
+      sb.append("?").append(serviceQuery);
+    }
+    return sb.toString();
+  }
   private void appendTicket(StringBuilder sb, String ticket) {
     sb.append('&');
     appendParameter(sb, ProtocolConstants.TICKET_PARAM, 
